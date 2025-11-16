@@ -1,0 +1,358 @@
+{
+  "auth": {
+    "welcome": "Welcome",
+    "welcomeDescription": "Sign in to your account or create a new one to start supporting funds",
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "John",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Doe",
+    "dateOfBirth": "Date of Birth",
+    "confirmPassword": "Confirm Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "signInSuccess": "Welcome back, {name}! 🎉",
+    "signInSuccessDescription": "Sign in successful!",
+    "signUpSuccess": "Account created successfully! 🎉",
+    "signUpSuccessDescription": "Setting up your account...",
+    "welcomeMessage": "Welcome to CharityHub, {name}! 🎉",
+    "welcomeDescription2": "You're all set to start supporting funds!",
+    "signInFailed": "Sign In Failed",
+    "signUpFailed": "Sign Up Failed",
+    "pleaseSignInManually": "Please sign in manually",
+    "autoSignInFailed": "Account created but auto sign-in failed",
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "invalidCredentials": "Invalid email or password",
+    "unableToCreateAccount": "Unable to create account",
+    "passwordHint": "8-50 characters with uppercase, lowercase, number, and special character",
+    "agreeToTerms": "I agree to the",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "demoCredentials": "Demo Credentials",
+    "additionalInfo": "By signing in, you can save your favourite funds and track your contributions.",
+    "required": "*",
+    "brandName": "CharityHub",
+    "brandTagline": "Join thousands making a difference"
+  },
+  "home": {
+    "hero": {
+      "title": "Make a Difference",
+      "titleHighlight": "One Fund at a Time",
+      "subtitle": "Join thousands of people supporting causes that matter. Start your fundraiser or back a fund today.",
+      "exploreFunds": "Explore Funds",
+      "startFundraiser": "Start a Fundraiser"
+    },
+    "stats": {
+      "totalRaised": "Total Raised",
+      "totalRaisedDesc": "Across all funds",
+      "totalFunds": "Total Funds",
+      "activeFundsCount": "{count} currently active",
+      "activeFunds": "Active Funds",
+      "raisingFundsNow": "Raising funds right now",
+      "totalBackers": "Total Backers",
+      "peopleMakingDifference": "People making a difference"
+    },
+    "featured": {
+      "title": "Featured Funds",
+      "subtitle": "Support these trending funds making real impact",
+      "viewAll": "View All Funds"
+    },
+    "cta": {
+      "title": "Ready to Make an Impact?",
+      "subtitle": "Whether you're looking to start your own fund or support existing causes, every contribution makes a difference.",
+      "startFund": "Start Your Fund",
+      "browseFunds": "Browse Funds"
+    }
+  },
+  "funds": {
+    "title": "Browse Funds",
+    "subtitle": "Discover and support fundraising campaigns making a real difference",
+    "search": "Search funds...",
+    "searchPlaceholder": "Search by name or description",
+    "filter": {
+      "category": "Category",
+      "allCategories": "All Categories",
+      "sortBy": "Sort by",
+      "recent": "Most Recent",
+      "mostFunded": "Most Funded",
+      "mostBackers": "Most Backers",
+      "endingSoon": "Ending Soon"
+    },
+    "results": {
+      "showing": "Showing {count} funds",
+      "noResults": "No funds found",
+      "tryDifferent": "Try different search terms or filters"
+    },
+    "card": {
+      "raised": "raised",
+      "of": "of",
+      "goal": "goal",
+      "backers": "backers",
+      "daysLeft": "{days} days left",
+      "ended": "Fund ended",
+      "viewDetails": "View Details"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "loadingProfile": "Loading your profile...",
+    "failedToLoad": "Failed to load profile",
+    "checkBackend": "Make sure the backend API server is running on http://localhost:5001",
+    "checkConsole": "Check the browser console (F12) for detailed error messages.",
+    "tryAgain": "Try Again",
+    "signInAgain": "Sign In Again",
+    "pleaseSignIn": "Please sign in to view your profile",
+    "stats": {
+      "totalContributions": "Total Contributions",
+      "totalAmount": "Total Amount",
+      "memberSince": "Member Since"
+    },
+    "tabs": {
+      "backedCampaigns": "Backed Campaigns",
+      "settings": "Settings"
+    },
+    "contributions": {
+      "title": "Contribution History",
+      "subtitle": "View all funds you've supported and track your rewards",
+      "campaign": "Fund",
+      "amount": "Amount",
+      "reward": "Reward",
+      "date": "Date",
+      "status": "Status",
+      "action": "Action",
+      "view": "View",
+      "noReward": "No reward",
+      "completed": "Completed",
+      "shipped": "Shipped",
+      "pending": "Pending",
+      "noFunds": "You haven't backed any funds yet. Browse funds to get started!",
+      "browseFunds": "Browse Funds"
+    },
+    "settings": {
+      "profileInfo": "Profile Information",
+      "updateInfo": "Update your personal information",
+      "editProfile": "Edit Profile",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "emailCannotChange": "Email cannot be changed",
+      "phoneNumber": "Phone Number",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "accountInfo": "Account Information",
+      "viewAccountDetails": "View your account details",
+      "userId": "User ID",
+      "accountStatus": "Account Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "joined": "Joined",
+      "updateSuccess": "Profile updated successfully",
+      "updateFailed": "Failed to update profile",
+      "sessionExpired": "Your session has expired",
+      "sessionExpiredDesc": "Please sign in again to continue.",
+      "notAuthenticated": "Not authenticated",
+      "notAuthenticatedDesc": "Please sign in to view your profile."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+    "email": "Email",
+    "sendEmail": "Send us an email",
+    "phone": "Phone",
+    "callUs": "Call us directly",
+    "office": "Office",
+    "visitUs": "Visit us at",
+    "officeHours": "Office Hours",
+    "mondayFriday": "Monday - Friday: 9:00 AM - 6:00 PM",
+    "saturday": "Saturday: 10:00 AM - 4:00 PM",
+    "sunday": "Sunday: Closed",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "What is your message about?",
+      "message": "Message",
+      "messagePlaceholder": "Tell us more...",
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "success": "Message sent successfully!",
+      "successDesc": "We'll get back to you as soon as possible.",
+      "error": "Failed to send message",
+      "errorDesc": "Please try again later."
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated:",
+    "sections": {
+      "collect": {
+        "title": "1. Information We Collect",
+        "intro": "CharityHub collects information to provide better services to all our users and to maintain the security of our platform.",
+        "youProvide": "Information you provide:",
+        "accountInfo": "Account information (name, email address, password)",
+        "paymentInfo": "Payment information (processed securely through third-party providers)",
+        "campaignDetails": "Campaign creation details and updates",
+        "communications": "Comments, messages, and other communications"
+      },
+      "use": {
+        "title": "2. How We Use Your Information",
+        "intro": "We use the information we collect to:",
+        "processDonations": "Process your donations and contributions",
+        "sendUpdates": "Send you campaign updates and notifications",
+        "provideSupport": "Provide customer support",
+        "preventFraud": "Prevent fraud and maintain platform security",
+        "improveServices": "Improve our services and user experience"
+      },
+      "sharing": {
+        "title": "3. Information Sharing",
+        "intro": "We do not sell your personal information. We may share your information only in the following circumstances:",
+        "withCreators": "With campaign creators when you make a contribution",
+        "withProviders": "With service providers who assist in our operations",
+        "whenRequired": "When required by law or to protect rights and safety",
+        "merger": "In connection with a merger, acquisition, or sale of assets"
+      },
+      "security": {
+        "title": "4. Data Security",
+        "content": "We implement industry-standard security measures to protect your personal information. All payment transactions are encrypted using SSL technology. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security."
+      },
+      "rights": {
+        "title": "5. Your Privacy Rights",
+        "intro": "You have the right to:",
+        "accessInfo": "Access your personal information",
+        "correctInfo": "Correct inaccurate information",
+        "deleteInfo": "Request deletion of your information",
+        "optOut": "Opt-out of marketing communications",
+        "exportData": "Export your data in a portable format"
+      },
+      "cookies": {
+        "title": "6. Cookies and Tracking",
+        "content": "We use cookies and similar tracking technologies to improve your experience, analyse usage patterns, and deliver personalised content. You can control cookie preferences through your browser settings."
+      },
+      "children": {
+        "title": "7. Children's Privacy",
+        "content": "Our platform is not intended for children under 13 years of age. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately."
+      },
+      "changes": {
+        "title": "8. Changes to This Policy",
+        "content": "We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the \"Last updated\" date."
+      },
+      "contact": {
+        "title": "9. Contact Us",
+        "content": "If you have any questions about this Privacy Policy, please contact us at privacy@charityhub.com"
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated:",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing and using CharityHub, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our platform."
+      },
+      "accounts": {
+        "title": "2. User Accounts",
+        "creation": "Account Creation:",
+        "ageRequirement": "You must be at least 18 years old to create an account",
+        "accurateInfo": "You must provide accurate and complete information",
+        "security": "You are responsible for maintaining account security",
+        "noMultiple": "One person or entity may not maintain multiple accounts",
+        "termination": "Account Termination:",
+        "terminationText": "We reserve the right to suspend or terminate accounts that violate these terms or engage in fraudulent activity."
+      },
+      "campaigns": {
+        "title": "3. Campaigns and Fundraising",
+        "creatorsMust": "Campaign Creators Must:",
+        "accurateCampaign": "Provide accurate and truthful information about their campaign",
+        "useFunds": "Use funds only for the stated purpose",
+        "provideUpdates": "Provide regular updates to contributors",
+        "fulfillRewards": "Fulfil any promised rewards or refund contributions",
+        "complyLaws": "Comply with all applicable laws and regulations",
+        "prohibited": "Prohibited Campaigns:",
+        "illegal": "Illegal activities or fraudulent purposes",
+        "hateSpeech": "Hate speech, discrimination, or violence",
+        "misleading": "Misleading or deceptive content",
+        "adult": "Pornographic or adult content"
+      },
+      "payments": {
+        "title": "4. Contributions and Payments",
+        "intro": "All contributions are final and non-refundable unless:",
+        "fraudulent": "The campaign is fraudulent or violates our terms",
+        "failedRewards": "The creator fails to fulfil promised rewards",
+        "cancelled": "The campaign is cancelled before funds are transferred",
+        "fees": "CharityHub charges a platform fee of 5% on all successful contributions, plus payment processing fees."
+      },
+      "ip": {
+        "title": "5. Intellectual Property",
+        "license": "By posting content on CharityHub, you grant us a non-exclusive, worldwide licence to use, display, and distribute your content in connection with our services.",
+        "ownership": "You retain all ownership rights to your content and are responsible for ensuring you have the rights to all content you post."
+      },
+      "disputes": {
+        "title": "6. Dispute Resolution",
+        "attemptResolve": "If you have a dispute with another user, you agree to first attempt to resolve it directly with that user. CharityHub may, at its discretion, provide assistance in resolving disputes.",
+        "jurisdiction": "Any legal disputes will be governed by the laws of California and subject to the jurisdiction of courts in San Francisco County."
+      },
+      "liability": {
+        "title": "7. Limitation of Liability",
+        "intro": "CharityHub acts as a platform connecting campaign creators and contributors. We do not:",
+        "noGuarantee": "Guarantee the success of any campaign",
+        "noVerify": "Verify the accuracy of campaign information",
+        "noControl": "Control how creators use funds",
+        "noDelivery": "Guarantee the delivery of rewards",
+        "disclaimer": "You use CharityHub at your own risk. We are not liable for any damages arising from your use of the platform or from campaigns you support."
+      },
+      "changes": {
+        "title": "8. Changes to Terms",
+        "content": "We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting. Continued use of CharityHub after changes constitutes acceptance of the modified terms."
+      },
+      "contact": {
+        "title": "9. Contact Information",
+        "content": "For questions about these Terms of Service, please contact us at legal@charityhub.com"
+      }
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "clear": "Clear",
+    "apply": "Apply",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "nav": {
+      "home": "Home",
+      "campaigns": "Funds",
+      "contact": "Contact",
+      "profile": "Profile",
+      "signIn": "Sign In",
+      "startFundraiser": "Start a Fundraiser"
+    }
+  }
+}

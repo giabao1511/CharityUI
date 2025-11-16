@@ -1,0 +1,358 @@
+{
+  "auth": {
+    "welcome": "Chào mừng",
+    "welcomeDescription": "Đăng nhập vào tài khoản của bạn hoặc tạo tài khoản mới để bắt đầu ủng hộ các quỹ",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Mật khẩu",
+    "passwordPlaceholder": "••••••••",
+    "firstName": "Tên",
+    "firstNamePlaceholder": "Văn",
+    "lastName": "Họ",
+    "lastNamePlaceholder": "Nguyễn",
+    "dateOfBirth": "Ngày sinh",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "rememberMe": "Ghi nhớ đăng nhập",
+    "forgotPassword": "Quên mật khẩu?",
+    "signIn": "Đăng nhập",
+    "signingIn": "Đang đăng nhập...",
+    "createAccount": "Tạo tài khoản",
+    "creatingAccount": "Đang tạo tài khoản...",
+    "signInSuccess": "Chào mừng trở lại, {name}! 🎉",
+    "signInSuccessDescription": "Đăng nhập thành công!",
+    "signUpSuccess": "Tạo tài khoản thành công! 🎉",
+    "signUpSuccessDescription": "Đang thiết lập tài khoản của bạn...",
+    "welcomeMessage": "Chào mừng đến với CharityHub, {name}! 🎉",
+    "welcomeDescription2": "Bạn đã sẵn sàng để bắt đầu ủng hộ các quỹ!",
+    "signInFailed": "Đăng nhập thất bại",
+    "signUpFailed": "Đăng ký thất bại",
+    "pleaseSignInManually": "Vui lòng đăng nhập thủ công",
+    "autoSignInFailed": "Tài khoản đã được tạo nhưng đăng nhập tự động thất bại",
+    "unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
+    "invalidCredentials": "Email hoặc mật khẩu không đúng",
+    "unableToCreateAccount": "Không thể tạo tài khoản",
+    "passwordHint": "8-50 ký tự bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
+    "agreeToTerms": "Tôi đồng ý với",
+    "termsOfService": "Điều khoản dịch vụ",
+    "and": "và",
+    "privacyPolicy": "Chính sách bảo mật",
+    "demoCredentials": "Thông tin đăng nhập demo",
+    "additionalInfo": "Bằng cách đăng nhập, bạn có thể lưu các quỹ yêu thích và theo dõi đóng góp của mình.",
+    "required": "*",
+    "brandName": "CharityHub",
+    "brandTagline": "Cùng hàng ngàn người tạo nên sự khác biệt"
+  },
+  "home": {
+    "hero": {
+      "title": "Tạo Nên Sự Khác Biệt",
+      "titleHighlight": "Từng Quỹ Một",
+      "subtitle": "Cùng hàng ngàn người ủng hộ những mục đích ý nghĩa. Bắt đầu gây quỹ hoặc đóng góp cho một quỹ ngay hôm nay.",
+      "exploreCampaigns": "Khám Phá Quỹ",
+      "startFundraiser": "Bắt Đầu Gây Quỹ"
+    },
+    "stats": {
+      "totalRaised": "Tổng Đã Quyên Góp",
+      "totalRaisedDesc": "Từ tất cả các quỹ",
+      "totalCampaigns": "Tổng Quỹ",
+      "activeCampaignsCount": "{count} đang hoạt động",
+      "activeCampaigns": "Quỹ Đang Hoạt Động",
+      "raisingFundsNow": "Đang gây quỹ ngay bây giờ",
+      "totalBackers": "Tổng Người Ủng Hộ",
+      "peopleMakingDifference": "Người đang tạo nên sự khác biệt"
+    },
+    "featured": {
+      "title": "Quỹ Nổi Bật",
+      "subtitle": "Ủng hộ những quỹ đang thịnh hành và tạo ra tác động thực sự",
+      "viewAll": "Xem Tất Cả Quỹ"
+    },
+    "cta": {
+      "title": "Sẵn Sàng Tạo Nên Tác Động?",
+      "subtitle": "Dù bạn đang muốn bắt đầu quỹ của riêng mình hay ủng hộ các mục đích hiện có, mọi đóng góp đều tạo nên sự khác biệt.",
+      "startCampaign": "Bắt Đầu Quỹ",
+      "browseCampaigns": "Duyệt Quỹ"
+    }
+  },
+  "funds": {
+    "title": "Duyệt Quỹ",
+    "subtitle": "Khám phá và ủng hộ các quỹ gây quỹ tạo nên sự khác biệt thực sự",
+    "search": "Tìm kiếm quỹ...",
+    "searchPlaceholder": "Tìm theo tên hoặc mô tả",
+    "filter": {
+      "category": "Danh Mục",
+      "allCategories": "Tất Cả Danh Mục",
+      "sortBy": "Sắp xếp theo",
+      "recent": "Mới Nhất",
+      "mostFunded": "Quyên Góp Nhiều Nhất",
+      "mostBackers": "Nhiều Người Ủng Hộ Nhất",
+      "endingSoon": "Sắp Kết Thúc"
+    },
+    "results": {
+      "showing": "Hiển thị {count} quỹ",
+      "noResults": "Không tìm thấy quỹ nào",
+      "tryDifferent": "Thử các từ khóa hoặc bộ lọc khác"
+    },
+    "card": {
+      "raised": "đã quyên góp",
+      "of": "của",
+      "goal": "mục tiêu",
+      "backers": "người ủng hộ",
+      "daysLeft": "còn {days} ngày",
+      "ended": "Quỹ đã kết thúc",
+      "viewDetails": "Xem Chi Tiết"
+    }
+  },
+  "profile": {
+    "title": "Hồ Sơ Của Tôi",
+    "loadingProfile": "Đang tải hồ sơ của bạn...",
+    "failedToLoad": "Không thể tải hồ sơ",
+    "checkBackend": "Đảm bảo máy chủ API backend đang chạy trên http://localhost:5001",
+    "checkConsole": "Kiểm tra console của trình duyệt (F12) để xem thông báo lỗi chi tiết.",
+    "tryAgain": "Thử Lại",
+    "signInAgain": "Đăng Nhập Lại",
+    "pleaseSignIn": "Vui lòng đăng nhập để xem hồ sơ của bạn",
+    "stats": {
+      "totalContributions": "Tổng Đóng Góp",
+      "totalAmount": "Tổng Số Tiền",
+      "memberSince": "Thành Viên Từ"
+    },
+    "tabs": {
+      "backedCampaigns": "Quỹ Đã Ủng Hộ",
+      "settings": "Cài Đặt"
+    },
+    "contributions": {
+      "title": "Lịch Sử Đóng Góp",
+      "subtitle": "Xem tất cả quỹ bạn đã ủng hộ và theo dõi phần thưởng của bạn",
+      "campaign": "Quỹ",
+      "amount": "Số Tiền",
+      "reward": "Phần Thưởng",
+      "date": "Ngày",
+      "status": "Trạng Thái",
+      "action": "Hành Động",
+      "view": "Xem",
+      "noReward": "Không có phần thưởng",
+      "completed": "Đã Hoàn Thành",
+      "shipped": "Đã Gửi",
+      "pending": "Đang Chờ",
+      "noCampaigns": "Bạn chưa ủng hộ quỹ nào. Duyệt quỹ để bắt đầu!",
+      "browseCampaigns": "Duyệt Quỹ"
+    },
+    "settings": {
+      "profileInfo": "Thông Tin Hồ Sơ",
+      "updateInfo": "Cập nhật thông tin cá nhân của bạn",
+      "editProfile": "Chỉnh Sửa Hồ Sơ",
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "email": "Email",
+      "emailCannotChange": "Không thể thay đổi email",
+      "phoneNumber": "Số Điện Thoại",
+      "saveChanges": "Lưu Thay Đổi",
+      "saving": "Đang lưu...",
+      "cancel": "Hủy",
+      "accountInfo": "Thông Tin Tài Khoản",
+      "viewAccountDetails": "Xem chi tiết tài khoản của bạn",
+      "userId": "ID Người Dùng",
+      "accountStatus": "Trạng Thái Tài Khoản",
+      "active": "Hoạt Động",
+      "inactive": "Không Hoạt Động",
+      "joined": "Tham Gia",
+      "updateSuccess": "Cập nhật hồ sơ thành công",
+      "updateFailed": "Không thể cập nhật hồ sơ",
+      "sessionExpired": "Phiên của bạn đã hết hạn",
+      "sessionExpiredDesc": "Vui lòng đăng nhập lại để tiếp tục.",
+      "notAuthenticated": "Chưa xác thực",
+      "notAuthenticatedDesc": "Vui lòng đăng nhập để xem hồ sơ của bạn."
+    }
+  },
+  "contact": {
+    "title": "Liên Hệ",
+    "subtitle": "Có câu hỏi? Chúng tôi rất muốn nghe từ bạn. Gửi tin nhắn cho chúng tôi và chúng tôi sẽ phản hồi sớm nhất có thể.",
+    "email": "Email",
+    "sendEmail": "Gửi email cho chúng tôi",
+    "phone": "Điện Thoại",
+    "callUs": "Gọi trực tiếp cho chúng tôi",
+    "office": "Văn Phòng",
+    "visitUs": "Ghé thăm chúng tôi tại",
+    "officeHours": "Giờ Làm Việc",
+    "mondayFriday": "Thứ Hai - Thứ Sáu: 9:00 SA - 6:00 CH",
+    "saturday": "Thứ Bảy: 10:00 SA - 4:00 CH",
+    "sunday": "Chủ Nhật: Đóng cửa",
+    "form": {
+      "name": "Tên",
+      "namePlaceholder": "Tên của bạn",
+      "email": "Email",
+      "emailPlaceholder": "email@cua-ban.com",
+      "subject": "Chủ Đề",
+      "subjectPlaceholder": "Tin nhắn của bạn về vấn đề gì?",
+      "message": "Tin Nhắn",
+      "messagePlaceholder": "Cho chúng tôi biết thêm...",
+      "submit": "Gửi Tin Nhắn",
+      "submitting": "Đang gửi...",
+      "success": "Đã gửi tin nhắn thành công!",
+      "successDesc": "Chúng tôi sẽ phản hồi bạn sớm nhất có thể.",
+      "error": "Không thể gửi tin nhắn",
+      "errorDesc": "Vui lòng thử lại sau."
+    }
+  },
+  "privacy": {
+    "title": "Chính Sách Bảo Mật",
+    "lastUpdated": "Cập nhật lần cuối:",
+    "sections": {
+      "collect": {
+        "title": "1. Thông Tin Chúng Tôi Thu Thập",
+        "intro": "CharityHub thu thập thông tin để cung cấp dịch vụ tốt hơn cho tất cả người dùng và duy trì bảo mật nền tảng.",
+        "youProvide": "Thông tin bạn cung cấp:",
+        "accountInfo": "Thông tin tài khoản (tên, địa chỉ email, mật khẩu)",
+        "paymentInfo": "Thông tin thanh toán (được xử lý an toàn thông qua nhà cung cấp bên thứ ba)",
+        "campaignDetails": "Chi tiết và cập nhật tạo quỹ",
+        "communications": "Bình luận, tin nhắn và các giao tiếp khác"
+      },
+      "use": {
+        "title": "2. Cách Chúng Tôi Sử Dụng Thông Tin Của Bạn",
+        "intro": "Chúng tôi sử dụng thông tin thu thập được để:",
+        "processDonations": "Xử lý các khoản quyên góp và đóng góp của bạn",
+        "sendUpdates": "Gửi cho bạn các cập nhật và thông báo quỹ",
+        "provideSupport": "Cung cấp hỗ trợ khách hàng",
+        "preventFraud": "Ngăn chặn gian lận và duy trì bảo mật nền tảng",
+        "improveServices": "Cải thiện dịch vụ và trải nghiệm người dùng của chúng tôi"
+      },
+      "sharing": {
+        "title": "3. Chia Sẻ Thông Tin",
+        "intro": "Chúng tôi không bán thông tin cá nhân của bạn. Chúng tôi chỉ có thể chia sẻ thông tin của bạn trong các trường hợp sau:",
+        "withCreators": "Với người tạo quỹ khi bạn thực hiện đóng góp",
+        "withProviders": "Với các nhà cung cấp dịch vụ hỗ trợ hoạt động của chúng tôi",
+        "whenRequired": "Khi được yêu cầu bởi pháp luật hoặc để bảo vệ quyền và an toàn",
+        "merger": "Liên quan đến việc sáp nhập, mua lại hoặc bán tài sản"
+      },
+      "security": {
+        "title": "4. Bảo Mật Dữ Liệu",
+        "content": "Chúng tôi triển khai các biện pháp bảo mật tiêu chuẩn ngành để bảo vệ thông tin cá nhân của bạn. Tất cả các giao dịch thanh toán được mã hóa bằng công nghệ SSL. Tuy nhiên, không có phương thức truyền tải qua Internet nào an toàn 100% và chúng tôi không thể đảm bảo bảo mật tuyệt đối."
+      },
+      "rights": {
+        "title": "5. Quyền Bảo Mật Của Bạn",
+        "intro": "Bạn có quyền:",
+        "accessInfo": "Truy cập thông tin cá nhân của bạn",
+        "correctInfo": "Sửa thông tin không chính xác",
+        "deleteInfo": "Yêu cầu xóa thông tin của bạn",
+        "optOut": "Từ chối nhận thông tin tiếp thị",
+        "exportData": "Xuất dữ liệu của bạn ở định dạng di động"
+      },
+      "cookies": {
+        "title": "6. Cookie và Theo Dõi",
+        "content": "Chúng tôi sử dụng cookie và các công nghệ theo dõi tương tự để cải thiện trải nghiệm của bạn, phân tích mô hình sử dụng và cung cấp nội dung được cá nhân hóa. Bạn có thể kiểm soát tùy chọn cookie thông qua cài đặt trình duyệt của mình."
+      },
+      "children": {
+        "title": "7. Quyền Riêng Tư Của Trẻ Em",
+        "content": "Nền tảng của chúng tôi không dành cho trẻ em dưới 13 tuổi. Chúng tôi không cố ý thu thập thông tin cá nhân từ trẻ em. Nếu bạn tin rằng chúng tôi đã thu thập thông tin từ một đứa trẻ, vui lòng liên hệ với chúng tôi ngay lập tức."
+      },
+      "changes": {
+        "title": "8. Thay Đổi Chính Sách Này",
+        "content": "Chúng tôi có thể cập nhật Chính sách Bảo mật này theo thời gian. Chúng tôi sẽ thông báo cho bạn về bất kỳ thay đổi quan trọng nào bằng cách đăng chính sách mới trên trang này và cập nhật ngày \"Cập nhật lần cuối\"."
+      },
+      "contact": {
+        "title": "9. Liên Hệ Với Chúng Tôi",
+        "content": "Nếu bạn có bất kỳ câu hỏi nào về Chính sách Bảo mật này, vui lòng liên hệ với chúng tôi tại privacy@charityhub.com"
+      }
+    }
+  },
+  "terms": {
+    "title": "Điều Khoản Dịch Vụ",
+    "lastUpdated": "Cập nhật lần cuối:",
+    "sections": {
+      "acceptance": {
+        "title": "1. Chấp Nhận Điều Khoản",
+        "content": "Bằng cách truy cập và sử dụng CharityHub, bạn chấp nhận và đồng ý bị ràng buộc bởi các Điều khoản Dịch vụ này. Nếu bạn không đồng ý với các điều khoản này, vui lòng không sử dụng nền tảng của chúng tôi."
+      },
+      "accounts": {
+        "title": "2. Tài Khoản Người Dùng",
+        "creation": "Tạo Tài Khoản:",
+        "ageRequirement": "Bạn phải ít nhất 18 tuổi để tạo tài khoản",
+        "accurateInfo": "Bạn phải cung cấp thông tin chính xác và đầy đủ",
+        "security": "Bạn chịu trách nhiệm duy trì bảo mật tài khoản",
+        "noMultiple": "Một người hoặc thực thể không được duy trì nhiều tài khoản",
+        "termination": "Chấm Dứt Tài Khoản:",
+        "terminationText": "Chúng tôi có quyền tạm ngừng hoặc chấm dứt các tài khoản vi phạm các điều khoản này hoặc tham gia vào hoạt động gian lận."
+      },
+      "campaigns": {
+        "title": "3. Quỹ và Gây Quỹ",
+        "creatorsMust": "Người Tạo Quỹ Phải:",
+        "accurateCampaign": "Cung cấp thông tin chính xác và trung thực về quỹ của họ",
+        "useFunds": "Chỉ sử dụng quỹ cho mục đích đã nêu",
+        "provideUpdates": "Cung cấp cập nhật thường xuyên cho người đóng góp",
+        "fulfillRewards": "Thực hiện bất kỳ phần thưởng đã hứa hoặc hoàn lại đóng góp",
+        "complyLaws": "Tuân thủ tất cả các luật và quy định hiện hành",
+        "prohibited": "Quỹ Bị Cấm:",
+        "illegal": "Hoạt động bất hợp pháp hoặc mục đích gian lận",
+        "hateSpeech": "Phát ngôn thù hận, phân biệt đối xử hoặc bạo lực",
+        "misleading": "Nội dung gây hiểu lầm hoặc lừa dối",
+        "adult": "Nội dung khiêu dâm hoặc người lớn"
+      },
+      "payments": {
+        "title": "4. Đóng Góp và Thanh Toán",
+        "intro": "Tất cả các đóng góp là cuối cùng và không hoàn lại trừ khi:",
+        "fraudulent": "Quỹ là gian lận hoặc vi phạm điều khoản của chúng tôi",
+        "failedRewards": "Người tạo không thực hiện được phần thưởng đã hứa",
+        "cancelled": "Quỹ bị hủy trước khi chuyển tiền",
+        "fees": "CharityHub tính phí nền tảng 5% trên tất cả các đóng góp thành công, cộng với phí xử lý thanh toán."
+      },
+      "ip": {
+        "title": "5. Sở Hữu Trí Tuệ",
+        "license": "Bằng cách đăng nội dung trên CharityHub, bạn cấp cho chúng tôi giấy phép không độc quyền, trên toàn thế giới để sử dụng, hiển thị và phân phối nội dung của bạn liên quan đến dịch vụ của chúng tôi.",
+        "ownership": "Bạn giữ tất cả quyền sở hữu đối với nội dung của mình và chịu trách nhiệm đảm bảo bạn có quyền đối với tất cả nội dung bạn đăng."
+      },
+      "disputes": {
+        "title": "6. Giải Quyết Tranh Chấp",
+        "attemptResolve": "Nếu bạn có tranh chấp với người dùng khác, bạn đồng ý trước tiên cố gắng giải quyết trực tiếp với người dùng đó. CharityHub có thể, theo quyết định của mình, cung cấp hỗ trợ trong việc giải quyết tranh chấp.",
+        "jurisdiction": "Bất kỳ tranh chấp pháp lý nào sẽ được điều chỉnh bởi luật pháp California và tuân theo quyền tài phán của tòa án ở Quận San Francisco."
+      },
+      "liability": {
+        "title": "7. Giới Hạn Trách Nhiệm",
+        "intro": "CharityHub hoạt động như một nền tảng kết nối người tạo quỹ và người đóng góp. Chúng tôi không:",
+        "noGuarantee": "Đảm bảo sự thành công của bất kỳ quỹ nào",
+        "noVerify": "Xác minh tính chính xác của thông tin quỹ",
+        "noControl": "Kiểm soát cách người tạo sử dụng quỹ",
+        "noDelivery": "Đảm bảo việc giao phần thưởng",
+        "disclaimer": "Bạn sử dụng CharityHub với rủi ro của riêng mình. Chúng tôi không chịu trách nhiệm cho bất kỳ thiệt hại nào phát sinh từ việc bạn sử dụng nền tảng hoặc từ các quỹ bạn ủng hộ."
+      },
+      "changes": {
+        "title": "8. Thay Đổi Điều Khoản",
+        "content": "Chúng tôi có quyền sửa đổi các điều khoản này bất cứ lúc nào. Các thay đổi sẽ có hiệu lực ngay lập tức sau khi đăng. Việc tiếp tục sử dụng CharityHub sau các thay đổi tạo thành sự chấp nhận các điều khoản đã sửa đổi."
+      },
+      "contact": {
+        "title": "9. Thông Tin Liên Hệ",
+        "content": "Để biết câu hỏi về Điều khoản Dịch vụ này, vui lòng liên hệ với chúng tôi tại legal@charityhub.com"
+      }
+    }
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "close": "Đóng",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước",
+    "submit": "Gửi",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "sort": "Sắp xếp",
+    "clear": "Xóa",
+    "apply": "Áp dụng",
+    "confirm": "Xác nhận",
+    "yes": "Có",
+    "no": "Không",
+    "nav": {
+      "home": "Trang chủ",
+      "campaigns": "Quỹ",
+      "contact": "Liên hệ",
+      "profile": "Hồ sơ",
+      "signIn": "Đăng nhập",
+      "startFundraiser": "Bắt đầu gây quỹ"
+    }
+  }
+}

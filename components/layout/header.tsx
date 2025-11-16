@@ -1,0 +1,198 @@
+"use client";
+
+import { useState } from "react";
+import { Link, usePathname } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
+import { Heart, User, Menu, X } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { UserMenu } from "@/components/user-menu";
+import { useAuth } from "@/lib/auth-context";
+import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+
+export function Header() {
+  const t = useTranslations("common");
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
+
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(path);
+  };
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
+        <Link href="/" className="flex items-center space-x-2">
+          <Heart className="h-6 w-6 text-primary" fill="currentColor" aria-hidden="true" />
+          <span className="text-xl font-bold">CharityHub</span>
+        </Link>
+        
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-6" aria-label="Main navigation">
+          <Link 
+            href="/" 
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              isActive("/") 
+                ? "text-primary font-semibold" 
+                : "text-muted-foreground"
+            )}
+          >
+            {t("nav.home")}
+          </Link>
+          <Link 
+            href="/funds" 
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              isActive("/funds") 
+                ? "text-primary font-semibold" 
+                : "text-muted-foreground"
+            )}
+          >
+            {t("nav.campaigns")}
+          </Link>
+          <Link 
+            href="/contact" 
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              isActive("/contact") 
+                ? "text-primary font-semibold" 
+                : "text-muted-foreground"
+            )}
+          >
+            {t("nav.contact")}
+          </Link>
+          <Link 
+            href="/profile" 
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              isActive("/profile") 
+                ? "text-primary font-semibold" 
+                : "text-muted-foreground"
+            )}
+          >
+            {t("nav.profile")}
+          </Link>
+        </nav>
+
+        {/* Desktop Actions */}
+        <div className="hidden md:flex items-center gap-3">
+          <LanguageSwitcher />
+          <ThemeToggle />
+          {user ? (
+            <UserMenu />
+          ) : (
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/auth">
+                <User className="h-4 w-4 mr-2" aria-hidden="true" />
+                {t("nav.signIn")}
+              </Link>
+            </Button>
+          )}
+          <Button asChild size="sm">
+            <Link href="/funds">{t("nav.startFundraiser")}</Link>
+          </Button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageSwitcher />
+          <ThemeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t">
+          <nav className="container py-4 space-y-4" aria-label="Mobile navigation">
+            <Link
+              href="/"
+              className={cn(
+                "block px-4 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
+                isActive("/")
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-muted-foreground"
+              )}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t("nav.home")}
+            </Link>
+            <Link
+              href="/funds"
+              className={cn(
+                "block px-4 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
+                isActive("/funds")
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-muted-foreground"
+              )}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t("nav.campaigns")}
+            </Link>
+            <Link
+              href="/contact"
+              className={cn(
+                "block px-4 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
+                isActive("/contact")
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-muted-foreground"
+              )}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t("nav.contact")}
+            </Link>
+            <Link
+              href="/profile"
+              className={cn(
+                "block px-4 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
+                isActive("/profile")
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-muted-foreground"
+              )}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t("nav.profile")}
+            </Link>
+            <div className="pt-4 border-t space-y-2">
+              {user ? (
+                <div className="px-4">
+                  <UserMenu />
+                </div>
+              ) : (
+                <Button variant="outline" size="sm" asChild className="w-full">
+                  <Link href="/auth" onClick={() => setMobileMenuOpen(false)}>
+                    <User className="h-4 w-4 mr-2" aria-hidden="true" />
+                    {t("nav.signIn")}
+                  </Link>
+                </Button>
+              )}
+              <Button asChild size="sm" className="w-full">
+                <Link href="/funds" onClick={() => setMobileMenuOpen(false)}>
+                  {t("nav.startFundraiser")}
+                </Link>
+              </Button>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+}
