@@ -1,42 +1,44 @@
 import { notFound } from "next/navigation";
-import { FundTabs } from "@/components/funds/fund-tabs";
-import { ContributionSidebar } from "@/components/funds/contribution-sidebar";
-import { FundRewardSection } from "@/components/funds/fund-reward-section";
+import { CampaignTabs } from "@/components/campaigns/campaign-tabs";
+import { ContributionSidebar } from "@/components/campaigns/contribution-sidebar";
+import { CampaignRewardSection } from "@/components/campaigns/campaign-reward-section";
 import { Heading, BodyText } from "@/components/ui/typography";
-import { getFundById } from "@/lib/services/fund.service";
-import { fundToCampaign } from "@/lib/adapters/fund-to-campaign.adapter";
+import { getCampaignById } from "@/lib/services/campaign.service";
+import { campaignToMockFormat } from "@/lib/adapters/campaign-adapter";
 import { mockCampaigns } from "@/lib/data";
 import type { Fund } from "@/types";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
-export default async function FundDetailPage({ 
-  params 
-}: { 
-  readonly params: Promise<{ slug: string; locale: string }> 
+export default async function CampaignDetailPage({
+  params
+}: {
+  readonly params: Promise<{ slug: string; locale: string }>
 }) {
   const { slug } = await params;
-  
-  // Try to extract fundId from slug (format: fund-{fundId})
+
+  // Try to extract campaignId from slug (format: campaign-{campaignId})
   let campaign: Fund | null = null;
   let error = null;
-  
-  // Check if slug starts with 'fund-' (API format) or is a regular slug (mock data)
-  if (slug.startsWith('fund-')) {
-    // API fund - extract ID
-    const fundId = slug.replace('fund-', '');
-    
+
+  // Check if slug starts with 'campaign-' (API format) or is a regular slug (mock data)
+  if (slug.startsWith('campaign-')) {
+    // API campaign - extract ID
+    const campaignId = slug.replace('campaign-', '');
+
     try {
-      const fund = await getFundById(fundId);
-      campaign = fundToCampaign(fund);
+      const apiCampaign = await getCampaignById(campaignId);
+      campaign = campaignToMockFormat(apiCampaign);
     } catch (err) {
-      error = err instanceof Error ? err.message : "Failed to load fund";
-      console.error("Error fetching fund from API:", err);
+      error = err instanceof Error ? err.message : "Failed to load campaign";
+      console.error("Error fetching campaign from API:", err);
     }
   }
-  
+
   // Fallback to mock data if API fails or slug is in mock format
   if (!campaign) {
     campaign = mockCampaigns.find(c => c.slug === slug) || null;
-    
+
     if (!campaign) {
       notFound();
     }
@@ -54,7 +56,7 @@ export default async function FundDetailPage({
         <div className="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 rounded-lg border border-yellow-200 dark:border-yellow-800">
           <p className="font-semibold">⚠️ Using Demo Data</p>
           <p className="text-sm">Backend API error: {error}</p>
-          <p className="text-sm mt-1">Showing mock fund for demonstration. Please fix the backend database schema.</p>
+          <p className="text-sm mt-1">Showing mock campaign for demonstration. Please fix the backend database schema.</p>
         </div>
       )}
 
@@ -75,8 +77,8 @@ export default async function FundDetailPage({
           {/* Campaign Image/Banner */}
           {campaign.imageUrl ? (
             <div className="aspect-video w-full overflow-hidden rounded-lg">
-              <img 
-                src={campaign.imageUrl} 
+              <img
+                src={campaign.imageUrl}
                 alt={campaign.title}
                 className="w-full h-full object-cover"
               />
@@ -92,23 +94,23 @@ export default async function FundDetailPage({
               />
             </div>
           ) : (
-            <div 
+            <div
               className="aspect-video w-full overflow-hidden rounded-lg bg-muted"
               aria-hidden="true"
             >
               <div className="h-full w-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <span className="text-muted-foreground">Fund Image</span>
+                <span className="text-muted-foreground">Campaign Image</span>
               </div>
             </div>
           )}
 
-          {/* Reward Tiers - Only show if fund has rewards */}
+          {/* Reward Tiers - Only show if campaign has rewards */}
           {campaign.rewardTiers && campaign.rewardTiers.length > 0 && (
-            <FundRewardSection rewardTiers={campaign.rewardTiers} />
+            <CampaignRewardSection rewardTiers={campaign.rewardTiers} />
           )}
 
-          {/* Fund Tabs - Client Component */}
-          <FundTabs fund={campaign} />
+          {/* Campaign Tabs - Client Component */}
+          <CampaignTabs campaign={campaign} />
         </div>
 
         {/* Sidebar - Client Component */}

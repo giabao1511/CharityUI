@@ -34,45 +34,56 @@ export function Header() {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6" aria-label="Main navigation">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className={cn(
               "text-sm font-medium transition-colors hover:text-primary",
-              isActive("/") 
-                ? "text-primary font-semibold" 
+              isActive("/")
+                ? "text-primary font-semibold"
                 : "text-muted-foreground"
             )}
           >
             {t("nav.home")}
           </Link>
-          <Link 
-            href="/funds" 
+          <Link
+            href="/campaigns"
             className={cn(
               "text-sm font-medium transition-colors hover:text-primary",
-              isActive("/funds") 
-                ? "text-primary font-semibold" 
+              isActive("/campaigns")
+                ? "text-primary font-semibold"
                 : "text-muted-foreground"
             )}
           >
             {t("nav.campaigns")}
           </Link>
-          <Link 
-            href="/contact" 
+          <Link
+            href="/organizations"
             className={cn(
               "text-sm font-medium transition-colors hover:text-primary",
-              isActive("/contact") 
-                ? "text-primary font-semibold" 
+              isActive("/organizations")
+                ? "text-primary font-semibold"
+                : "text-muted-foreground"
+            )}
+          >
+            Organizations
+          </Link>
+          <Link
+            href="/contact"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              isActive("/contact")
+                ? "text-primary font-semibold"
                 : "text-muted-foreground"
             )}
           >
             {t("nav.contact")}
           </Link>
-          <Link 
-            href="/profile" 
+          <Link
+            href="/profile"
             className={cn(
               "text-sm font-medium transition-colors hover:text-primary",
-              isActive("/profile") 
-                ? "text-primary font-semibold" 
+              isActive("/profile")
+                ? "text-primary font-semibold"
                 : "text-muted-foreground"
             )}
           >
@@ -95,7 +106,7 @@ export function Header() {
             </Button>
           )}
           <Button asChild size="sm">
-            <Link href="/funds">{t("nav.startFundraiser")}</Link>
+            <Link href="/campaigns">{t("nav.startFundraiser")}</Link>
           </Button>
         </div>
 
@@ -136,16 +147,28 @@ export function Header() {
               {t("nav.home")}
             </Link>
             <Link
-              href="/funds"
+              href="/campaigns"
               className={cn(
                 "block px-4 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
-                isActive("/funds")
+                isActive("/campaigns")
                   ? "bg-primary/10 text-primary font-semibold"
                   : "text-muted-foreground"
               )}
               onClick={() => setMobileMenuOpen(false)}
             >
               {t("nav.campaigns")}
+            </Link>
+            <Link
+              href="/organizations"
+              className={cn(
+                "block px-4 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
+                isActive("/organizations")
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-muted-foreground"
+              )}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Organizations
             </Link>
             <Link
               href="/contact"
@@ -185,7 +208,7 @@ export function Header() {
                 </Button>
               )}
               <Button asChild size="sm" className="w-full">
-                <Link href="/funds" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/campaigns" onClick={() => setMobileMenuOpen(false)}>
                   {t("nav.startFundraiser")}
                 </Link>
               </Button>

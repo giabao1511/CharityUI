@@ -325,6 +325,102 @@
       }
     }
   },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Discover and support fundraising campaigns from verified organizations",
+    "search": "Search campaigns...",
+    "searchPlaceholder": "Search by title or description",
+    "filter": {
+      "category": "Category",
+      "allCategories": "All Categories",
+      "sortBy": "Sort by"
+    },
+    "card": {
+      "image": "Campaign Image",
+      "funded": "funded",
+      "backers": "backers",
+      "daysLeft": "{days} days left",
+      "ended": "Ended",
+      "by": "by",
+      "viewCampaign": "View Campaign"
+    },
+    "detail": {
+      "pledged": "pledged of",
+      "goal": "goal",
+      "backersCount": "backers",
+      "daysToGo": "days to go",
+      "campaignActive": "Campaign Active",
+      "campaignEnded": "Campaign Ended",
+      "contributionAmount": "Contribution Amount",
+      "enterAmount": "Enter amount",
+      "backThisCampaign": "Back This Campaign",
+      "selectedReward": "Selected Reward:",
+      "minimumContribution": "Enter the amount you would like to contribute (minimum $1)"
+    },
+    "tabs": {
+      "description": "Description & Updates",
+      "milestones": "Milestones",
+      "contributors": "Contributors",
+      "comments": "Comments"
+    },
+    "content": {
+      "aboutCampaign": "About This Campaign",
+      "campaignStory": "Campaign Story",
+      "howFundsUsed": "How Funds Will Be Used",
+      "campaignUpdates": "Campaign Updates",
+      "campaignMilestones": "Campaign Milestones",
+      "fundingRequired": "Funding Required:",
+      "completed": "Completed:",
+      "storyDescription": "This campaign was created to address a critical need in our community. Your support will make a direct impact and help us achieve our goal of making a positive difference."
+    },
+    "milestones": {
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "pending": "Pending"
+    },
+    "messages": {
+      "invalidAmount": "Invalid Amount",
+      "invalidAmountDesc": "Please enter a valid contribution amount.",
+      "thankYou": "Thank You!",
+      "contributionSuccess": "Your contribution of {amount} has been received!",
+      "rewardSelected": "You selected the \"{reward}\" reward tier.",
+      "demoMode": "(Demo mode - no actual payment processed)"
+    },
+    "errors": {
+      "usingDemoData": "Using Demo Data",
+      "backendError": "Backend API error: {error}",
+      "demoDataDesc": "Showing mock campaigns for demonstration. Please fix the backend database schema."
+    }
+  },
+  "organizations": {
+    "title": "Organizations",
+    "subtitle": "Discover verified charitable organizations making a difference",
+    "viewOrganization": "View Organization",
+    "noDescription": "No description available",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "suspended": "Suspended",
+      "verified": "Verified"
+    },
+    "errors": {
+      "connectionError": "Connection Error",
+      "backendError": "Backend API error: {error}",
+      "ensureBackend": "Please ensure the backend server is running."
+    },
+    "detail": {
+      "campaigns": "Campaigns",
+      "activeCampaigns": "Active Campaigns",
+      "totalCampaigns": "Total Campaigns",
+      "about": "About",
+      "contact": "Contact Information",
+      "website": "Website",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address"
+    }
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",

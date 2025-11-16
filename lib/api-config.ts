@@ -26,25 +26,42 @@ export const API_ENDPOINTS = {
     UPLOAD_AVATAR: `${API_BASE_URL}/v1/users/upload-avatar`,
     REFRESH_TOKEN: `${API_BASE_URL}/v1/users/refresh-token`,
   },
+  // Organization endpoints
+  ORGANIZATIONS: {
+    LIST: `${API_BASE_URL}/v1/organizations`,
+    CREATE: `${API_BASE_URL}/v1/organizations`,
+    DETAIL: (orgId: string | number) =>
+      `${API_BASE_URL}/v1/organizations/${orgId}`,
+    UPDATE: (orgId: string | number) =>
+      `${API_BASE_URL}/v1/organizations/${orgId}`,
+    UPLOAD_AVATAR: `${API_BASE_URL}/v1/organizations/upload-avatar`,
+    UPLOAD_MEDIA: `${API_BASE_URL}/v1/organizations/upload-media`,
+  },
   // Fund Categories endpoints
   FUND_CATEGORIES: {
     LIST: `${API_BASE_URL}/v1/fund-categories`,
     CREATE: `${API_BASE_URL}/v1/fund-categories`,
     UPLOAD_ICON: `${API_BASE_URL}/v1/fund-categories/upload-icon`,
   },
-  // Funds endpoints (main fundraising campaigns)
-  FUNDS: {
+  // Campaign endpoints (fundraising campaigns managed by organizations)
+  CAMPAIGNS: {
     LIST: `${API_BASE_URL}/v1/fund-charity`,
     CREATE: `${API_BASE_URL}/v1/fund-charity`,
-    DETAIL: (fundId: string | number) => `${API_BASE_URL}/v1/fund-charity/${fundId}`,
-    UPDATE: (fundId: string | number) => `${API_BASE_URL}/v1/fund-charity/${fundId}`,
+    DETAIL: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/fund-charity/${campaignId}`,
+    UPDATE: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/fund-charity/${campaignId}`,
     UPLOAD_BANNER: `${API_BASE_URL}/v1/fund-charity/upload-banner`,
     UPLOAD_MEDIA: `${API_BASE_URL}/v1/fund-charity/upload-media`,
   },
-  // Legacy alias for backward compatibility (campaigns = funds)
-  CAMPAIGNS: {
+  // Legacy alias for backward compatibility (funds = campaigns)
+  FUNDS: {
     LIST: `${API_BASE_URL}/v1/fund-charity`,
+    CREATE: `${API_BASE_URL}/v1/fund-charity`,
     DETAIL: (id: string | number) => `${API_BASE_URL}/v1/fund-charity/${id}`,
+    UPDATE: (id: string | number) => `${API_BASE_URL}/v1/fund-charity/${id}`,
+    UPLOAD_BANNER: `${API_BASE_URL}/v1/fund-charity/upload-banner`,
+    UPLOAD_MEDIA: `${API_BASE_URL}/v1/fund-charity/upload-media`,
   },
 } as const;
 
@@ -58,6 +75,7 @@ export async function apiClient<T>(
   options?: RequestInit
 ): Promise<{
   data?: T;
+  pagination?: { page: number; limit: number; total: number };
   error?: { message: string; statusCode: number; errors?: any[] };
 }> {
   try {
@@ -100,7 +118,7 @@ export async function apiClient<T>(
       };
     }
 
-    return { data: result.data || result };
+    return result;
   } catch (error) {
     return {
       error: {

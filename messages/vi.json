@@ -325,6 +325,102 @@
       }
     }
   },
+  "campaigns": {
+    "title": "Chiến Dịch",
+    "subtitle": "Khám phá và ủng hộ các chiến dịch gây quỹ từ các tổ chức đã xác minh",
+    "search": "Tìm kiếm chiến dịch...",
+    "searchPlaceholder": "Tìm theo tiêu đề hoặc mô tả",
+    "filter": {
+      "category": "Danh Mục",
+      "allCategories": "Tất Cả Danh Mục",
+      "sortBy": "Sắp xếp theo"
+    },
+    "card": {
+      "image": "Hình Ảnh Chiến Dịch",
+      "funded": "đã quyên góp",
+      "backers": "người ủng hộ",
+      "daysLeft": "còn {days} ngày",
+      "ended": "Đã kết thúc",
+      "by": "bởi",
+      "viewCampaign": "Xem Chiến Dịch"
+    },
+    "detail": {
+      "pledged": "đã cam kết của",
+      "goal": "mục tiêu",
+      "backersCount": "người ủng hộ",
+      "daysToGo": "ngày còn lại",
+      "campaignActive": "Chiến Dịch Đang Hoạt Động",
+      "campaignEnded": "Chiến Dịch Đã Kết Thúc",
+      "contributionAmount": "Số Tiền Đóng Góp",
+      "enterAmount": "Nhập số tiền",
+      "backThisCampaign": "Ủng Hộ Chiến Dịch Này",
+      "selectedReward": "Phần Thưởng Đã Chọn:",
+      "minimumContribution": "Nhập số tiền bạn muốn đóng góp (tối thiểu $1)"
+    },
+    "tabs": {
+      "description": "Mô Tả & Cập Nhật",
+      "milestones": "Mốc Quan Trọng",
+      "contributors": "Người Đóng Góp",
+      "comments": "Bình Luận"
+    },
+    "content": {
+      "aboutCampaign": "Về Chiến Dịch Này",
+      "campaignStory": "Câu Chuyện Chiến Dịch",
+      "howFundsUsed": "Cách Sử Dụng Quỹ",
+      "campaignUpdates": "Cập Nhật Chiến Dịch",
+      "campaignMilestones": "Mốc Quan Trọng Của Chiến Dịch",
+      "fundingRequired": "Quỹ Cần Thiết:",
+      "completed": "Đã Hoàn Thành:",
+      "storyDescription": "Chiến dịch này được tạo ra để giải quyết một nhu cầu cấp thiết trong cộng đồng của chúng ta. Sự hỗ trợ của bạn sẽ tạo ra tác động trực tiếp và giúp chúng tôi đạt được mục tiêu tạo ra sự khác biệt tích cực."
+    },
+    "milestones": {
+      "completed": "Đã Hoàn Thành",
+      "inProgress": "Đang Thực Hiện",
+      "pending": "Đang Chờ"
+    },
+    "messages": {
+      "invalidAmount": "Số Tiền Không Hợp Lệ",
+      "invalidAmountDesc": "Vui lòng nhập số tiền đóng góp hợp lệ.",
+      "thankYou": "Cảm Ơn Bạn!",
+      "contributionSuccess": "Khoản đóng góp {amount} của bạn đã được nhận!",
+      "rewardSelected": "Bạn đã chọn phần thưởng \"{reward}\".",
+      "demoMode": "(Chế độ demo - không có giao dịch thanh toán thực tế)"
+    },
+    "errors": {
+      "usingDemoData": "Sử Dụng Dữ Liệu Demo",
+      "backendError": "Lỗi API backend: {error}",
+      "demoDataDesc": "Hiển thị chiến dịch mô phỏng để trình diễn. Vui lòng sửa lỗi cơ sở dữ liệu backend."
+    }
+  },
+  "organizations": {
+    "title": "Tổ Chức",
+    "subtitle": "Khám phá các tổ chức từ thiện đã xác minh đang tạo nên sự khác biệt",
+    "viewOrganization": "Xem Tổ Chức",
+    "noDescription": "Không có mô tả",
+    "status": {
+      "active": "Hoạt Động",
+      "inactive": "Không Hoạt Động",
+      "pending": "Đang Chờ",
+      "suspended": "Đã Tạm Ngưng",
+      "verified": "Đã Xác Minh"
+    },
+    "errors": {
+      "connectionError": "Lỗi Kết Nối",
+      "backendError": "Lỗi API backend: {error}",
+      "ensureBackend": "Vui lòng đảm bảo máy chủ backend đang chạy."
+    },
+    "detail": {
+      "campaigns": "Chiến Dịch",
+      "activeCampaigns": "Chiến Dịch Đang Hoạt Động",
+      "totalCampaigns": "Tổng Chiến Dịch",
+      "about": "Giới Thiệu",
+      "contact": "Thông Tin Liên Hệ",
+      "website": "Trang Web",
+      "email": "Email",
+      "phone": "Điện Thoại",
+      "address": "Địa Chỉ"
+    }
+  },
   "common": {
     "loading": "Đang tải...",
     "error": "Lỗi",
