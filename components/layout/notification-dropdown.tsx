@@ -11,16 +11,23 @@ import { useNotifications } from "@/contexts/notification-context";
 import { Link } from "@/i18n/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
+import { getSocket } from "@/lib/socket";
+import { useAuth } from "@/lib/auth-context";
 
 export function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+  const { notifications, unreadCount, markAsRead, markAllAsRead } =
+    useNotifications();
+  const { user } = useAuth();
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -53,6 +60,25 @@ export function NotificationDropdown() {
         return "ℹ️";
     }
   };
+  useEffect(() => {
+    if (!user) return;
+
+    const socket = getSocket();
+
+    socket.on("connect", () => {
+      console.log('join')
+      socket.emit("join-notify", user.userId);
+    });
+
+    socket.on("notification", (notif) => {
+      console.log("📩 New notif:", notif);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("notification");
+    };
+  }, [user]);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -142,7 +168,10 @@ export function NotificationDropdown() {
 
                         <div className="flex-1 min-w-0">
                           {notification.actionUrl ? (
-                            <Link href={notification.actionUrl} className="block">
+                            <Link
+                              href={notification.actionUrl}
+                              className="block"
+                            >
                               <BodyText
                                 weight="semibold"
                                 size="sm"
@@ -150,25 +179,40 @@ export function NotificationDropdown() {
                               >
                                 {notification.title}
                               </BodyText>
-                              <BodyText size="sm" muted className="line-clamp-2">
+                              <BodyText
+                                size="sm"
+                                muted
+                                className="line-clamp-2"
+                              >
                                 {notification.message}
                               </BodyText>
                             </Link>
                           ) : (
                             <>
-                              <BodyText weight="semibold" size="sm" className="mb-1">
+                              <BodyText
+                                weight="semibold"
+                                size="sm"
+                                className="mb-1"
+                              >
                                 {notification.title}
                               </BodyText>
-                              <BodyText size="sm" muted className="line-clamp-2">
+                              <BodyText
+                                size="sm"
+                                muted
+                                className="line-clamp-2"
+                              >
                                 {notification.message}
                               </BodyText>
                             </>
                           )}
 
                           <BodyText size="xs" muted className="mt-1">
-                            {formatDistanceToNow(new Date(notification.timestamp), {
-                              addSuffix: true,
-                            })}
+                            {formatDistanceToNow(
+                              new Date(notification.timestamp),
+                              {
+                                addSuffix: true,
+                              }
+                            )}
                           </BodyText>
                         </div>
 
