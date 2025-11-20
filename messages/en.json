@@ -49,7 +49,7 @@
       "title": "Make a Difference",
       "titleHighlight": "One Fund at a Time",
       "subtitle": "Join thousands of people supporting causes that matter. Start your fundraiser or back a fund today.",
-      "exploreFunds": "Explore Funds",
+      "exploreCampaigns": "Explore Campaigns",
       "startFundraiser": "Start a Fundraiser"
     },
     "stats": {
@@ -331,9 +331,30 @@
     "search": "Search campaigns...",
     "searchPlaceholder": "Search by title or description",
     "filter": {
+      "searchPlaceholder":"Search by name or description",
       "category": "Category",
       "allCategories": "All Categories",
-      "sortBy": "Sort by"
+      "sortBy": "Sort by",
+      "order": "Order",
+      "status": "Status",
+      "search": "Search",
+      "clear": "Clear Filters",
+      "recent": "Most Recent",
+      "mostFunded": "Most Funded",
+      "mostBackers": "Most Backers",
+      "endingSoon": "Ending Soon",
+      "allStatus": "All Status",
+      "active": "Active",
+      "paused": "Paused",
+      "completed": "Completed",
+      "closed": "Closed",
+      "startDate": "Start Date",
+      "createdDate": "Created Date",
+      "title": "Title",
+      "targetAmount": "Target Amount",
+      "currentAmount": "Current Amount",
+      "descending": "Descending",
+      "ascending": "Ascending"
     },
     "card": {
       "image": "Campaign Image",
@@ -397,6 +418,17 @@
     "subtitle": "Discover verified charitable organizations making a difference",
     "viewOrganization": "View Organization",
     "noDescription": "No description available",
+    "filter": {
+      "searchPlaceholder": "Search organizations...",
+      "sortBy": "Sort by",
+      "order": "Order",
+      "search": "Search",
+      "clear": "Clear Filters",
+      "orgName": "Organization Name",
+      "createdDate": "Created Date",
+      "descending": "Descending",
+      "ascending": "Ascending"
+    },
     "status": {
       "active": "Active",
       "inactive": "Inactive",
@@ -418,7 +450,134 @@
       "website": "Website",
       "email": "Email",
       "phone": "Phone",
-      "address": "Address"
+      "address": "Address",
+      "team": "Team",
+      "media": "Media",
+      "teamMembers": "Team Members",
+      "mediaGallery": "Media Gallery",
+      "noCampaigns": "No campaigns yet",
+      "noTeam": "No team members listed",
+      "noMedia": "No media files available",
+      "raisedOf": "raised of",
+      "member": "Member"
+    }
+  },
+  "creator": {
+    "dashboard": {
+      "title": "Creator Dashboard",
+      "welcome": "Welcome back, {name}!",
+      "subtitle": "Manage your campaigns and track performance"
+    },
+    "stats": {
+      "totalRaised": "Total Raised",
+      "totalRaisedDesc": "Across all campaigns",
+      "activeCampaigns": "Active Campaigns",
+      "activeCampaignsDesc": "Currently running",
+      "totalVolunteers": "Total Volunteers",
+      "totalVolunteersDesc": "Registered helpers",
+      "totalBackers": "Total Backers",
+      "totalBackersDesc": "People supporting you"
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "noActivity": "No recent activity to display",
+      "donation": "Donation",
+      "volunteer": "Volunteer",
+      "milestone": "Milestone",
+      "comment": "Comment",
+      "update": "Update"
+    },
+    "campaigns": {
+      "title": "My Campaigns",
+      "subtitle": "Manage all your fundraising campaigns",
+      "createNew": "Create New Campaign",
+      "noCampaigns": "You haven't created any campaigns yet",
+      "getStarted": "Get Started",
+      "table": {
+        "campaign": "Campaign",
+        "status": "Status",
+        "raised": "Raised",
+        "target": "Target",
+        "backers": "Backers",
+        "volunteers": "Volunteers",
+        "endDate": "End Date",
+        "actions": "Actions",
+        "manage": "Manage",
+        "edit": "Edit",
+        "view": "View"
+      }
+    },
+    "milestones": {
+      "title": "Milestone Management",
+      "subtitle": "Track and update campaign milestones",
+      "updateMilestone": "Update Milestone",
+      "achievedAmount": "Achieved Amount",
+      "targetAmount": "Target Amount",
+      "status": "Status",
+      "pending": "Pending",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "updateStatus": "Update Status",
+      "updateAmount": "Update Amount",
+      "saveChanges": "Save Changes",
+      "cancel": "Cancel",
+      "updated": "Milestone updated successfully",
+      "updateFailed": "Failed to update milestone"
+    },
+    "volunteers": {
+      "title": "Volunteer Management",
+      "subtitle": "Manage volunteer registrations for this campaign",
+      "noVolunteers": "No volunteer registrations yet",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "registeredAt": "Registered",
+        "status": "Status",
+        "skills": "Skills",
+        "availability": "Availability",
+        "actions": "Actions"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "actions": {
+        "approve": "Approve",
+        "reject": "Reject",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "viewDetails": "View Details"
+      },
+      "approved": "Volunteer approved",
+      "rejected": "Volunteer rejected",
+      "statusUpdated": "Volunteer status updated"
+    },
+    "create": {
+      "pageTitle": "Create New Campaign",
+      "pageSubtitle": "Launch a fundraising campaign for your organization",
+      "title": "Campaign Information",
+      "subtitle": "Fill in the details for your new campaign",
+      "organization": "Organization",
+      "selectOrganization": "Select an organization",
+      "organizationHelp": "The organization that will manage this campaign",
+      "category": "Campaign Category",
+      "selectCategory": "Select a category",
+      "campaignTitle": "Campaign Title",
+      "titlePlaceholder": "Enter a compelling campaign title",
+      "description": "Campaign Description",
+      "descriptionPlaceholder": "Describe your campaign goals, purpose, and how the funds will be used...",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "targetAmount": "Target Amount",
+      "targetAmountHelp": "The total amount you aim to raise",
+      "createCampaign": "Create Campaign",
+      "creating": "Creating...",
+      "cancel": "Cancel",
+      "success": "Campaign created successfully!",
+      "error": "Failed to create campaign"
     }
   },
   "common": {
@@ -444,7 +603,8 @@
     "no": "No",
     "nav": {
       "home": "Home",
-      "campaigns": "Funds",
+      "campaigns": "Campaigns",
+      "organizations": "Organizations",
       "contact": "Contact",
       "profile": "Profile",
       "signIn": "Sign In",

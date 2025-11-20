@@ -50,7 +50,7 @@ export function ContributorsList({ contributors }: ContributorsListProps) {
                       {contributor.isAnonymous ? "Anonymous" : contributor.name}
                     </BodyText>
                     <BodyText weight="bold" className="text-primary flex-shrink-0">
-                      {formatCurrency(contributor.amount, locale)}
+                      {formatCurrency(contributor.amount)}
                     </BodyText>
                   </div>
 

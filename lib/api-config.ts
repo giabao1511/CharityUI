@@ -45,10 +45,10 @@ export const API_ENDPOINTS = {
   },
   // Campaign endpoints (fundraising campaigns managed by organizations)
   CAMPAIGNS: {
-    LIST: `${API_BASE_URL}/v1/fund-charity`,
-    CREATE: `${API_BASE_URL}/v1/fund-charity`,
+    LIST: `${API_BASE_URL}/v1/campaigns`,
+    CREATE: (orgId: string | number) => `${API_BASE_URL}/v1/campaigns/${orgId}`,
     DETAIL: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/fund-charity/${campaignId}`,
+      `${API_BASE_URL}/v1/campaigns/detail/${campaignId}`,
     UPDATE: (campaignId: string | number) =>
       `${API_BASE_URL}/v1/fund-charity/${campaignId}`,
     UPLOAD_BANNER: `${API_BASE_URL}/v1/fund-charity/upload-banner`,
@@ -62,6 +62,54 @@ export const API_ENDPOINTS = {
     UPDATE: (id: string | number) => `${API_BASE_URL}/v1/fund-charity/${id}`,
     UPLOAD_BANNER: `${API_BASE_URL}/v1/fund-charity/upload-banner`,
     UPLOAD_MEDIA: `${API_BASE_URL}/v1/fund-charity/upload-media`,
+  },
+  // Volunteer endpoints (Real API - Implemented)
+  VOLUNTEERS: {
+    // Get volunteers for a campaign
+    LIST: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/volunteers/${campaignId}`,
+    // Update volunteer status
+    UPDATE_STATUS: (registrationId: string | number) =>
+      `${API_BASE_URL}/v1/volunteers/status/${registrationId}`,
+  },
+  // Payment endpoints (VNPay Integration)
+  PAYMENTS: {
+    // Create payment URL (VNPay)
+    CREATE: `${API_BASE_URL}/v1/payments/create`,
+    // Check payment status after callback
+    CHECK: `${API_BASE_URL}/v1/payments/check`,
+  },
+  // Creator/Fund Manager Dashboard endpoints
+  CREATOR: {
+    // Dashboard statistics (TODO: Backend to implement)
+    STATS: `${API_BASE_URL}/v1/creator/stats`,
+    // Campaign management (Uses existing endpoints)
+    CAMPAIGNS: `${API_BASE_URL}/v1/creator/campaigns`,
+    CREATE_CAMPAIGN: (orgId: string | number) =>
+      `${API_BASE_URL}/v1/creator/campaigns/${orgId}`,
+    UPDATE_CAMPAIGN: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}`,
+    CAMPAIGN_ANALYTICS: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/analytics`,
+    // Activity feed (TODO: Backend to implement)
+    ACTIVITIES: `${API_BASE_URL}/v1/creator/activities`,
+    // Milestone management (TODO: Backend to implement)
+    CAMPAIGN_MILESTONES: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/milestones`,
+    CREATE_MILESTONE: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/milestones`,
+    UPDATE_MILESTONE: (milestoneId: string | number) =>
+      `${API_BASE_URL}/v1/creator/milestones/${milestoneId}`,
+    DELETE_MILESTONE: (milestoneId: string | number) =>
+      `${API_BASE_URL}/v1/creator/milestones/${milestoneId}`,
+    // Donations (TODO: Backend to implement)
+    CAMPAIGN_DONATIONS: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/donations`,
+    // Campaign updates/posts (TODO: Backend to implement)
+    CAMPAIGN_UPDATES: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/updates`,
+    POST_CAMPAIGN_UPDATE: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/updates`,
   },
 } as const;
 

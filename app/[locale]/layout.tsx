@@ -9,6 +9,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/lib/auth-context";
+import { NotificationProvider } from "@/contexts/notification-context";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -48,25 +49,27 @@ export default async function LocaleLayout({
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="light"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <a 
-                href="#main-content" 
-                className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+            <NotificationProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
               >
-                Skip to main content
-              </a>
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <main id="main-content" className="flex-1 pt-0">{children}</main>
-                <Footer />
-              </div>
-              <Toaster />
-            </ThemeProvider>
+                <a
+                  href="#main-content"
+                  className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+                >
+                  Skip to main content
+                </a>
+                <div className="flex min-h-screen flex-col">
+                  <Header />
+                  <main id="main-content" className="flex-1 pt-0">{children}</main>
+                  <Footer />
+                </div>
+                <Toaster />
+              </ThemeProvider>
+            </NotificationProvider>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

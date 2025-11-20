@@ -10,7 +10,9 @@ interface OrganizationSidebarProps {
   readonly organization: Organization;
 }
 
-export function OrganizationSidebar({ organization }: OrganizationSidebarProps) {
+export function OrganizationSidebar({
+  organization,
+}: OrganizationSidebarProps) {
   const wallet = organization.wallets?.[0];
   const campaignsCount = organization.campaigns?.length || 0;
 
@@ -27,7 +29,9 @@ export function OrganizationSidebar({ organization }: OrganizationSidebarProps) 
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="text-sm text-muted-foreground mb-1">Total Balance</p>
+              <p className="text-sm text-muted-foreground mb-1">
+                Total Balance
+              </p>
               <p className="text-2xl font-bold">
                 ${wallet.balance.toLocaleString()}
               </p>
@@ -41,29 +45,6 @@ export function OrganizationSidebar({ organization }: OrganizationSidebarProps) 
         </Card>
       )}
 
-      {/* Campaigns Stats */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="w-5 h-5" />
-            Campaigns
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-muted-foreground">Total Campaigns</p>
-              <p className="font-semibold">{campaignsCount}</p>
-            </div>
-            {campaignsCount > 0 && (
-              <Button variant="outline" className="w-full mt-4">
-                View All Campaigns
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Bank Accounts */}
       {organization.banks && organization.banks.length > 0 && (
         <Card>
@@ -72,7 +53,10 @@ export function OrganizationSidebar({ organization }: OrganizationSidebarProps) 
           </CardHeader>
           <CardContent className="space-y-3">
             {organization.banks.map((bank) => (
-              <div key={bank.bankAccountId} className="border-l-2 border-primary pl-3">
+              <div
+                key={bank.bankAccountId}
+                className="border-l-2 border-primary pl-3"
+              >
                 <p className="font-medium text-sm">{bank.bankName}</p>
                 <p className="text-xs text-muted-foreground">
                   {bank.accountHolder}

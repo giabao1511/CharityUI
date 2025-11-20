@@ -59,9 +59,9 @@ export function UserMenu() {
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => router.push("/campaigns")}>
+        <DropdownMenuItem onClick={() => router.push("/creator")}>
           <Heart className="mr-2 h-4 w-4" />
-          <span>My Campaigns</span>
+          <span>Dashboard</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/profile")}>
           <Settings className="mr-2 h-4 w-4" />

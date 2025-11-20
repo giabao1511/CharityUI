@@ -42,8 +42,6 @@ export async function getOrganizations(filters?: OrganizationQueryFilters) {
     throw new Error("Invalid response structure from API");
   }
 
-  console.log(result);
-
   return result;
 }
 

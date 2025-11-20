@@ -74,7 +74,7 @@ export function ContributionSidebar({
     
     // Mock handler - in real app, this would process payment
     toast.success("Thank You!", {
-      description: `Your contribution of ${formatCurrency(Number.parseFloat(amount), locale)} has been received!${rewardInfo} (Demo mode - no actual payment processed)`,
+      description: `Your contribution of ${formatCurrency(Number.parseFloat(amount))} has been received!${rewardInfo} (Demo mode - no actual payment processed)`,
     });
     setContributionAmount("");
     setSelectedTierId(null);
@@ -83,8 +83,8 @@ export function ContributionSidebar({
   return (
     <Card className="lg:sticky lg:top-20">
       <CardHeader>
-        <CardTitle className="text-2xl">{formatCurrency(currentAmount, locale)}</CardTitle>
-        <CardDescription>pledged of {formatCurrency(goalAmount, locale)} goal</CardDescription>
+        <CardTitle className="text-2xl">{formatCurrency(currentAmount)}</CardTitle>
+        <CardDescription>pledged of {formatCurrency(goalAmount)} goal</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>

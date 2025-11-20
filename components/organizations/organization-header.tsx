@@ -1,17 +1,16 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Heading, BodyText } from "@/components/ui/typography";
-import { MapPin, Mail, Phone, Globe, Users } from "lucide-react";
+import { BodyText, Heading } from "@/components/ui/typography";
 import type { Organization } from "@/types/organization";
-import { OrgStatusNames } from "@/types/organization";
+import { Globe, Mail, MapPin, Phone, Users } from "lucide-react";
 
 interface OrganizationHeaderProps {
   readonly organization: Organization;
 }
 
 export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
-  const statusName = organization.status?.statusName || OrgStatusNames[organization.statusId] || "Unknown";
+  const statusName = organization.status?.orgStatusName;
   const isActive = organization.statusId === 2;
 
   return (
@@ -34,7 +33,9 @@ export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
 
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <Heading level={1} className="mb-0">{organization.orgName}</Heading>
+            <Heading level={1} className="mb-0">
+              {organization.orgName}
+            </Heading>
             <Badge variant={isActive ? "default" : "secondary"}>
               {statusName}
             </Badge>
@@ -55,7 +56,9 @@ export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
             <MapPin className="w-5 h-5 mt-0.5 text-muted-foreground flex-shrink-0" />
             <div>
               <p className="text-sm font-medium">Address</p>
-              <p className="text-sm text-muted-foreground">{organization.address}</p>
+              <p className="text-sm text-muted-foreground">
+                {organization.address}
+              </p>
             </div>
           </div>
         )}

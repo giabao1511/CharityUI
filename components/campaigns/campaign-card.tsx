@@ -8,7 +8,7 @@ import { Fund } from "@/types";
 import { Users, Calendar } from "lucide-react";
 import { BodyText } from "@/components/ui/typography";
 import { formatCurrency } from "@/lib/currency";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface CampaignCardProps {
   campaign: Fund;
@@ -16,6 +16,7 @@ interface CampaignCardProps {
 
 export function CampaignCard({ campaign }: CampaignCardProps) {
   const locale = useLocale() as 'en' | 'vi';
+  const t = useTranslations("campaigns.card");
   const percentageFunded = Math.round((campaign.currentAmount / campaign.goalAmount) * 100);
   const daysLeft = Math.ceil(
     (new Date(campaign.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
@@ -28,7 +29,7 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
         aria-hidden="true"
       >
         <div className="h-full w-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-          <span className="text-muted-foreground text-sm">Campaign Image</span>
+          <span className="text-muted-foreground text-sm">{t("image")}</span>
         </div>
       </div>
 
@@ -48,37 +49,47 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
         <div>
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="font-semibold text-lg">
-              {formatCurrency(campaign.currentAmount, locale)}
+              {formatCurrency(campaign.currentAmount)}
             </span>
             <span className="text-muted-foreground">
-              of {formatCurrency(campaign.goalAmount, locale)}
+              of {formatCurrency(campaign.goalAmount)}
             </span>
           </div>
           <Progress value={percentageFunded} className="h-2" />
           <BodyText size="sm" muted className="mt-2">
-            {percentageFunded}% funded
+            {percentageFunded}% {t("funded")}
           </BodyText>
         </div>
 
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Users className="h-4 w-4" aria-hidden="true" />
-            <span>{campaign.backers} backers</span>
+            <span>{campaign.backers} {t("backers")}</span>
           </div>
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4" aria-hidden="true" />
-            <span>{daysLeft > 0 ? `${daysLeft} days left` : 'Ended'}</span>
+            <span>{daysLeft > 0 ? t("daysLeft", { days: daysLeft }) : t("ended")}</span>
           </div>
         </div>
 
         <div className="text-sm text-muted-foreground">
-          by <span className="font-medium text-foreground">{campaign.creator}</span>
+          {t("by")}{" "}
+          {campaign.organization ? (
+            <Link
+              href={`/organizations/${campaign.organization.orgId}`}
+              className="font-medium text-foreground hover:text-primary transition-colors hover:underline"
+            >
+              {campaign.creator}
+            </Link>
+          ) : (
+            <span className="font-medium text-foreground">{campaign.creator}</span>
+          )}
         </div>
       </CardContent>
 
       <CardFooter className="mt-auto">
         <Button asChild className="w-full">
-          <Link href={`/campaigns/${campaign.slug}`}>View Campaign</Link>
+          <Link href={`/campaigns/${campaign.slug}`}>{t("viewCampaign")}</Link>
         </Button>
       </CardFooter>
     </Card>

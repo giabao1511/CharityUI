@@ -53,7 +53,7 @@ export function CampaignListClient({ campaigns, categories }: CampaignListClient
     <>
       {/* Filters */}
       <div className="mb-8 space-y-4">
-        <CampaignFilters categories={categories} onFilterChange={setFilters} />
+        <CampaignFilters />
 
         {/* Results Count */}
         <div className="text-sm text-muted-foreground">

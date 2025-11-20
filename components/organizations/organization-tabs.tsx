@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heading, BodyText } from "@/components/ui/typography";
-import { Users, Briefcase, Image as ImageIcon } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BodyText, Heading } from "@/components/ui/typography";
+import { Link } from "@/i18n/navigation";
 import type { Organization } from "@/types/organization";
+import { ArrowRight, Briefcase, Image as ImageIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 interface OrganizationTabsProps {
   organization: Organization;
@@ -14,19 +16,17 @@ interface OrganizationTabsProps {
 
 export function OrganizationTabs({ organization }: OrganizationTabsProps) {
   const [activeTab, setActiveTab] = useState("about");
+  const t = useTranslations("organizations.detail");
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="about">About</TabsTrigger>
+      <TabsList className="grid w-full grid-cols-3">
+        <TabsTrigger value="about">{t("about")}</TabsTrigger>
         <TabsTrigger value="campaigns">
-          Campaigns ({organization.campaigns?.length || 0})
-        </TabsTrigger>
-        <TabsTrigger value="team">
-          Team ({organization.userRoles?.length || 0})
+          {t("campaigns")} ({organization.campaigns?.length || 0})
         </TabsTrigger>
         <TabsTrigger value="media">
-          Media ({organization.media?.length || 0})
+          {t("media")} ({organization.media?.length || 0})
         </TabsTrigger>
       </TabsList>
 
@@ -39,7 +39,10 @@ export function OrganizationTabs({ organization }: OrganizationTabsProps) {
             </Heading>
             <div className="prose dark:prose-invert max-w-none">
               <BodyText muted className="whitespace-pre-wrap">
-                {organization.description || "No description available"}
+                {organization.description ||
+                  t("noDescription", {
+                    defaultValue: "No description available",
+                  })}
               </BodyText>
             </div>
           </CardContent>
@@ -52,17 +55,21 @@ export function OrganizationTabs({ organization }: OrganizationTabsProps) {
           <CardContent className="p-6">
             <Heading level={3} className="mb-4 flex items-center gap-2">
               <Briefcase className="w-5 h-5" />
-              Campaigns
+              {t("campaigns")}
             </Heading>
             {organization.campaigns && organization.campaigns.length > 0 ? (
               <div className="space-y-4">
                 {organization.campaigns.map((campaign) => (
-                  <div
+                  <Link
                     key={campaign.campaignId}
-                    className="border rounded-lg p-4 hover:bg-accent/50 transition-colors"
+                    href={`/campaigns/${campaign.campaignId}`}
+                    className="block border rounded-lg p-4 hover:bg-accent/50 hover:border-primary transition-all group"
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <Heading level={4} className="mb-0">
+                      <Heading
+                        level={4}
+                        className="mb-0 group-hover:text-primary transition-colors"
+                      >
                         {campaign.title}
                       </Heading>
                       <Badge
@@ -85,60 +92,28 @@ export function OrganizationTabs({ organization }: OrganizationTabsProps) {
                         </span>
                         <span className="text-muted-foreground">
                           {" "}
-                          raised of{" "}
+                          {t("raisedOf")}{" "}
                         </span>
                         <span className="font-semibold">
                           ${campaign.targetAmount.toLocaleString()}
                         </span>
                       </div>
-                      <div className="text-muted-foreground">
-                        {Math.round(
-                          (campaign.currentAmount / campaign.targetAmount) * 100
-                        )}
-                        %
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground">
+                          {Math.round(
+                            (campaign.currentAmount / campaign.targetAmount) *
+                              100
+                          )}
+                          %
+                        </span>
+                        <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
-              <BodyText muted>No campaigns yet</BodyText>
-            )}
-          </CardContent>
-        </Card>
-      </TabsContent>
-
-      {/* Team Tab */}
-      <TabsContent value="team" className="mt-6">
-        <Card>
-          <CardContent className="p-6">
-            <Heading level={3} className="mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Team Members
-            </Heading>
-            {organization.userRoles && organization.userRoles.length > 0 ? (
-              <div className="space-y-3">
-                {organization.userRoles.map((userRole) => (
-                  <div
-                    key={userRole.userRoleId}
-                    className="flex items-center justify-between p-3 border rounded-lg"
-                  >
-                    <div>
-                      <BodyText weight="medium">
-                        {userRole.user?.username || `User ${userRole.userId}`}
-                      </BodyText>
-                      <BodyText size="sm" muted>
-                        {userRole.user?.email}
-                      </BodyText>
-                    </div>
-                    <Badge variant="outline">
-                      {userRole.role?.roleName || "Member"}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted-foreground">No team members listed</p>
+              <BodyText muted>{t("noCampaigns")}</BodyText>
             )}
           </CardContent>
         </Card>
@@ -148,10 +123,10 @@ export function OrganizationTabs({ organization }: OrganizationTabsProps) {
       <TabsContent value="media" className="mt-6">
         <Card>
           <CardContent className="p-6">
-            <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+            <Heading level={3} className="mb-4 flex items-center gap-2">
               <ImageIcon className="w-5 h-5" />
-              Media Gallery
-            </h3>
+              {t("mediaGallery")}
+            </Heading>
             {organization.media && organization.media.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {organization.media.map((media) => (
@@ -168,7 +143,7 @@ export function OrganizationTabs({ organization }: OrganizationTabsProps) {
                 ))}
               </div>
             ) : (
-              <BodyText muted>No media files available</BodyText>
+              <BodyText muted>{t("noMedia")}</BodyText>
             )}
           </CardContent>
         </Card>

@@ -1,10 +1,9 @@
-import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FundCard } from "@/components/funds/fund-card";
-import { featuredCampaigns, platformStats } from "@/lib/data";
-import { ArrowRight, TrendingUp, Users, Target, Heart } from "lucide-react";
-import { Heading, BodyText, Large } from "@/components/ui/typography";
+import { BodyText, Heading, Large } from "@/components/ui/typography";
+import { Link } from "@/i18n/navigation";
+import { platformStats } from "@/lib/data";
+import { ArrowRight, Heart, Target, TrendingUp, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export default function Home() {
@@ -17,15 +16,17 @@ export default function Home() {
           <div className="mx-auto max-w-3xl text-center space-y-8">
             <Heading level={1} className="sm:text-5xl md:text-6xl lg:text-7xl">
               {t("hero.title")}
-              <span className="block text-primary">{t("hero.titleHighlight")}</span>
+              <span className="block text-primary">
+                {t("hero.titleHighlight")}
+              </span>
             </Heading>
             <BodyText size="lg" className="sm:text-xl md:text-2xl" muted>
               {t("hero.subtitle")}
             </BodyText>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild className="text-base">
-                <Link href="/funds">
-                  {t("hero.exploreFunds")}
+                <Link href="/campaigns">
+                  {t("hero.exploreCampaigns")}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
@@ -43,7 +44,9 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t("stats.totalRaised")}</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  {t("stats.totalRaised")}
+                </CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -56,21 +59,33 @@ export default function Home() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t("stats.totalFunds")}</CardTitle>
-                <Target className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <CardTitle className="text-sm font-medium">
+                  {t("stats.totalFunds")}
+                </CardTitle>
+                <Target
+                  className="h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
               </CardHeader>
               <CardContent>
                 <Large>{platformStats.totalCampaigns}</Large>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {t("stats.activeFundsCount", { count: platformStats.activeCampaigns })}
+                  {t("stats.activeFundsCount", {
+                    count: platformStats.activeCampaigns,
+                  })}
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t("stats.activeFunds")}</CardTitle>
-                <Heart className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <CardTitle className="text-sm font-medium">
+                  {t("stats.activeFunds")}
+                </CardTitle>
+                <Heart
+                  className="h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
               </CardHeader>
               <CardContent>
                 <Large>{platformStats.activeCampaigns}</Large>
@@ -82,8 +97,13 @@ export default function Home() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t("stats.totalBackers")}</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <CardTitle className="text-sm font-medium">
+                  {t("stats.totalBackers")}
+                </CardTitle>
+                <Users
+                  className="h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
               </CardHeader>
               <CardContent>
                 <Large>{platformStats.totalBackers.toLocaleString()}</Large>
@@ -115,12 +135,6 @@ export default function Home() {
               </Link>
             </Button>
           </div>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featuredCampaigns.map((fund) => (
-              <FundCard key={fund.id} fund={fund} />
-            ))}
-          </div>
         </div>
       </section>
 
@@ -138,8 +152,13 @@ export default function Home() {
               <Button size="lg" variant="secondary" asChild>
                 <Link href="/funds">{t("cta.startFund")}</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
-                <Link href="/funds">{t("cta.browseFunds")}</Link>
+              <Button
+                size="lg"
+                variant="outline"
+                asChild
+                className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+              >
+                <Link href="/campaigns">{t("cta.browseFunds")}</Link>
               </Button>
             </div>
           </div>

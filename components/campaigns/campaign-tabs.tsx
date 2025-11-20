@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Circle, Clock } from "lucide-react";
 import { Fund } from "@/types";
 import { Heading, BodyText, List } from "@/components/ui/typography";
-import { ContributorsList } from "./contributors-list";
+import { VolunteersList } from "./volunteers-list";
 import { CommentsSection } from "./comments-section";
 import { formatCurrency } from "@/lib/currency";
 import { useLocale } from "next-intl";
@@ -22,8 +22,8 @@ export function CampaignTabs({ campaign }: CampaignTabsProps) {
       <TabsList className="grid w-full grid-cols-4 mb-6">
         <TabsTrigger value="description">Description & Updates</TabsTrigger>
         <TabsTrigger value="milestones">Milestones</TabsTrigger>
-        <TabsTrigger value="contributors">
-          Contributors ({campaign.contributors.length})
+        <TabsTrigger value="volunteers">
+          Volunteers ({campaign.volunteers.length})
         </TabsTrigger>
         <TabsTrigger value="comments">
           Comments ({campaign.comments.length})
@@ -145,7 +145,7 @@ export function CampaignTabs({ campaign }: CampaignTabsProps) {
                         {milestone.description}
                       </p>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span>Funding Required: {formatCurrency(milestone.fundingRequired, locale)}</span>
+                        <span>Funding Required: {formatCurrency(milestone.fundingRequired)}</span>
                         {milestone.achievedDate && (
                           <span>
                             Completed:{" "}
@@ -166,8 +166,8 @@ export function CampaignTabs({ campaign }: CampaignTabsProps) {
         </Card>
       </TabsContent>
 
-      <TabsContent value="contributors" className="mt-0">
-        <ContributorsList contributors={campaign.contributors} />
+      <TabsContent value="volunteers" className="mt-0">
+        <VolunteersList volunteers={campaign.volunteers} />
       </TabsContent>
 
       <TabsContent value="comments" className="mt-0">

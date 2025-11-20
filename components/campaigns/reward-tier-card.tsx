@@ -60,7 +60,7 @@ export function RewardTierCard({ tier, selected, onSelect, disabled = false }: R
       <CardHeader>
         <div className="space-y-2">
           <CardTitle className="text-2xl font-bold">
-            {formatCurrency(tier.amount, locale)}
+            {formatCurrency(tier.amount)}
           </CardTitle>
           <CardDescription className="text-base font-semibold text-foreground">
             {tier.title}

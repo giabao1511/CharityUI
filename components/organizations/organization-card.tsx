@@ -7,14 +7,32 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Users, Globe } from "lucide-react";
 import { Heading, BodyText } from "@/components/ui/typography";
 import type { OrganizationListItem } from "@/types/organization";
-import { OrgStatusNames } from "@/types/organization";
+import { useTranslations } from "next-intl";
 
 interface OrganizationCardProps {
   readonly organization: OrganizationListItem;
 }
 
 export function OrganizationCard({ organization }: OrganizationCardProps) {
-  const statusName = organization.status?.statusName || OrgStatusNames[organization.statusId] || "Unknown";
+  const t = useTranslations("organizations");
+
+  // Map status ID to translation key
+  const getStatusTranslationKey = (statusId: number): string => {
+    switch (statusId) {
+      case 1:
+        return "status.pending";
+      case 2:
+        return "status.active";
+      case 3:
+        return "status.inactive";
+      case 4:
+        return "status.suspended";
+      default:
+        return "status.pending";
+    }
+  };
+
+  const statusName = t(getStatusTranslationKey(organization.statusId));
   const isActive = organization.statusId === 2; // Active status
 
   return (
@@ -33,7 +51,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
         )}
         <div className="absolute top-4 right-4">
           <Badge variant={isActive ? "default" : "secondary"}>
-            {statusName}
+            {organization.status?.orgStatusName}
           </Badge>
         </div>
       </div>
@@ -44,7 +62,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
         </Heading>
 
         <BodyText size="sm" muted className="mb-4 line-clamp-2">
-          {organization.description || "No description available"}
+          {organization.description || t("noDescription")}
         </BodyText>
 
         <div className="space-y-2">
@@ -75,7 +93,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
 
       <CardFooter className="p-6 pt-0">
         <Link href={`/organizations/${organization.orgId}`} className="w-full">
-          <Button className="w-full">View Organization</Button>
+          <Button className="w-full">{t("viewOrganization")}</Button>
         </Link>
       </CardFooter>
     </Card>

@@ -61,9 +61,9 @@ export default function ContactPage() {
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-1">{t("visitUs")}</p>
                 <address className="text-sm font-medium not-italic">
-                  123 Charity Street<br />
-                  San Francisco, CA 94102<br />
-                  United States
+                  UIT<br />
+                  Ho Chi Minh City<br />
+                  Vietnam
                 </address>
               </CardContent>
             </Card>

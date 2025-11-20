@@ -32,6 +32,7 @@ export const mockCampaigns: Fund[] = [
     currentAmount: 89500,
     currency: "USD",
     imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
     startDate: "2024-01-15",
     endDate: "2025-06-30",
     status: "active",
@@ -179,6 +180,32 @@ export const mockCampaigns: Fund[] = [
         rewardTier: "Water Drop Supporter"
       }
     ],
+    volunteers: [
+      {
+        id: "v1",
+        name: "Alex Martinez",
+        registeredAt: "2024-10-15",
+        status: "active" as const,
+        skills: ["Engineering", "Project Management"],
+        availability: "Weekends"
+      },
+      {
+        id: "v2",
+        name: "Priya Sharma",
+        registeredAt: "2024-10-20",
+        status: "active" as const,
+        skills: ["Community Outreach", "Translation"],
+        availability: "Flexible"
+      },
+      {
+        id: "v3",
+        name: "James Wilson",
+        registeredAt: "2024-11-01",
+        status: "active" as const,
+        skills: ["Water Systems", "Training"],
+        availability: "Mon-Fri evenings"
+      }
+    ],
     comments: [
       {
         id: "cm1",
@@ -245,6 +272,7 @@ export const mockCampaigns: Fund[] = [
     currentAmount: 42300,
     currency: "USD",
     imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
     startDate: "2024-02-01",
     endDate: "2024-12-31",
     status: "active",
@@ -291,6 +319,7 @@ export const mockCampaigns: Fund[] = [
     ],
     rewardTiers: [],
     contributors: [],
+    volunteers: [],
     comments: []
   },
   {
@@ -329,6 +358,7 @@ export const mockCampaigns: Fund[] = [
     currentAmount: 134000,
     currency: "USD",
     imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
     startDate: "2024-03-01",
     endDate: "2025-12-31",
     status: "active",
@@ -381,6 +411,7 @@ export const mockCampaigns: Fund[] = [
     ],
     rewardTiers: [],
     contributors: [],
+    volunteers: [],
     comments: []
   },
   {
@@ -416,6 +447,7 @@ export const mockCampaigns: Fund[] = [
     currentAmount: 67000,
     currency: "USD",
     imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
     startDate: "2024-04-01",
     endDate: "2025-08-31",
     status: "active",
@@ -461,6 +493,7 @@ export const mockCampaigns: Fund[] = [
     ],
     rewardTiers: [],
     contributors: [],
+    volunteers: [],
     comments: []
   },
   {
@@ -510,6 +543,7 @@ export const mockCampaigns: Fund[] = [
     currentAmount: 95000,
     currency: "USD",
     imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
     startDate: "2024-05-01",
     endDate: "2025-05-01",
     status: "active",
@@ -562,6 +596,7 @@ export const mockCampaigns: Fund[] = [
     ],
     rewardTiers: [],
     contributors: [],
+    volunteers: [],
     comments: []
   },
   {
@@ -613,6 +648,7 @@ export const mockCampaigns: Fund[] = [
     currentAmount: 178000,
     currency: "USD",
     imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
     startDate: "2024-01-01",
     endDate: "2025-12-31",
     status: "active",
@@ -665,6 +701,7 @@ export const mockCampaigns: Fund[] = [
     ],
     rewardTiers: [],
     contributors: [],
+    volunteers: [],
     comments: []
   }
 ];

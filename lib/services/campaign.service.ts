@@ -32,7 +32,7 @@ export async function getCampaigns(filters?: CampaignQueryFilters) {
     queryParams.toString() ? `?${queryParams.toString()}` : ""
   }`;
 
-  const result = await apiClient<{ data: CampaignListResponse }>(url);
+  const result = await apiClient<any>(url);
 
   if (result.error) {
     console.error("API Error:", result.error, "URL:", url);
@@ -41,8 +41,24 @@ export async function getCampaigns(filters?: CampaignQueryFilters) {
 
   console.log("API Response:", result.data);
 
-  // Handle different response structures from backend
-  if (result.data?.data) {
+  // New API structure: { data: [...campaigns], pagination: {...} }
+  if (result.data && Array.isArray(result.data) && result.pagination) {
+    return {
+      funds: result.data,
+      pagination: result.pagination,
+    };
+  }
+
+  // Handle nested data structure
+  if (result.data?.data && Array.isArray(result.data.data)) {
+    return {
+      funds: result.data.data,
+      pagination: result.data.pagination || result.pagination,
+    };
+  }
+
+  // Legacy structure: { data: { funds: [...], pagination: {...} } }
+  if (result.data?.data && "funds" in result.data.data) {
     return result.data.data;
   }
 
@@ -57,13 +73,20 @@ export async function getCampaigns(filters?: CampaignQueryFilters) {
 /**
  * Get a single campaign by ID
  */
-export async function getCampaignById(campaignId: string | number): Promise<Campaign> {
-  const result = await apiClient<Campaign>(
+export async function getCampaignById(campaignId: string | number): Promise<any> {
+  const result = await apiClient<any>(
     API_ENDPOINTS.CAMPAIGNS.DETAIL(campaignId)
   );
 
+  console.log("rsss",result)
+
   if (result.error) {
     throw new Error(result.error.message);
+  }
+
+  // Handle nested data structure from API
+  if (result.data?.data) {
+    return result.data.data;
   }
 
   if (!result.data) {
@@ -75,9 +98,10 @@ export async function getCampaignById(campaignId: string | number): Promise<Camp
 
 /**
  * Create a new campaign
+ * Returns flexible type since API response structure may vary
  */
-export async function createCampaign(data: CreateCampaignRequest) {
-  const result = await apiClient<{ data: Campaign }>(API_ENDPOINTS.CAMPAIGNS.CREATE, {
+export async function createCampaign(orgId: string | number, data: CreateCampaignRequest) {
+  const result = await apiClient<{ data: any }>(API_ENDPOINTS.CAMPAIGNS.CREATE(orgId), {
     method: "POST",
     body: JSON.stringify(data),
   });

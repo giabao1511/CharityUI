@@ -23,7 +23,7 @@ export const OrgStatusNames: Record<number, string> = {
  */
 export interface OrgStatusInfo {
   orgStatusId: number;
-  statusName: string;
+  orgStatusName: string;
 }
 
 /**

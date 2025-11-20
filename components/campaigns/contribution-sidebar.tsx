@@ -6,14 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Calendar, Users, Target } from "lucide-react";
+import { Calendar, Users, Target, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { RewardTier } from "@/types";
 import { BodyText } from "@/components/ui/typography";
 import { formatCurrency } from "@/lib/currency";
 import { useLocale } from "next-intl";
+import { createPayment } from "@/lib/services/payment.service";
+import { GuestDonationDialog } from "./guest-donation-dialog";
+import { useAuth } from "@/lib/auth-context";
 
 interface ContributionSidebarProps {
+  campaignId: string | number;
   goalAmount: number;
   currentAmount: number;
   backers: number;
@@ -24,6 +28,7 @@ interface ContributionSidebarProps {
 }
 
 export function ContributionSidebar({
+  campaignId,
   goalAmount,
   currentAmount,
   backers,
@@ -33,8 +38,11 @@ export function ContributionSidebar({
   selectedTierId: externalSelectedTierId = null,
 }: ContributionSidebarProps) {
   const locale = useLocale() as 'en' | 'vi';
+  const { user } = useAuth();
   const [contributionAmount, setContributionAmount] = useState("");
   const [selectedTierId, setSelectedTierId] = useState<string | null>(externalSelectedTierId);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showGuestDialog, setShowGuestDialog] = useState(false);
 
   // Derive the selected tier and amount from props
   // When externalSelectedTierId changes, update local state
@@ -61,32 +69,92 @@ export function ContributionSidebar({
     }
   };
 
-  const handleContribute = (amount: string) => {
+  const handleContribute = async (amount: string) => {
     if (!amount || Number.parseFloat(amount) <= 0) {
       toast.error("Invalid Amount", {
         description: "Please enter a valid contribution amount.",
       });
       return;
     }
-    
-    const selectedTier = rewardTiers.find(t => t.id === selectedTierId);
-    const rewardInfo = selectedTier ? ` You selected the "${selectedTier.title}" reward tier.` : "";
-    
-    // Mock handler - in real app, this would process payment
-    toast.success("Thank You!", {
-      description: `Your contribution of ${formatCurrency(Number.parseFloat(amount), locale)} has been received!${rewardInfo} (Demo mode - no actual payment processed)`,
+
+    // If user is not logged in, show guest dialog
+    if (!user) {
+      setShowGuestDialog(true);
+      return;
+    }
+
+    // User is logged in, proceed directly
+    await processPayment({ amount });
+  };
+
+  const processPayment = async ({
+    amount,
+    email,
+    phoneNumber,
+    message,
+    isAnonymous,
+  }: {
+    amount?: string;
+    email?: string;
+    phoneNumber?: string;
+    message?: string;
+    isAnonymous?: boolean;
+  }) => {
+    setIsProcessing(true);
+
+    try {
+      const amountInVND = Math.round(Number.parseFloat(amount || contributionAmount));
+
+      // Create payment and get VNPay URL
+      const paymentUrl = await createPayment({
+        amount: amountInVND,
+        campaignId: Number(campaignId),
+        email,
+        phoneNumber,
+        message,
+        isAnonymous,
+      });
+
+      // Redirect to VNPay payment page
+      window.location.href = paymentUrl;
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast.error("Payment Failed", {
+        description: error instanceof Error ? error.message : "Failed to initiate payment. Please try again.",
+      });
+      setIsProcessing(false);
+    }
+  };
+
+  const handleGuestDonation = async (guestData: {
+    email?: string;
+    phoneNumber?: string;
+    message?: string;
+    isAnonymous: boolean;
+  }) => {
+    setShowGuestDialog(false);
+    await processPayment({
+      amount: contributionAmount,
+      ...guestData,
     });
-    setContributionAmount("");
-    setSelectedTierId(null);
   };
 
   return (
-    <Card className="lg:sticky lg:top-20">
-      <CardHeader>
-        <CardTitle className="text-2xl">{formatCurrency(currentAmount, locale)}</CardTitle>
-        <CardDescription>pledged of {formatCurrency(goalAmount, locale)} goal</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <>
+      <GuestDonationDialog
+        open={showGuestDialog}
+        onOpenChange={setShowGuestDialog}
+        amount={Number.parseFloat(contributionAmount) || 0}
+        campaignId={campaignId}
+        onSubmit={handleGuestDonation}
+      />
+
+      <Card className="lg:sticky lg:top-20">
+        <CardHeader>
+          <CardTitle className="text-2xl">{formatCurrency(currentAmount)}</CardTitle>
+          <CardDescription>pledged of {formatCurrency(goalAmount)} goal</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
         <div>
           <Progress value={percentageFunded} className="h-3" />
           <p className="mt-2 text-sm text-muted-foreground">{percentageFunded}% funded</p>
@@ -130,8 +198,16 @@ export function ContributionSidebar({
             className="w-full"
             size="lg"
             onClick={() => handleContribute(contributionAmount)}
+            disabled={isProcessing || daysLeft <= 0}
           >
-            Back This Campaign
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              "Back This Campaign"
+            )}
           </Button>
         </div>
 
@@ -172,5 +248,6 @@ export function ContributionSidebar({
         )}
       </CardContent>
     </Card>
+    </>
   );
 }

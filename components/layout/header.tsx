@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { Heart, User, Menu, X } from "lucide-react";
+import { Heart, User, Menu, X, LayoutDashboard } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { UserMenu } from "@/components/user-menu";
+import { NotificationDropdown } from "@/components/layout/notification-dropdown";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
@@ -28,12 +29,19 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <Heart className="h-6 w-6 text-primary" fill="currentColor" aria-hidden="true" />
+          <Heart
+            className="h-6 w-6 text-primary"
+            fill="currentColor"
+            aria-hidden="true"
+          />
           <span className="text-xl font-bold">CharityHub</span>
         </Link>
-        
+
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6" aria-label="Main navigation">
+        <nav
+          className="hidden md:flex items-center space-x-6"
+          aria-label="Main navigation"
+        >
           <Link
             href="/"
             className={cn(
@@ -65,7 +73,7 @@ export function Header() {
                 : "text-muted-foreground"
             )}
           >
-            Organizations
+            {t("nav.organizations")}
           </Link>
           <Link
             href="/contact"
@@ -78,23 +86,13 @@ export function Header() {
           >
             {t("nav.contact")}
           </Link>
-          <Link
-            href="/profile"
-            className={cn(
-              "text-sm font-medium transition-colors hover:text-primary",
-              isActive("/profile")
-                ? "text-primary font-semibold"
-                : "text-muted-foreground"
-            )}
-          >
-            {t("nav.profile")}
-          </Link>
         </nav>
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-3">
           <LanguageSwitcher />
           <ThemeToggle />
+          {user && <NotificationDropdown />}
           {user ? (
             <UserMenu />
           ) : (
@@ -114,6 +112,7 @@ export function Header() {
         <div className="flex items-center gap-2 md:hidden">
           <LanguageSwitcher />
           <ThemeToggle />
+          {user && <NotificationDropdown />}
           <Button
             variant="ghost"
             size="icon"
@@ -133,7 +132,10 @@ export function Header() {
       {/* Mobile Navigation Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t">
-          <nav className="container py-4 space-y-4" aria-label="Mobile navigation">
+          <nav
+            className="container py-4 space-y-4"
+            aria-label="Mobile navigation"
+          >
             <Link
               href="/"
               className={cn(
@@ -168,7 +170,7 @@ export function Header() {
               )}
               onClick={() => setMobileMenuOpen(false)}
             >
-              Organizations
+              {t("nav.organizations")}
             </Link>
             <Link
               href="/contact"
@@ -194,6 +196,21 @@ export function Header() {
             >
               {t("nav.profile")}
             </Link>
+            {user && (
+              <Link
+                href="/creator"
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
+                  isActive("/creator")
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground"
+                )}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Creator
+              </Link>
+            )}
             <div className="pt-4 border-t space-y-2">
               {user ? (
                 <div className="px-4">
@@ -208,7 +225,10 @@ export function Header() {
                 </Button>
               )}
               <Button asChild size="sm" className="w-full">
-                <Link href="/campaigns" onClick={() => setMobileMenuOpen(false)}>
+                <Link
+                  href="/campaigns"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   {t("nav.startFundraiser")}
                 </Link>
               </Button>

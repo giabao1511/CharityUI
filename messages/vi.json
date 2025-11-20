@@ -331,9 +331,30 @@
     "search": "Tìm kiếm chiến dịch...",
     "searchPlaceholder": "Tìm theo tiêu đề hoặc mô tả",
     "filter": {
+      "searchPlaceholder": "Tìm theo tên hoặc mô tả",
       "category": "Danh Mục",
       "allCategories": "Tất Cả Danh Mục",
-      "sortBy": "Sắp xếp theo"
+      "sortBy": "Sắp xếp theo",
+      "order": "Thứ tự",
+      "status": "Trạng thái",
+      "search": "Tìm kiếm",
+      "clear": "Xóa Bộ Lọc",
+      "recent": "Mới Nhất",
+      "mostFunded": "Quyên Góp Nhiều Nhất",
+      "mostBackers": "Nhiều Người Ủng Hộ Nhất",
+      "endingSoon": "Sắp Kết Thúc",
+      "allStatus": "Tất Cả Trạng Thái",
+      "active": "Đang Hoạt Động",
+      "paused": "Tạm Dừng",
+      "completed": "Hoàn Thành",
+      "closed": "Đã Đóng",
+      "startDate": "Ngày Bắt Đầu",
+      "createdDate": "Ngày Tạo",
+      "title": "Tiêu Đề",
+      "targetAmount": "Số Tiền Mục Tiêu",
+      "currentAmount": "Số Tiền Hiện Tại",
+      "descending": "Giảm Dần",
+      "ascending": "Tăng Dần"
     },
     "card": {
       "image": "Hình Ảnh Chiến Dịch",
@@ -397,6 +418,17 @@
     "subtitle": "Khám phá các tổ chức từ thiện đã xác minh đang tạo nên sự khác biệt",
     "viewOrganization": "Xem Tổ Chức",
     "noDescription": "Không có mô tả",
+    "filter": {
+      "searchPlaceholder": "Tìm kiếm tổ chức...",
+      "sortBy": "Sắp xếp theo",
+      "order": "Thứ tự",
+      "search": "Tìm kiếm",
+      "clear": "Xóa Bộ Lọc",
+      "orgName": "Tên Tổ Chức",
+      "createdDate": "Ngày Tạo",
+      "descending": "Giảm Dần",
+      "ascending": "Tăng Dần"
+    },
     "status": {
       "active": "Hoạt Động",
       "inactive": "Không Hoạt Động",
@@ -418,7 +450,134 @@
       "website": "Trang Web",
       "email": "Email",
       "phone": "Điện Thoại",
-      "address": "Địa Chỉ"
+      "address": "Địa Chỉ",
+      "team": "Nhóm",
+      "media": "Phương Tiện",
+      "teamMembers": "Thành Viên Nhóm",
+      "mediaGallery": "Thư Viện Phương Tiện",
+      "noCampaigns": "Chưa có chiến dịch",
+      "noTeam": "Chưa có thành viên nào",
+      "noMedia": "Không có tệp phương tiện",
+      "raisedOf": "đã quyên góp của",
+      "member": "Thành Viên"
+    }
+  },
+  "creator": {
+    "dashboard": {
+      "title": "Bảng điều khiển người tạo",
+      "welcome": "Chào mừng trở lại, {name}!",
+      "subtitle": "Quản lý chiến dịch và theo dõi hiệu suất"
+    },
+    "stats": {
+      "totalRaised": "Tổng đã quyên góp",
+      "totalRaisedDesc": "Trên tất cả chiến dịch",
+      "activeCampaigns": "Chiến dịch đang hoạt động",
+      "activeCampaignsDesc": "Đang chạy",
+      "totalVolunteers": "Tổng tình nguyện viên",
+      "totalVolunteersDesc": "Người giúp đỡ đã đăng ký",
+      "totalBackers": "Tổng người ủng hộ",
+      "totalBackersDesc": "Người ủng hộ bạn"
+    },
+    "activity": {
+      "title": "Hoạt động gần đây",
+      "noActivity": "Không có hoạt động gần đây",
+      "donation": "Quyên góp",
+      "volunteer": "Tình nguyện viên",
+      "milestone": "Mốc quan trọng",
+      "comment": "Bình luận",
+      "update": "Cập nhật"
+    },
+    "campaigns": {
+      "title": "Chiến dịch của tôi",
+      "subtitle": "Quản lý tất cả chiến dịch gây quỹ",
+      "createNew": "Tạo chiến dịch mới",
+      "noCampaigns": "Bạn chưa tạo chiến dịch nào",
+      "getStarted": "Bắt đầu",
+      "table": {
+        "campaign": "Chiến dịch",
+        "status": "Trạng thái",
+        "raised": "Đã quyên góp",
+        "target": "Mục tiêu",
+        "backers": "Người ủng hộ",
+        "volunteers": "Tình nguyện viên",
+        "endDate": "Ngày kết thúc",
+        "actions": "Hành động",
+        "manage": "Quản lý",
+        "edit": "Chỉnh sửa",
+        "view": "Xem"
+      }
+    },
+    "milestones": {
+      "title": "Quản lý mốc quan trọng",
+      "subtitle": "Theo dõi và cập nhật mốc chiến dịch",
+      "updateMilestone": "Cập nhật mốc",
+      "achievedAmount": "Số tiền đạt được",
+      "targetAmount": "Số tiền mục tiêu",
+      "status": "Trạng thái",
+      "pending": "Đang chờ",
+      "inProgress": "Đang thực hiện",
+      "completed": "Hoàn thành",
+      "updateStatus": "Cập nhật trạng thái",
+      "updateAmount": "Cập nhật số tiền",
+      "saveChanges": "Lưu thay đổi",
+      "cancel": "Hủy",
+      "updated": "Đã cập nhật mốc thành công",
+      "updateFailed": "Không thể cập nhật mốc"
+    },
+    "volunteers": {
+      "title": "Quản lý tình nguyện viên",
+      "subtitle": "Quản lý đăng ký tình nguyện viên cho chiến dịch này",
+      "noVolunteers": "Chưa có đăng ký tình nguyện viên",
+      "table": {
+        "name": "Tên",
+        "email": "Email",
+        "registeredAt": "Đã đăng ký",
+        "status": "Trạng thái",
+        "skills": "Kỹ năng",
+        "availability": "Khả năng",
+        "actions": "Hành động"
+      },
+      "status": {
+        "pending": "Đang chờ",
+        "approved": "Đã duyệt",
+        "rejected": "Đã từ chối",
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "actions": {
+        "approve": "Duyệt",
+        "reject": "Từ chối",
+        "activate": "Kích hoạt",
+        "deactivate": "Vô hiệu hóa",
+        "viewDetails": "Xem chi tiết"
+      },
+      "approved": "Đã duyệt tình nguyện viên",
+      "rejected": "Đã từ chối tình nguyện viên",
+      "statusUpdated": "Đã cập nhật trạng thái tình nguyện viên"
+    },
+    "create": {
+      "pageTitle": "Tạo chiến dịch mới",
+      "pageSubtitle": "Khởi động chiến dịch gây quỹ cho tổ chức của bạn",
+      "title": "Thông tin chiến dịch",
+      "subtitle": "Điền thông tin chi tiết cho chiến dịch mới",
+      "organization": "Tổ chức",
+      "selectOrganization": "Chọn tổ chức",
+      "organizationHelp": "Tổ chức sẽ quản lý chiến dịch này",
+      "category": "Danh mục chiến dịch",
+      "selectCategory": "Chọn danh mục",
+      "campaignTitle": "Tiêu đề chiến dịch",
+      "titlePlaceholder": "Nhập tiêu đề hấp dẫn cho chiến dịch",
+      "description": "Mô tả chiến dịch",
+      "descriptionPlaceholder": "Mô tả mục tiêu, mục đích và cách sử dụng quỹ...",
+      "startDate": "Ngày bắt đầu",
+      "endDate": "Ngày kết thúc",
+      "targetAmount": "Số tiền mục tiêu",
+      "targetAmountHelp": "Tổng số tiền bạn muốn quyên góp",
+      "createCampaign": "Tạo chiến dịch",
+      "creating": "Đang tạo...",
+      "cancel": "Hủy",
+      "success": "Tạo chiến dịch thành công!",
+      "error": "Không thể tạo chiến dịch"
     }
   },
   "common": {
@@ -444,7 +603,8 @@
     "no": "Không",
     "nav": {
       "home": "Trang chủ",
-      "campaigns": "Quỹ",
+      "campaigns": "Chiến dịch",
+      "organizations": "Tổ chức",
       "contact": "Liên hệ",
       "profile": "Hồ sơ",
       "signIn": "Đăng nhập",

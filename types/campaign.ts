@@ -328,5 +328,5 @@ export function isCampaignActive(campaign: Campaign | CampaignListItem): boolean
  * Helper function to get campaign slug
  */
 export function getCampaignSlug(campaign: Campaign | CampaignListItem): string {
-  return `campaign-${campaign.fundId}`;
+  return `${campaign.fundId}`;
 }

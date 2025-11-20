@@ -109,13 +109,12 @@ export default function ProfilePage() {
 
     setIsLoadingProfile(true);
     const result = await getMyProfile();
-
+    console.log("my profilee", result);
     if (result.error) {
       toast.error(t("settings.updateFailed"), {
         description: result.error.message,
       });
     } else if (result.data) {
-      console.log(result.data)
       setProfile(result.data);
       // Initialize edit draft with current profile data
       setEditDraft({
@@ -131,7 +130,8 @@ export default function ProfilePage() {
   // Load profile on first render only (modern pattern without useEffect)
   // Check localStorage directly instead of waiting for authUser to prevent logout during locale switch
   if (!hasInitiatedLoad.current) {
-    const hasToken = globalThis.window !== undefined && localStorage.getItem("accessToken");
+    const hasToken =
+      globalThis.window !== undefined && localStorage.getItem("accessToken");
     if (hasToken) {
       hasInitiatedLoad.current = true;
       loadProfile();
@@ -169,7 +169,8 @@ export default function ProfilePage() {
   }, [profile]);
 
   // Redirect if not logged in - check localStorage directly to avoid false redirects during locale switching
-  const hasAccessToken = globalThis.window !== undefined && localStorage.getItem("accessToken");
+  const hasAccessToken =
+    globalThis.window !== undefined && localStorage.getItem("accessToken");
   if (!hasAccessToken && !isLoadingProfile) {
     return (
       <div className="container py-12 md:py-16 text-center">
@@ -198,9 +199,7 @@ export default function ProfilePage() {
     return (
       <div className="container py-12 md:py-16 text-center space-y-4">
         <Heading level={2}>{t("failedToLoad")}</Heading>
-        <BodyText muted>
-          {t("checkBackend")}
-        </BodyText>
+        <BodyText muted>{t("checkBackend")}</BodyText>
         <BodyText muted size="sm">
           {t("checkConsole")}
         </BodyText>
@@ -271,7 +270,9 @@ export default function ProfilePage() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full max-w-md grid-cols-2 mb-6">
-          <TabsTrigger value="contributions">{t("tabs.backedCampaigns")}</TabsTrigger>
+          <TabsTrigger value="contributions">
+            {t("tabs.backedCampaigns")}
+          </TabsTrigger>
           <TabsTrigger value="settings">{t("tabs.settings")}</TabsTrigger>
         </TabsList>
 
@@ -293,7 +294,9 @@ export default function ProfilePage() {
                       <TableHead>{t("contributions.reward")}</TableHead>
                       <TableHead>{t("contributions.date")}</TableHead>
                       <TableHead>{t("contributions.status")}</TableHead>
-                      <TableHead className="text-right">{t("contributions.action")}</TableHead>
+                      <TableHead className="text-right">
+                        {t("contributions.action")}
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -329,12 +332,22 @@ export default function ProfilePage() {
                         <TableCell>
                           {(() => {
                             if (contribution.status === "completed") {
-                              return <Badge>{t("contributions.completed")}</Badge>;
+                              return (
+                                <Badge>{t("contributions.completed")}</Badge>
+                              );
                             }
                             if (contribution.status === "shipped") {
-                              return <Badge variant="secondary">{t("contributions.shipped")}</Badge>;
+                              return (
+                                <Badge variant="secondary">
+                                  {t("contributions.shipped")}
+                                </Badge>
+                              );
                             }
-                            return <Badge variant="secondary">{t("contributions.pending")}</Badge>;
+                            return (
+                              <Badge variant="secondary">
+                                {t("contributions.pending")}
+                              </Badge>
+                            );
                           })()}
                         </TableCell>
                         <TableCell className="text-right">
@@ -354,11 +367,11 @@ export default function ProfilePage() {
 
               {mockContributions.length === 0 && (
                 <div className="py-12 text-center">
-                  <BodyText muted>
-                    {t("contributions.emptyState")}
-                  </BodyText>
+                  <BodyText muted>{t("contributions.emptyState")}</BodyText>
                   <Button className="mt-4" asChild>
-                    <Link href="/funds">{t("contributions.browseCampaigns")}</Link>
+                    <Link href="/funds">
+                      {t("contributions.browseCampaigns")}
+                    </Link>
                   </Button>
                 </div>
               )}
@@ -372,9 +385,7 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle>{t("settings.title")}</CardTitle>
-                  <CardDescription>
-                    {t("settings.description")}
-                  </CardDescription>
+                  <CardDescription>{t("settings.description")}</CardDescription>
                 </div>
                 {!editMode && (
                   <Button
@@ -505,11 +516,15 @@ export default function ProfilePage() {
                 <div>
                   <BodyText weight="semibold">{t("account.status")}</BodyText>
                   <BodyText size="sm" muted>
-                    {profile.isActive ? t("account.active") : t("account.inactive")}
+                    {profile.isActive
+                      ? t("account.active")
+                      : t("account.inactive")}
                   </BodyText>
                 </div>
                 <Badge variant={profile.isActive ? "default" : "secondary"}>
-                  {profile.isActive ? t("account.active") : t("account.inactive")}
+                  {profile.isActive
+                    ? t("account.active")
+                    : t("account.inactive")}
                 </Badge>
               </div>
               <div className="flex items-center justify-between py-2 border-t">

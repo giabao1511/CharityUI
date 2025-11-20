@@ -4,6 +4,7 @@ import { getOrganizationById } from "@/lib/services/organization.service";
 import { OrganizationHeader } from "@/components/organizations/organization-header";
 import { OrganizationTabs } from "@/components/organizations/organization-tabs";
 import { OrganizationSidebar } from "@/components/organizations/organization-sidebar";
+import { getTranslations } from "next-intl/server";
 
 export default async function OrganizationDetailPage({
   params,
@@ -11,6 +12,7 @@ export default async function OrganizationDetailPage({
   readonly params: Promise<{ id: string; locale: string }>;
 }) {
   const { id } = await params;
+  const t = await getTranslations("organizations");
 
   let organization = null;
   let error = null;
@@ -32,8 +34,8 @@ export default async function OrganizationDetailPage({
       {/* Error Message */}
       {error && (
         <div className="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 rounded-lg border border-yellow-200 dark:border-yellow-800">
-          <p className="font-semibold">⚠️ Connection Error</p>
-          <p className="text-sm">Backend API error: {error}</p>
+          <p className="font-semibold">⚠️ {t("errors.connectionError")}</p>
+          <p className="text-sm">{t("errors.backendError", { error })}</p>
         </div>
       )}
 

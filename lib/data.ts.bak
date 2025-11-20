@@ -1,0 +1,721 @@
+import { Fund, PlatformStats } from "@/types";
+
+export const mockCampaigns: Fund[] = [
+  {
+    id: "1",
+    slug: "clean-water-africa",
+    title: "Clean Water for Rural Africa",
+    shortDescription: "Bring clean drinking water to 10 villages in rural Kenya through sustainable well systems.",
+    fullDescription: `
+      Access to clean water is a fundamental human right, yet millions in rural Africa still lack this basic necessity. Our project aims to bring sustainable, clean water solutions to 10 villages in rural Kenya, impacting over 5,000 people directly.
+
+      **The Problem:**
+      Communities in these villages currently walk an average of 3 hours daily to fetch water from contaminated sources, leading to waterborne diseases and lost educational opportunities for children.
+
+      **Our Solution:**
+      We will install solar-powered deep well systems with water purification technology. Each system will serve 500+ people and includes:
+      - Deep well drilling (100-150 meters)
+      - Solar-powered pumping systems
+      - Water purification stations
+      - Community training for maintenance
+      - 5-year maintenance program
+
+      **Impact:**
+      - 5,000+ people with access to clean water
+      - 50% reduction in waterborne diseases
+      - 15+ hours saved per week per family
+      - Increased school attendance by 30%
+    `,
+    creator: "Global Water Initiative",
+    category: "Water & Sanitation",
+    goalAmount: 150000,
+    currentAmount: 89500,
+    currency: "USD",
+    imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
+    startDate: "2024-01-15",
+    endDate: "2025-06-30",
+    status: "active",
+    backers: 1240,
+    milestones: [
+      {
+        id: "m1",
+        title: "Community Engagement & Assessment",
+        description: "Complete village surveys, community meetings, and geological assessments",
+        fundingRequired: 25000,
+        status: "achieved",
+        achievedDate: "2024-03-01"
+      },
+      {
+        id: "m2",
+        title: "First 3 Wells Completed",
+        description: "Drill and install first three well systems with solar pumps",
+        fundingRequired: 60000,
+        status: "achieved",
+        achievedDate: "2024-07-15"
+      },
+      {
+        id: "m3",
+        title: "Training Programs Launched",
+        description: "Train community members on maintenance and water safety",
+        fundingRequired: 90000,
+        status: "in-progress"
+      },
+      {
+        id: "m4",
+        title: "Remaining 7 Wells Installation",
+        description: "Complete installation of all 10 well systems across villages",
+        fundingRequired: 150000,
+        status: "pending"
+      }
+    ],
+    updates: [
+      {
+        id: "u1",
+        title: "Third Well Successfully Completed!",
+        content: "We're thrilled to announce the completion of our third well in Makueni village. The community celebrated with a traditional ceremony and the children enjoyed clean water for the first time!",
+        date: "2024-07-20"
+      },
+      {
+        id: "u2",
+        title: "60% Funding Milestone Reached",
+        content: "Thanks to your incredible support, we've reached 60% of our funding goal! This means we can now move forward with wells 4 and 5. The community's gratitude is immeasurable.",
+        date: "2024-08-05"
+      }
+    ],
+    rewardTiers: [
+      {
+        id: "r1",
+        title: "Water Drop Supporter",
+        description: "Every drop counts! Your support helps maintain clean water systems.",
+        amount: 10,
+        backersCount: 420,
+        items: [
+          "Digital thank you card",
+          "Project updates via email",
+          "Your name on our supporters wall (digital)"
+        ]
+      },
+      {
+        id: "r2",
+        title: "Community Hero",
+        description: "Make a significant impact on a family's daily life.",
+        amount: 50,
+        backersCount: 385,
+        estimatedDelivery: "December 2024",
+        items: [
+          "All previous rewards",
+          "Personalized photo from the community",
+          "Exclusive behind-the-scenes video updates",
+          "Certificate of contribution"
+        ]
+      },
+      {
+        id: "r3",
+        title: "Well Sponsor",
+        description: "Help fund an entire well system for a village!",
+        amount: 250,
+        backersCount: 165,
+        estimatedDelivery: "March 2025",
+        items: [
+          "All previous rewards",
+          "Your name/company on a well plaque",
+          "Detailed impact report with photos",
+          "Video call with the project team",
+          "Handmade thank you gift from the community"
+        ]
+      },
+      {
+        id: "r4",
+        title: "Village Champion",
+        description: "Transform an entire village with your generosity!",
+        amount: 1000,
+        backersCount: 18,
+        estimatedDelivery: "March 2025",
+        backerLimit: 25,
+        items: [
+          "All previous rewards",
+          "Invitation to visit the project site",
+          "Feature in our annual report",
+          "Naming rights for one water station",
+          "Lifetime project updates"
+        ]
+      }
+    ],
+    contributors: [
+      {
+        id: "c1",
+        name: "Sarah Johnson",
+        amount: 250,
+        date: "2024-11-05",
+        rewardTier: "Well Sponsor"
+      },
+      {
+        id: "c2",
+        name: "Anonymous",
+        amount: 1000,
+        date: "2024-11-03",
+        rewardTier: "Village Champion",
+        isAnonymous: true
+      },
+      {
+        id: "c3",
+        name: "Michael Chen",
+        amount: 50,
+        date: "2024-11-02",
+        rewardTier: "Community Hero"
+      },
+      {
+        id: "c4",
+        name: "Emily Rodriguez",
+        amount: 100,
+        date: "2024-11-01",
+        rewardTier: "Community Hero"
+      },
+      {
+        id: "c5",
+        name: "David Park",
+        amount: 25,
+        date: "2024-10-30",
+        rewardTier: "Water Drop Supporter"
+      }
+    ],
+    volunteers: [
+      {
+        id: "v1",
+        name: "Alex Martinez",
+        registeredAt: "2024-10-15",
+        status: "active" as const,
+        skills: ["Engineering", "Project Management"],
+        availability: "Weekends"
+      },
+      {
+        id: "v2",
+        name: "Priya Sharma",
+        registeredAt: "2024-10-20",
+        status: "active" as const,
+        skills: ["Community Outreach", "Translation"],
+        availability: "Flexible"
+      },
+      {
+        id: "v3",
+        name: "James Wilson",
+        registeredAt: "2024-11-01",
+        status: "active" as const,
+        skills: ["Water Systems", "Training"],
+        availability: "Mon-Fri evenings"
+      }
+    ],
+    comments: [
+      {
+        id: "cm1",
+        author: "Jennifer Williams",
+        content: "This is such an amazing project! I've been following your progress and I'm so impressed with the impact you're making. Question: How do you ensure the maintenance of these wells in the long term?",
+        date: "2024-11-04",
+        replies: [
+          {
+            id: "cm1-r1",
+            author: "Global Water Initiative",
+            content: "Great question! We train local community members as well technicians and establish a maintenance fund. Each village also has a water committee responsible for ongoing care. We provide 5 years of direct support and quarterly check-ins.",
+            date: "2024-11-05"
+          }
+        ]
+      },
+      {
+        id: "cm2",
+        author: "Robert Martinez",
+        content: "Contributed last week and couldn't be happier to support this cause. The updates with photos really show the impact. Keep up the excellent work!",
+        date: "2024-11-02"
+      },
+      {
+        id: "cm3",
+        author: "Lisa Thompson",
+        content: "Are you planning to expand to other regions after completing these 10 wells? This model seems very effective.",
+        date: "2024-10-28",
+        replies: [
+          {
+            id: "cm3-r1",
+            author: "Global Water Initiative",
+            content: "Yes! Based on the success of this pilot, we're already planning Phase 2 for 2025, targeting 20 additional villages in Tanzania and Uganda. Stay tuned!",
+            date: "2024-10-29"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "2",
+    slug: "education-for-all",
+    title: "Education for All: School Supplies Drive",
+    shortDescription: "Provide essential school supplies and books to 1,000 underprivileged children.",
+    fullDescription: `
+      Every child deserves access to quality education, but many children in underserved communities lack basic school supplies. This campaign aims to bridge that gap.
+
+      **Our Mission:**
+      Provide comprehensive school supply kits to 1,000 children across 20 schools in underserved areas. Each kit includes notebooks, pens, pencils, erasers, rulers, school bags, and age-appropriate reading books.
+
+      **Why This Matters:**
+      - Many families can't afford basic school supplies
+      - Lack of materials leads to lower academic performance
+      - Children often share supplies, reducing learning effectiveness
+      - Access to books promotes literacy and imagination
+
+      **What We're Providing:**
+      - Complete school supply kits for 1,000 students
+      - Age-appropriate reading books library (500 books per school)
+      - Quarterly supply replenishment for one year
+      - Teacher training on resource utilization
+    `,
+    creator: "Learn & Grow Foundation",
+    category: "Education",
+    goalAmount: 50000,
+    currentAmount: 42300,
+    currency: "USD",
+    imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
+    startDate: "2024-02-01",
+    endDate: "2024-12-31",
+    status: "active",
+    backers: 856,
+    milestones: [
+      {
+        id: "m1",
+        title: "Partner School Identification",
+        description: "Identify and partner with 20 schools in need",
+        fundingRequired: 5000,
+        status: "achieved",
+        achievedDate: "2024-02-28"
+      },
+      {
+        id: "m2",
+        title: "First 500 Kits Distributed",
+        description: "Distribute supply kits to first 500 students",
+        fundingRequired: 25000,
+        status: "achieved",
+        achievedDate: "2024-06-15"
+      },
+      {
+        id: "m3",
+        title: "Book Libraries Established",
+        description: "Set up reading libraries in all 20 schools",
+        fundingRequired: 40000,
+        status: "in-progress"
+      },
+      {
+        id: "m4",
+        title: "Complete Distribution & Training",
+        description: "Distribute remaining kits and complete teacher training",
+        fundingRequired: 50000,
+        status: "pending"
+      }
+    ],
+    updates: [
+      {
+        id: "u1",
+        title: "Amazing Milestone: 500 Kids Now Have Supplies!",
+        content: "We've reached the halfway mark! 500 children now have complete school supply kits. The joy on their faces is priceless. Check out the photos in our gallery!",
+        date: "2024-06-20"
+      }
+    ],
+    rewardTiers: [],
+    contributors: [],
+    comments: []
+  },
+  {
+    id: "3",
+    slug: "community-health-clinic",
+    title: "Community Health Clinic Construction",
+    shortDescription: "Build a modern health clinic to serve 15,000 residents in an underserved area.",
+    fullDescription: `
+      Healthcare is a basic human right, yet thousands in our community lack access to medical facilities. We're building a modern health clinic to change that.
+
+      **The Need:**
+      Our community of 15,000 people currently has no nearby health facility. Residents must travel 50+ km for basic medical care, often resulting in untreated conditions and medical emergencies.
+
+      **Our Vision:**
+      A modern, fully-equipped community health clinic offering:
+      - General medical consultations
+      - Maternal and child health services
+      - Emergency care
+      - Pharmacy services
+      - Health education programs
+      - Mobile clinic services for remote areas
+
+      **Facility Features:**
+      - 2,000 sq ft modern building
+      - 4 consultation rooms
+      - Minor surgery room
+      - Laboratory
+      - Pharmacy
+      - Waiting areas
+      - Staff accommodation
+      - Solar power with battery backup
+    `,
+    creator: "HealthBridge International",
+    category: "Healthcare",
+    goalAmount: 200000,
+    currentAmount: 134000,
+    currency: "USD",
+    imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
+    startDate: "2024-03-01",
+    endDate: "2025-12-31",
+    status: "active",
+    backers: 2100,
+    milestones: [
+      {
+        id: "m1",
+        title: "Land Acquisition & Planning",
+        description: "Secure land and complete architectural plans",
+        fundingRequired: 30000,
+        status: "achieved",
+        achievedDate: "2024-05-15"
+      },
+      {
+        id: "m2",
+        title: "Foundation & Structure",
+        description: "Complete building foundation and main structure",
+        fundingRequired: 100000,
+        status: "achieved",
+        achievedDate: "2024-09-01"
+      },
+      {
+        id: "m3",
+        title: "Interior & Equipment",
+        description: "Complete interior finishing and install medical equipment",
+        fundingRequired: 170000,
+        status: "in-progress"
+      },
+      {
+        id: "m4",
+        title: "Staffing & Grand Opening",
+        description: "Hire staff, stock pharmacy, and open clinic to public",
+        fundingRequired: 200000,
+        status: "pending"
+      }
+    ],
+    updates: [
+      {
+        id: "u1",
+        title: "Building Structure Complete!",
+        content: "Major progress! The main building structure is complete. We're now moving into the interior finishing phase. Thank you for making this possible!",
+        date: "2024-09-05"
+      },
+      {
+        id: "u2",
+        title: "Equipment Procurement Underway",
+        content: "We've begun procuring medical equipment. The diagnostic machines have been ordered and will arrive next month!",
+        date: "2024-10-15"
+      }
+    ],
+    rewardTiers: [],
+    contributors: [],
+    comments: []
+  },
+  {
+    id: "4",
+    slug: "solar-power-villages",
+    title: "Solar Power for Remote Villages",
+    shortDescription: "Bring electricity to 5 remote villages through solar power installations.",
+    fullDescription: `
+      Imagine living without electricity in 2024. That's the reality for thousands in remote villages. We're changing that with clean, sustainable solar power.
+
+      **Current Situation:**
+      Five remote villages with a combined population of 3,000 people have never had access to electricity. This affects education, healthcare, communication, and economic opportunities.
+
+      **Our Solution:**
+      Install community solar microgrids in each village:
+      - Central solar panel arrays (50kW per village)
+      - Battery storage systems
+      - Distribution network to homes, schools, and clinics
+      - Solar-powered street lights
+      - Training for local technicians
+
+      **Expected Impact:**
+      - 3,000 people gain electricity access
+      - Schools can use computers and projectors
+      - Clinics can refrigerate vaccines
+      - Small businesses can operate
+      - Reduced kerosene use improves health
+      - Children can study after dark
+    `,
+    creator: "SunRise Energy Initiative",
+    category: "Energy & Environment",
+    goalAmount: 180000,
+    currentAmount: 67000,
+    currency: "USD",
+    imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
+    startDate: "2024-04-01",
+    endDate: "2025-08-31",
+    status: "active",
+    backers: 890,
+    milestones: [
+      {
+        id: "m1",
+        title: "Technical Assessment",
+        description: "Complete energy needs assessment and system design",
+        fundingRequired: 20000,
+        status: "achieved",
+        achievedDate: "2024-05-30"
+      },
+      {
+        id: "m2",
+        title: "First Village Installation",
+        description: "Complete solar installation in first village",
+        fundingRequired: 60000,
+        status: "in-progress"
+      },
+      {
+        id: "m3",
+        title: "Three Villages Powered",
+        description: "Complete installations in villages 2 and 3",
+        fundingRequired: 120000,
+        status: "pending"
+      },
+      {
+        id: "m4",
+        title: "All Villages Connected",
+        description: "Complete all installations and training programs",
+        fundingRequired: 180000,
+        status: "pending"
+      }
+    ],
+    updates: [
+      {
+        id: "u1",
+        title: "Equipment Arrived!",
+        content: "The solar panels and battery systems have arrived at the port! We're arranging transportation to the first village. Installation begins next week!",
+        date: "2024-10-01"
+      }
+    ],
+    rewardTiers: [],
+    contributors: [],
+    comments: []
+  },
+  {
+    id: "5",
+    slug: "women-entrepreneurship",
+    title: "Women's Entrepreneurship Program",
+    shortDescription: "Empower 200 women with microloans and business training to start small businesses.",
+    fullDescription: `
+      Economic empowerment changes lives. This program will provide 200 women with the tools, training, and capital to start and grow successful small businesses.
+
+      **Program Components:**
+      
+      **1. Business Training (3 months):**
+      - Business planning and management
+      - Financial literacy
+      - Marketing and sales
+      - Record keeping
+      - Digital skills
+
+      **2. Microloans:**
+      - $500 - $2,000 per entrepreneur
+      - Flexible repayment terms
+      - 3% interest (covers administration)
+      - Loans create revolving fund for future entrepreneurs
+
+      **3. Mentorship:**
+      - Pairing with successful business owners
+      - Monthly check-ins for first year
+      - Peer support groups
+      - Ongoing business advisory
+
+      **4. Market Access:**
+      - Local market linkages
+      - Cooperative selling platforms
+      - Digital marketplace training
+      - Bulk purchasing power
+
+      **Expected Outcomes:**
+      - 200 new businesses created
+      - Average income increase of 150%
+      - 600+ family members impacted
+      - 80% business survival rate after 2 years
+    `,
+    creator: "Women Empowerment Network",
+    category: "Economic Development",
+    goalAmount: 120000,
+    currentAmount: 95000,
+    currency: "USD",
+    imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
+    startDate: "2024-05-01",
+    endDate: "2025-05-01",
+    status: "active",
+    backers: 1580,
+    milestones: [
+      {
+        id: "m1",
+        title: "Curriculum Development",
+        description: "Develop training materials and select mentors",
+        fundingRequired: 15000,
+        status: "achieved",
+        achievedDate: "2024-06-15"
+      },
+      {
+        id: "m2",
+        title: "First Cohort Training",
+        description: "Train first 100 women entrepreneurs",
+        fundingRequired: 50000,
+        status: "achieved",
+        achievedDate: "2024-09-30"
+      },
+      {
+        id: "m3",
+        title: "Initial Loans Disbursed",
+        description: "Disburse microloans to first cohort",
+        fundingRequired: 90000,
+        status: "in-progress"
+      },
+      {
+        id: "m4",
+        title: "Program Completion",
+        description: "Train and fund all 200 entrepreneurs",
+        fundingRequired: 120000,
+        status: "pending"
+      }
+    ],
+    updates: [
+      {
+        id: "u1",
+        title: "First 100 Women Complete Training!",
+        content: "Incredible milestone! Our first cohort of 100 women have completed the business training program. Graduation ceremony was filled with inspiration and hope!",
+        date: "2024-10-01"
+      },
+      {
+        id: "u2",
+        title: "First Businesses Launching!",
+        content: "So exciting! The first 25 businesses are now operational. From tailoring shops to food processing, these women are making their dreams reality!",
+        date: "2024-10-20"
+      }
+    ],
+    rewardTiers: [],
+    contributors: [],
+    comments: []
+  },
+  {
+    id: "6",
+    slug: "refugee-support",
+    title: "Refugee Family Support Program",
+    shortDescription: "Provide housing, education, and job training for 50 refugee families.",
+    fullDescription: `
+      Refugees arrive in our country with hope but often face overwhelming challenges. This program provides comprehensive support to help 50 refugee families rebuild their lives.
+
+      **Comprehensive Support Package:**
+
+      **1. Housing Assistance (6 months):**
+      - Temporary housing rental subsidies
+      - Basic furniture and household items
+      - Utilities support
+      - Help finding permanent housing
+
+      **2. Education Support:**
+      - Language classes (English/host country language)
+      - School enrollment assistance for children
+      - School supplies and uniforms
+      - Tutoring services
+      - Adult education programs
+
+      **3. Job Training & Placement:**
+      - Skills assessment
+      - Vocational training
+      - Resume writing and interview prep
+      - Job placement assistance
+      - Entrepreneurship training option
+
+      **4. Integration Support:**
+      - Cultural orientation
+      - Legal document assistance
+      - Healthcare enrollment
+      - Community connection programs
+      - Ongoing case management
+
+      **Program Impact:**
+      - 50 families (approximately 200 people)
+      - 80% employment within 6 months
+      - 100% children enrolled in school
+      - Successful community integration
+    `,
+    creator: "New Horizons Refugee Services",
+    category: "Humanitarian Aid",
+    goalAmount: 250000,
+    currentAmount: 178000,
+    currency: "USD",
+    imageUrl: "/api/placeholder/800/600",
+    mediaUrls: [],
+    startDate: "2024-01-01",
+    endDate: "2025-12-31",
+    status: "active",
+    backers: 2890,
+    milestones: [
+      {
+        id: "m1",
+        title: "Program Infrastructure",
+        description: "Establish program office, hire staff, develop curricula",
+        fundingRequired: 50000,
+        status: "achieved",
+        achievedDate: "2024-03-01"
+      },
+      {
+        id: "m2",
+        title: "First 15 Families Enrolled",
+        description: "Provide housing and begin services for initial families",
+        fundingRequired: 100000,
+        status: "achieved",
+        achievedDate: "2024-07-01"
+      },
+      {
+        id: "m3",
+        title: "30 Families in Program",
+        description: "Expand services to 30 families total",
+        fundingRequired: 175000,
+        status: "in-progress"
+      },
+      {
+        id: "m4",
+        title: "Full 50 Families Served",
+        description: "Reach full capacity and serve all 50 families",
+        fundingRequired: 250000,
+        status: "pending"
+      }
+    ],
+    updates: [
+      {
+        id: "u1",
+        title: "Success Story: Ahmed's Journey",
+        content: "Ahmed arrived with his family 6 months ago. Today, he started his new job as a chef! His children are thriving in school. This is why we do this work!",
+        date: "2024-09-15"
+      },
+      {
+        id: "u2",
+        title: "30 Families Milestone Reached!",
+        content: "We're now supporting 30 families with 42 children enrolled in schools and 28 adults in language or job training programs. The progress is incredible!",
+        date: "2024-10-30"
+      }
+    ],
+    rewardTiers: [],
+    contributors: [],
+    comments: []
+  }
+];
+
+export const platformStats: PlatformStats = {
+  totalRaised: 685800,
+  totalCampaigns: 127,
+  activeCampaigns: 89,
+  totalBackers: 9556
+};
+
+export const featuredCampaigns = mockCampaigns.slice(0, 3);
+
+export const categories = [
+  "All Categories",
+  "Water & Sanitation",
+  "Education",
+  "Healthcare",
+  "Energy & Environment",
+  "Economic Development",
+  "Humanitarian Aid"
+];

@@ -42,6 +42,15 @@ export interface Contributor {
   isAnonymous?: boolean;
 }
 
+export interface Volunteer {
+  id: string;
+  name: string;
+  registeredAt: string;
+  status: "pending" | "active" | "rejected";
+  skills?: string[];
+  availability?: string;
+}
+
 export interface Comment {
   id: string;
   author: string;
@@ -72,6 +81,7 @@ export interface Fund {
   currentAmount: number;
   currency: string;
   imageUrl: string;
+  mediaUrls: string[];
   videoUrl?: string;
   startDate: string;
   endDate: string;
@@ -81,7 +91,14 @@ export interface Fund {
   updates: CampaignUpdate[];
   rewardTiers: RewardTier[];
   contributors: Contributor[];
+  volunteers: Volunteer[];
   comments: Comment[];
+  // Organization info (from API)
+  organization?: {
+    orgId: number;
+    orgName: string;
+    avatar?: string;
+  };
 }
 
 export interface CampaignUpdate {
