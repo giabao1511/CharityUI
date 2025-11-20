@@ -43,6 +43,7 @@ export function FundContributionSection({
       {/* Contribution Sidebar */}
       <div ref={sidebarRef}>
         <ContributionSidebar
+          campaignId={fund.id}
           goalAmount={fund.goalAmount}
           currentAmount={fund.currentAmount}
           backers={fund.backers}

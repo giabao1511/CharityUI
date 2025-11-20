@@ -48,6 +48,12 @@ export function fundToCampaign(fund: ApiFund | FundListItem): Campaign {
       ? fund.fundMedia.find((media) => media.mediaType === 2)?.url // MediaType.VIDEO = 2
       : undefined;
 
+  // Get all media URLs from fundMedia array
+  const mediaUrls =
+    "fundMedia" in fund && fund.fundMedia && fund.fundMedia.length > 0
+      ? fund.fundMedia.map((media) => media.url)
+      : [];
+
   return {
     id: fund.fundId.toString(),
     slug,
@@ -65,6 +71,7 @@ export function fundToCampaign(fund: ApiFund | FundListItem): Campaign {
     endDate: fund.endDate,
     creator: creatorName,
     imageUrl: fund.bannerUrl,
+    mediaUrls,
     videoUrl,
     status: getFundStatusAsCampaignStatus(fundStatus),
 
@@ -72,6 +79,7 @@ export function fundToCampaign(fund: ApiFund | FundListItem): Campaign {
     updates: [],
     rewardTiers: [],
     contributors: [],
+    volunteers: [],
     comments: [],
 
     // Milestones mapping

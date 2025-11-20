@@ -369,7 +369,7 @@ export default function ProfilePage() {
                 <div className="py-12 text-center">
                   <BodyText muted>{t("contributions.emptyState")}</BodyText>
                   <Button className="mt-4" asChild>
-                    <Link href="/funds">
+                    <Link href="/campaigns">
                       {t("contributions.browseCampaigns")}
                     </Link>
                   </Button>

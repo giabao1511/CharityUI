@@ -31,7 +31,7 @@ export default function Home() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="text-base">
-                <Link href="/funds">{t("hero.startFundraiser")}</Link>
+                <Link href="/campaigns">{t("hero.startFundraiser")}</Link>
               </Button>
             </div>
           </div>
@@ -129,7 +129,7 @@ export default function Home() {
               </BodyText>
             </div>
             <Button variant="outline" asChild className="mt-4 md:mt-0">
-              <Link href="/funds">
+              <Link href="/campaigns">
                 {t("featured.viewAll")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -150,7 +150,7 @@ export default function Home() {
             </BodyText>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button size="lg" variant="secondary" asChild>
-                <Link href="/funds">{t("cta.startFund")}</Link>
+                <Link href="/campaigns">{t("cta.startFund")}</Link>
               </Button>
               <Button
                 size="lg"

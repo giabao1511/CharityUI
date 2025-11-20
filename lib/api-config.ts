@@ -79,6 +79,12 @@ export const API_ENDPOINTS = {
     // Check payment status after callback
     CHECK: `${API_BASE_URL}/v1/payments/check`,
   },
+  // Donation endpoints
+  DONATIONS: {
+    // Get donations for a campaign (public)
+    LIST: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/donations/${campaignId}`,
+  },
   // Creator/Fund Manager Dashboard endpoints
   CREATOR: {
     // Dashboard statistics (TODO: Backend to implement)

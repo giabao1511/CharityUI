@@ -51,6 +51,30 @@ export interface Volunteer {
   availability?: string;
 }
 
+export interface DonationStatus {
+  donationStatusId: number;
+  statusName: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Donation {
+  donationId: number;
+  campaignId: number;
+  email: string | null;
+  fullName: string | null;
+  phoneNumber: string | null;
+  address: string | null;
+  isAnonymous: boolean;
+  amount: string;
+  donateDate: string;
+  message: string | null;
+  createdAt: string;
+  updatedAt: string;
+  user: any | null;
+  status: DonationStatus;
+}
+
 export interface Comment {
   id: string;
   author: string;

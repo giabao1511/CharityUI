@@ -14,6 +14,7 @@ import { formatCurrency } from "@/lib/currency";
 import { useLocale } from "next-intl";
 import { createPayment } from "@/lib/services/payment.service";
 import { GuestDonationDialog } from "./guest-donation-dialog";
+import { LoggedInDonationDialog } from "./logged-in-donation-dialog";
 import { useAuth } from "@/lib/auth-context";
 
 interface ContributionSidebarProps {
@@ -43,6 +44,7 @@ export function ContributionSidebar({
   const [selectedTierId, setSelectedTierId] = useState<string | null>(externalSelectedTierId);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showGuestDialog, setShowGuestDialog] = useState(false);
+  const [showLoggedInDialog, setShowLoggedInDialog] = useState(false);
 
   // Derive the selected tier and amount from props
   // When externalSelectedTierId changes, update local state
@@ -83,8 +85,8 @@ export function ContributionSidebar({
       return;
     }
 
-    // User is logged in, proceed directly
-    await processPayment({ amount });
+    // User is logged in, show logged-in dialog with pre-filled email
+    setShowLoggedInDialog(true);
   };
 
   const processPayment = async ({
@@ -139,6 +141,19 @@ export function ContributionSidebar({
     });
   };
 
+  const handleLoggedInDonation = async (userData: {
+    email: string;
+    phoneNumber?: string;
+    message?: string;
+    isAnonymous: boolean;
+  }) => {
+    setShowLoggedInDialog(false);
+    await processPayment({
+      amount: contributionAmount,
+      ...userData,
+    });
+  };
+
   return (
     <>
       <GuestDonationDialog
@@ -148,6 +163,17 @@ export function ContributionSidebar({
         campaignId={campaignId}
         onSubmit={handleGuestDonation}
       />
+
+      {user && (
+        <LoggedInDonationDialog
+          open={showLoggedInDialog}
+          onOpenChange={setShowLoggedInDialog}
+          amount={Number.parseFloat(contributionAmount) || 0}
+          campaignId={campaignId}
+          userEmail={user.email}
+          onSubmit={handleLoggedInDonation}
+        />
+      )}
 
       <Card className="lg:sticky lg:top-20">
         <CardHeader>

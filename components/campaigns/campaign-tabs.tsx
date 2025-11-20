@@ -3,25 +3,35 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Circle, Clock } from "lucide-react";
-import { Fund } from "@/types";
+import { Fund, Donation } from "@/types";
 import { Heading, BodyText, List } from "@/components/ui/typography";
 import { VolunteersList } from "./volunteers-list";
 import { CommentsSection } from "./comments-section";
+import { DonationsList } from "./donations-list";
 import { formatCurrency } from "@/lib/currency";
 import { useLocale } from "next-intl";
 
 interface CampaignTabsProps {
   readonly campaign: Fund;
+  readonly initialDonations?: Donation[];
+  readonly totalDonations?: number;
 }
 
-export function CampaignTabs({ campaign }: CampaignTabsProps) {
+export function CampaignTabs({
+  campaign,
+  initialDonations = [],
+  totalDonations = 0,
+}: CampaignTabsProps) {
   const locale = useLocale() as 'en' | 'vi';
 
   return (
     <Tabs defaultValue="description" className="w-full">
-      <TabsList className="grid w-full grid-cols-4 mb-6">
+      <TabsList className="grid w-full grid-cols-5 mb-6">
         <TabsTrigger value="description">Description & Updates</TabsTrigger>
         <TabsTrigger value="milestones">Milestones</TabsTrigger>
+        <TabsTrigger value="donations">
+          Donations ({totalDonations})
+        </TabsTrigger>
         <TabsTrigger value="volunteers">
           Volunteers ({campaign.volunteers.length})
         </TabsTrigger>
@@ -164,6 +174,15 @@ export function CampaignTabs({ campaign }: CampaignTabsProps) {
             </div>
           </CardContent>
         </Card>
+      </TabsContent>
+
+      <TabsContent value="donations" className="mt-0">
+        <DonationsList
+          campaignId={campaign.id}
+          initialDonations={initialDonations}
+          initialPage={1}
+          initialTotalPages={Math.ceil(totalDonations / 10)}
+        />
       </TabsContent>
 
       <TabsContent value="volunteers" className="mt-0">

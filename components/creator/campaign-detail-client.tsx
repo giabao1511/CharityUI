@@ -5,15 +5,18 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { getCampaignById } from "@/lib/services/campaign.service";
 import { getCampaignVolunteers } from "@/lib/services/creator.service";
+import { getCreatorCampaignDonations } from "@/lib/services/donation.service";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { MilestoneManager } from "@/components/creator/milestone-manager";
 import { VolunteerList } from "@/components/creator/volunteer-list";
+import { DonationsList } from "@/components/campaigns/donations-list";
 import { Heading, BodyText } from "@/components/ui/typography";
 import { formatCampaignAmount, calculateCampaignProgress, CampaignStatusNames, CampaignStatus } from "@/types/campaign";
 import type { Milestone } from "@/types/campaign";
 import type { VolunteerRegistration } from "@/types/creator";
+import type { Donation } from "@/types";
 import { Loader2, AlertCircle, DollarSign, Target, Users, Calendar, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -28,6 +31,8 @@ export function CampaignDetailClient({ campaignId }: CampaignDetailClientProps) 
   const router = useRouter();
   const [campaign, setCampaign] = useState<any>(null);
   const [volunteers, setVolunteers] = useState<VolunteerRegistration[]>([]);
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [totalDonations, setTotalDonations] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,17 +49,21 @@ export function CampaignDetailClient({ campaignId }: CampaignDetailClientProps) 
         setLoading(true);
         setError(null);
 
-        // Fetch campaign details and volunteers in parallel
-        const [campaignData, volunteersData] = await Promise.all([
+        // Fetch campaign details, volunteers, and donations in parallel (first page only)
+        const [campaignData, volunteersData, donationsData] = await Promise.all([
           getCampaignById(campaignId),
           getCampaignVolunteers(campaignId),
+          getCreatorCampaignDonations(campaignId, { page: 1, limit: 10 }).catch(() => ({ data: [], pagination: { total: 0, page: 1, limit: 10 } })),
         ]);
 
         console.log("Campaign detail API response:", campaignData);
         console.log("Volunteers API response:", volunteersData);
+        console.log("Donations API response:", donationsData);
 
         setCampaign(campaignData);
         setVolunteers(volunteersData.volunteers || []);
+        setDonations(donationsData.data || []);
+        setTotalDonations(donationsData.pagination?.total || 0);
       } catch (error) {
         console.error("Error loading campaign:", error);
         setError(
@@ -262,6 +271,24 @@ export function CampaignDetailClient({ campaignId }: CampaignDetailClientProps) 
           milestones={milestones}
           campaignId={id}
         />
+
+        {/* Donations List */}
+        <Card>
+          <CardContent className="pt-6">
+            <Heading level={2} gutterBottom>
+              Donations ({totalDonations})
+            </Heading>
+            <BodyText muted className="mb-6">
+              View all donations received for this campaign
+            </BodyText>
+            <DonationsList
+              campaignId={campaignId}
+              initialDonations={donations}
+              initialPage={1}
+              initialTotalPages={Math.ceil(totalDonations / 10)}
+            />
+          </CardContent>
+        </Card>
 
         {/* Volunteer Management */}
         <VolunteerList volunteers={volunteers} campaignId={id} />

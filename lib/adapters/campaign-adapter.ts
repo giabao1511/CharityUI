@@ -12,11 +12,21 @@ import type { CreatorCampaignItem, VolunteerRegistration } from "@/types/creator
  * Transform API volunteer (VolunteerRegistration) to public Volunteer type
  */
 export function transformVolunteerForPublic(apiVolunteer: VolunteerRegistration): Volunteer {
+  // Map API statuses to public volunteer statuses
+  let status: "pending" | "active" | "rejected" = "pending";
+  if (apiVolunteer.status === "active" || apiVolunteer.status === "approved") {
+    status = "active";
+  } else if (apiVolunteer.status === "rejected" || apiVolunteer.status === "inactive") {
+    status = "rejected";
+  } else if (apiVolunteer.status === "pending") {
+    status = "pending";
+  }
+
   return {
     id: `${apiVolunteer.volunteerId}`,
     name: apiVolunteer.userName,
     registeredAt: apiVolunteer.registeredAt,
-    status: apiVolunteer.status,
+    status: status,
     skills: apiVolunteer.skills || [],
     availability: apiVolunteer.availability || "",
   };

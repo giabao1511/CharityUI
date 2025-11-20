@@ -7,7 +7,8 @@ import { campaignToMockFormat } from "@/lib/adapters/campaign-adapter";
 import { mockCampaigns } from "@/lib/data";
 import { getCampaignById } from "@/lib/services/campaign.service";
 import { getCampaignVolunteers } from "@/lib/services/creator.service";
-import type { Fund } from "@/types";
+import { getCampaignDonations } from "@/lib/services/donation.service";
+import type { Fund, Donation } from "@/types";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
@@ -21,17 +22,22 @@ export default async function CampaignDetailPage({
   const t = await getTranslations("campaigns");
 
   let campaign: Fund | null = null;
+  let donations: Donation[] = [];
+  let totalDonations = 0;
   let error = null;
 
   // Try to fetch from API using the slug as campaign ID
   try {
-    // Fetch campaign and volunteers in parallel
-    const [apiCampaign, volunteersData] = await Promise.all([
+    // Fetch campaign, volunteers, and donations in parallel (first page only)
+    const [apiCampaign, volunteersData, donationsData] = await Promise.all([
       getCampaignById(slug),
-      getCampaignVolunteers(slug).catch(() => ({ volunteers: [] })), // Fallback to empty array if volunteers fetch fails
+      getCampaignVolunteers(slug),
+      getCampaignDonations(slug, { page: 1, limit: 10 }),
     ]);
 
     campaign = campaignToMockFormat(apiCampaign, volunteersData.volunteers);
+    donations = donationsData.data || [];
+    totalDonations = donationsData.pagination?.total || 0;
   } catch (err) {
     error = err instanceof Error ? err.message : "Failed to load campaign";
     console.error("Error fetching campaign from API:", err);
@@ -83,7 +89,9 @@ export default async function CampaignDetailPage({
               {campaign.creator}
             </Link>
           ) : (
-            <span className="font-medium text-foreground">{campaign.creator}</span>
+            <span className="font-medium text-foreground">
+              {campaign.creator}
+            </span>
           )}
         </div>
       </div>
@@ -132,7 +140,11 @@ export default async function CampaignDetailPage({
           )}
 
           {/* Campaign Tabs - Client Component */}
-          <CampaignTabs campaign={campaign} />
+          <CampaignTabs
+            campaign={campaign}
+            initialDonations={donations}
+            totalDonations={totalDonations}
+          />
         </div>
 
         {/* Sidebar - Client Component */}

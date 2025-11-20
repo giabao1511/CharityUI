@@ -1,12 +1,11 @@
-import { Suspense } from "react";
 import { CampaignCard } from "@/components/campaigns/campaign-card";
 import { CampaignFilters } from "@/components/campaigns/campaign-filters";
-import { mockCampaigns } from "@/lib/data";
-import { Heading, BodyText } from "@/components/ui/typography";
-import { getTranslations } from "next-intl/server";
-import { getCampaigns } from "@/lib/services/campaign.service";
+import { BodyText, Heading } from "@/components/ui/typography";
 import { campaignListToMockFormat } from "@/lib/adapters/campaign-adapter";
+import { mockCampaigns } from "@/lib/data";
+import { getCampaigns } from "@/lib/services/campaign.service";
 import type { Fund } from "@/types";
+import { getTranslations } from "next-intl/server";
 
 export default async function CampaignsPage({
   searchParams,
@@ -63,7 +62,9 @@ export default async function CampaignsPage({
     <div className="container py-12 md:py-16">
       {/* Page Header */}
       <div className="mb-12">
-        <Heading level={1} gutterBottom>{t("title")}</Heading>
+        <Heading level={1} gutterBottom>
+          {t("title")}
+        </Heading>
         <BodyText size="lg" muted>
           {t("subtitle")}
         </BodyText>

@@ -1,27 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, CheckCircle2, XCircle, ArrowLeft } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BodyText, Heading } from "@/components/ui/typography";
 import {
   checkPayment,
-  isPaymentSuccessful,
   formatVND,
+  isPaymentSuccessful,
   type PaymentCheckParams,
 } from "@/lib/services/payment.service";
-import { Heading, BodyText } from "@/components/ui/typography";
+import { ArrowLeft, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export default function CheckPaymentPage() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [paymentData, setPaymentData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const hasChecked = useRef(false);
 
   useEffect(() => {
     async function verifyPayment() {
+      // Prevent duplicate API calls
+      if (hasChecked.current) {
+        return;
+      }
+      hasChecked.current = true;
+
       try {
         // Extract all VNPay parameters from URL
         const params: PaymentCheckParams = {
@@ -114,7 +121,8 @@ export default function CheckPaymentPage() {
     );
   }
 
-  const success = isPaymentSuccessful(paymentData.data.vnp_ResponseCode);
+  // First check backend validation, then VNPay response code
+  const success = paymentData.valid && isPaymentSuccessful(paymentData.data.vnp_ResponseCode);
   const amount = parseInt(paymentData.data?.vnp_Amount) / 100; // VNPay returns amount in smallest unit
 
   return (
