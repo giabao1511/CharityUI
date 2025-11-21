@@ -95,6 +95,24 @@ export const API_ENDPOINTS = {
     // Mark all notifications as read
     MARK_ALL_READ: `${API_BASE_URL}/v1/notifications/mark-all-read`,
   },
+  // Admin endpoints (using existing user/org endpoints)
+  ADMIN: {
+    // Organizations - using main organization endpoints
+    ORGANIZATIONS: {
+      LIST: `${API_BASE_URL}/v1/organizations`,
+      CREATE: `${API_BASE_URL}/v1/organizations`,
+      UPDATE: (orgId: string | number) =>
+        `${API_BASE_URL}/v1/organizations/${orgId}`,
+    },
+    // Users - using main user endpoints
+    USERS: {
+      LIST: `${API_BASE_URL}/v1/users`,
+      UPDATE: (userId: string | number) =>
+        `${API_BASE_URL}/v1/users/${userId}`,
+      DELETE: (userId: string | number) =>
+        `${API_BASE_URL}/v1/users/${userId}`,
+    },
+  },
 } as const;
 
 /**
@@ -139,6 +157,22 @@ export async function apiClient<T>(
     const result = await response.json();
 
     if (!response.ok) {
+      // Handle 401 Unauthorized - redirect to login
+      if (response.status === 401 && typeof window !== "undefined") {
+        // Clear auth data
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+        // Redirect to login
+        window.location.href = "/auth?tab=signin";
+        return {
+          error: {
+            message: "Unauthorized. Redirecting to login...",
+            statusCode: 401,
+            errors: result.errors,
+          },
+        };
+      }
+
       // Use response.status (HTTP status code) instead of result.statusCode
       // because the backend might return statusCode as a string
       return {
