@@ -72,7 +72,7 @@ export async function getCreatorCampaignDonations(
     if (filters?.status) queryParams.append("status", String(filters.status));
 
     // Use creator endpoint which might show more details (like non-anonymous donor info)
-    const url = `${API_ENDPOINTS.CREATOR.CAMPAIGN_DONATIONS(campaignId)}${
+    const url = `${API_ENDPOINTS.DONATIONS.LIST(campaignId)}${
       queryParams.toString() ? `?${queryParams.toString()}` : ""
     }`;
 
@@ -135,4 +135,30 @@ export function getDonorDisplayName(donation: Donation): string {
 export function isDonationCompleted(donation: Donation): boolean {
   // Assuming statusId 2 is "Completed" based on the example
   return donation.status.donationStatusId === 2;
+}
+
+/**
+ * Get ALL donations for a campaign (for export purposes)
+ * Fetches all donations without pagination
+ * @param campaignId - Campaign ID
+ * @returns All donations for the campaign
+ */
+export async function getAllCampaignDonations(
+  campaignId: string | number
+): Promise<Donation[]> {
+  try {
+    // Fetch with a very high limit to get all donations
+    const url = `${API_ENDPOINTS.DONATIONS.LIST(campaignId)}`;
+
+    const result = await apiClient<Donation[]>(url);
+
+    if (result.error) {
+      throw new Error(result.error.message || "Failed to fetch donations");
+    }
+
+    return result.data || [];
+  } catch (error) {
+    console.error("Error fetching all campaign donations:", error);
+    throw error;
+  }
 }

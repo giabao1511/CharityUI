@@ -85,6 +85,7 @@ export default function AuthPage() {
           email: authData.email,
           firstName: authData.firstName,
           lastName: authData.lastName,
+          roles: authData.roles || [],
         });
 
         toast.success(t('signInSuccess', { name: authData.firstName }), {
@@ -150,13 +151,14 @@ export default function AuthPage() {
 
         if (authData) {
           storeAuthData(authData);
-          
+
           // Update auth context state
           setUser({
             userId: authData.userId,
             email: authData.email,
             firstName: authData.firstName,
             lastName: authData.lastName,
+            roles: authData.roles || [],
           });
 
           toast.success(t('welcomeMessage', { name: authData.firstName }), {

@@ -36,11 +36,19 @@ export function DonationsList({
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [loading, setLoading] = useState(false);
 
+  // Reset state when campaignId changes (navigation to different campaign)
+  useEffect(() => {
+    setDonations(initialDonations);
+    setCurrentPage(initialPage);
+    setTotalPages(initialTotalPages);
+  }, [campaignId, initialDonations, initialPage, initialTotalPages]);
+
   // Fetch donations when page changes
   useEffect(() => {
     async function fetchDonations() {
-      if (currentPage === initialPage && initialDonations.length > 0) {
-        return; // Use initial data for first page
+      // Skip fetch if we're on the initial page and have initial data
+      if (currentPage === initialPage && initialDonations.length > 0 && donations === initialDonations) {
+        return;
       }
 
       setLoading(true);
@@ -66,7 +74,7 @@ export function DonationsList({
     }
 
     fetchDonations();
-  }, [currentPage, campaignId, initialPage, initialDonations.length]);
+  }, [currentPage, campaignId]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

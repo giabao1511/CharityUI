@@ -12,6 +12,7 @@ export interface CreatePaymentRequest {
   phoneNumber?: string;
   message?: string;
   isAnonymous?: boolean;
+  userId?: number;
 }
 
 export interface PaymentCheckParams {
@@ -56,19 +57,16 @@ export async function createPayment(
   paymentData: CreatePaymentRequest
 ): Promise<string> {
   try {
-    const result = await apiClient<string>(
-      API_ENDPOINTS.PAYMENTS.CREATE,
-      {
-        method: "POST",
-        body: JSON.stringify(paymentData),
-      }
-    );
+    const result = await apiClient<string>(API_ENDPOINTS.PAYMENTS.CREATE, {
+      method: "POST",
+      body: JSON.stringify(paymentData),
+    });
 
     if (result.error) {
       throw new Error(result.error.message || "Failed to create payment");
     }
 
-    console.log(result.data)
+    console.log(result.data);
 
     if (!result.data) {
       throw new Error("No payment URL received");

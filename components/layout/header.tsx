@@ -25,6 +25,21 @@ export function Header() {
     return pathname.startsWith(path);
   };
 
+  // Role types
+  const roleType = {
+    User: 1,
+    Admin: 2,
+    Organization: 3,
+    MemberOfOrganization: 4
+  };
+
+  // Check if user has Organization or MemberOfOrganization role
+  const hasCreatorRole = user?.roles?.some(
+    (userRole) =>
+      userRole.role.roleId === roleType.Organization ||
+      userRole.role.roleId === roleType.MemberOfOrganization
+  ) ?? false;
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -196,7 +211,7 @@ export function Header() {
             >
               {t("nav.profile")}
             </Link>
-            {user && (
+            {hasCreatorRole && (
               <Link
                 href="/creator"
                 className={cn(

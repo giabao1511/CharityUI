@@ -1,13 +1,14 @@
 "use client";
 
 import { createContext, useContext, useState, useMemo, ReactNode } from "react";
-import { getStoredUser, isAuthenticated, clearAuthData } from "@/lib/services/auth.service";
+import { getStoredUser, isAuthenticated, clearAuthData, type UserRole } from "@/lib/services/auth.service";
 
 interface User {
   userId: number;
   email: string;
   firstName: string;
   lastName: string;
+  roles: UserRole[];
 }
 
 interface AuthContextType {

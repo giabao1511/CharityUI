@@ -1,21 +1,20 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { Fund } from "@/types";
-import { Users, Calendar } from "lucide-react";
 import { BodyText } from "@/components/ui/typography";
+import { Link } from "@/i18n/navigation";
 import { formatCurrency } from "@/lib/currency";
-import { useLocale, useTranslations } from "next-intl";
+import { Fund } from "@/types";
+import { Calendar, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CampaignCardProps {
   campaign: Fund;
 }
 
 export function CampaignCard({ campaign }: CampaignCardProps) {
-  const locale = useLocale() as 'en' | 'vi';
   const t = useTranslations("campaigns.card");
   const percentageFunded = Math.round((campaign.currentAmount / campaign.goalAmount) * 100);
   const daysLeft = Math.ceil(

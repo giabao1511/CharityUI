@@ -11,6 +11,22 @@ import type {
 } from "@/lib/validation/auth-schemas";
 
 // Response types
+export interface Role {
+  roleId: number;
+  roleName: string;
+}
+
+export interface Organization {
+  orgId: number;
+  orgName: string;
+  statusId: number;
+}
+
+export interface UserRole {
+  role: Role;
+  organization: Organization | null;
+}
+
 export interface AuthResponse {
   data: {
     userId: number;
@@ -19,6 +35,7 @@ export interface AuthResponse {
     lastName: string;
     dateOfBirth?: string;
     roleId?: number;
+    roles?: UserRole[];
     createdAt?: string;
     updatedAt?: string;
     accessToken: string;
@@ -166,6 +183,7 @@ export function storeAuthData(data: AuthResponse["data"]): void {
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
+      roles: data.roles || [],
     })
   );
 }
@@ -187,12 +205,22 @@ export function getStoredUser(): {
   email: string;
   firstName: string;
   lastName: string;
+  roles: UserRole[];
 } | null {
   const userStr = localStorage.getItem("user");
   if (!userStr) return null;
 
   try {
-    return JSON.parse(userStr);
+    const user = JSON.parse(userStr);
+
+    // Migration: Handle old format without roles
+    if (!user.roles) {
+      console.warn("User data in old format without roles. Clearing auth data. Please log in again.");
+      clearAuthData();
+      return null;
+    }
+
+    return user;
   } catch {
     return null;
   }

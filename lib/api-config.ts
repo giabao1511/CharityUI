@@ -85,37 +85,15 @@ export const API_ENDPOINTS = {
     LIST: (campaignId: string | number) =>
       `${API_BASE_URL}/v1/donations/${campaignId}`,
   },
-  // Creator/Fund Manager Dashboard endpoints
-  CREATOR: {
-    // Dashboard statistics (TODO: Backend to implement)
-    STATS: `${API_BASE_URL}/v1/creator/stats`,
-    // Campaign management (Uses existing endpoints)
-    CAMPAIGNS: `${API_BASE_URL}/v1/creator/campaigns`,
-    CREATE_CAMPAIGN: (orgId: string | number) =>
-      `${API_BASE_URL}/v1/creator/campaigns/${orgId}`,
-    UPDATE_CAMPAIGN: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}`,
-    CAMPAIGN_ANALYTICS: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/analytics`,
-    // Activity feed (TODO: Backend to implement)
-    ACTIVITIES: `${API_BASE_URL}/v1/creator/activities`,
-    // Milestone management (TODO: Backend to implement)
-    CAMPAIGN_MILESTONES: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/milestones`,
-    CREATE_MILESTONE: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/milestones`,
-    UPDATE_MILESTONE: (milestoneId: string | number) =>
-      `${API_BASE_URL}/v1/creator/milestones/${milestoneId}`,
-    DELETE_MILESTONE: (milestoneId: string | number) =>
-      `${API_BASE_URL}/v1/creator/milestones/${milestoneId}`,
-    // Donations (TODO: Backend to implement)
-    CAMPAIGN_DONATIONS: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/donations`,
-    // Campaign updates/posts (TODO: Backend to implement)
-    CAMPAIGN_UPDATES: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/updates`,
-    POST_CAMPAIGN_UPDATE: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/creator/campaigns/${campaignId}/updates`,
+  // Notification endpoints
+  NOTIFICATIONS: {
+    // Get all notifications for current user
+    LIST: `${API_BASE_URL}/v1/notifications`,
+    // Mark notification as read
+    MARK_READ: (notificationId: string | number) =>
+      `${API_BASE_URL}/v1/notifications/${notificationId}/read`,
+    // Mark all notifications as read
+    MARK_ALL_READ: `${API_BASE_URL}/v1/notifications/mark-all-read`,
   },
 } as const;
 

@@ -33,6 +33,21 @@ export function UserMenu() {
   // Get initials for avatar
   const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
 
+  // Role types
+  const roleType = {
+    User: 1,
+    Admin: 2,
+    Organization: 3,
+    MemberOfOrganization: 4
+  };
+
+  // Check if user has Organization or MemberOfOrganization role
+  const hasCreatorRole = user.roles?.some(
+    (userRole) =>
+      userRole.role.roleId === roleType.Organization ||
+      userRole.role.roleId === roleType.MemberOfOrganization
+  ) ?? false;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -59,10 +74,12 @@ export function UserMenu() {
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => router.push("/creator")}>
-          <Heart className="mr-2 h-4 w-4" />
-          <span>Dashboard</span>
-        </DropdownMenuItem>
+        {hasCreatorRole && (
+          <DropdownMenuItem onClick={() => router.push("/creator")}>
+            <Heart className="mr-2 h-4 w-4" />
+            <span>Dashboard</span>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onClick={() => router.push("/profile")}>
           <Settings className="mr-2 h-4 w-4" />
           <span>Settings</span>

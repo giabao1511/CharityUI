@@ -29,6 +29,7 @@ export function CampaignsListClient() {
       try {
         setLoading(true);
         setError(null);
+        setCampaigns([]); // Clear old data when refetching
 
         // Fetch all campaigns
         // TODO: Add filter for campaigns owned by current user when backend supports it

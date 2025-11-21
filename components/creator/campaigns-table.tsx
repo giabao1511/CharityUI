@@ -1,5 +1,8 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -8,15 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { formatCampaignAmount } from "@/types/campaign";
+import { CampaignStatus, formatCampaignAmount } from "@/types/campaign";
 import type { CreatorCampaignItem } from "@/types/creator";
-import { CampaignStatus, CampaignStatusNames } from "@/types/campaign";
-import Link from "next/link";
-import { Eye, Edit, Users, Target } from "lucide-react";
+import { Eye, Target, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 interface CampaignsTableProps {
   readonly campaigns: CreatorCampaignItem[];

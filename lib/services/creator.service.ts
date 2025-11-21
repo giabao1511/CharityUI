@@ -5,9 +5,11 @@
  * This service integrates with EXISTING backend API endpoints:
  * - Uses /v1/organizations for organization management
  * - Uses /v1/campaigns and /v1/fund-charity for campaign management
- * - Uses mock data for features not yet implemented in backend (volunteers, milestones, etc.)
+ * - Uses /v1/volunteers for volunteer management (real API)
+ * - Uses /v1/donations for activity tracking
+ * - Aggregates stats from campaigns and donations
  *
- * See docs/creator-api-integration.md for detailed integration strategy
+ * Note: Milestones are not yet implemented in the backend and use simulated responses
  */
 
 import { apiClient, API_ENDPOINTS } from "@/lib/api-config";
@@ -21,30 +23,48 @@ import type {
   CreateCampaignRequest,
   UpdateCampaignRequest,
 } from "@/types/campaign";
-import {
-  mockCreatorStats,
-  mockRecentActivity,
-} from "@/lib/mock-creator-data";
 
 /**
  * Get creator dashboard statistics
- *
- * Currently uses mock data aggregated from campaigns
- * TODO: Backend to implement GET /v1/users/creator-stats for real-time aggregation
+ * Aggregates data from user's campaigns using existing endpoints
  */
 export async function getCreatorStats(): Promise<CreatorStats> {
   try {
-    // TODO: When backend implements, use:
-    // const result = await apiClient<{ data: CreatorStats }>(
-    //   API_ENDPOINTS.CREATOR.STATS
-    // );
+    // Fetch all user's campaigns
+    const { campaigns } = await getCreatorCampaigns({ limit: 1000 });
 
-    // For now, return mock stats
-    // In production, this would aggregate from user's campaigns
-    return mockCreatorStats;
+    // Calculate stats from campaigns
+    const totalCampaigns = campaigns.length;
+    const activeCampaigns = campaigns.filter(c => c.status === 1).length;
+    const totalRaised = campaigns.reduce(
+      (sum, c) => sum + (c.currentAmount || 0),
+      0
+    );
+    const totalBackers = campaigns.reduce(
+      (sum, c) => sum + (c.backersCount || 0),
+      0
+    );
+
+    return {
+      totalRaised,
+      activeCampaignsCount: activeCampaigns,
+      totalVolunteers: campaigns.reduce(
+        (sum, c) => sum + (c.volunteersCount || 0),
+        0
+      ),
+      totalDonations: totalBackers, // Using backers count as donation count
+      totalBackers,
+    };
   } catch (error) {
     console.error("Error getting creator stats:", error);
-    return mockCreatorStats;
+    // Return empty stats on error
+    return {
+      totalRaised: 0,
+      activeCampaignsCount: 0,
+      totalVolunteers: 0,
+      totalDonations: 0,
+      totalBackers: 0,
+    };
   }
 }
 
@@ -110,9 +130,7 @@ export async function getCreatorCampaigns(filters?: {
 
 /**
  * Get recent activity for creator's campaigns
- *
- * Currently uses mock data
- * TODO: Backend to implement GET /v1/users/my-campaigns/activities
+ * Aggregates activity from donations across all campaigns
  */
 export async function getCreatorActivity(filters?: {
   campaignId?: number;
@@ -124,18 +142,51 @@ export async function getCreatorActivity(filters?: {
   pagination?: { page: number; limit: number; total: number };
 }> {
   try {
-    // TODO: When backend implements, use:
-    // const result = await apiClient<any>(API_ENDPOINTS.CREATOR.ACTIVITIES);
+    const activities: ActivityItem[] = [];
 
-    // For now, use mock data
-    let activities = mockRecentActivity;
+    // Get creator's campaigns
+    const { campaigns } = await getCreatorCampaigns({ limit: 1000 });
 
-    // Apply filters client-side
-    if (filters?.campaignId) {
-      activities = activities.filter(a => a.campaignId === filters.campaignId);
+    // Filter by specific campaign if provided
+    const campaignsToFetch = filters?.campaignId
+      ? campaigns.filter(c => c.fundId === filters.campaignId)
+      : campaigns.slice(0, 10); // Fetch donations for up to 10 campaigns to avoid overload
+
+    // Fetch donations for each campaign and convert to activity items
+    for (const campaign of campaignsToFetch) {
+      try {
+        const { getCreatorCampaignDonations } = await import("./donation.service");
+        const donationsResult = await getCreatorCampaignDonations(campaign.fundId, {
+          limit: 20, // Get recent 20 donations per campaign
+        });
+
+        // Convert donations to activity items
+        const donationActivities: ActivityItem[] = (donationsResult.data || []).map((donation: any) => ({
+          id: `donation-${donation.donationId}`,
+          type: "donation" as const,
+          campaignId: campaign.fundId,
+          campaignName: campaign.fundName,
+          description: `New donation of ${donation.amount}`,
+          userName: donation.isAnonymous ? "Anonymous" : (donation.fullName || "Anonymous"),
+          amount: parseFloat(donation.amount),
+          timestamp: donation.donateDate,
+        }));
+
+        activities.push(...donationActivities);
+      } catch (error) {
+        console.error(`Error fetching donations for campaign ${campaign.fundId}:`, error);
+      }
     }
+
+    // Sort by timestamp (most recent first)
+    activities.sort((a, b) =>
+      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
+
+    // Apply type filter
+    let filteredActivities = activities;
     if (filters?.type) {
-      activities = activities.filter(a => a.type === filters.type);
+      filteredActivities = activities.filter(a => a.type === filters.type);
     }
 
     // Apply pagination
@@ -143,14 +194,14 @@ export async function getCreatorActivity(filters?: {
     const limit = filters?.limit || 20;
     const start = (page - 1) * limit;
     const end = start + limit;
-    const paginatedActivities = activities.slice(start, end);
+    const paginatedActivities = filteredActivities.slice(start, end);
 
     return {
       activities: paginatedActivities,
       pagination: {
         page,
         limit,
-        total: activities.length,
+        total: filteredActivities.length,
       },
     };
   } catch (error) {

@@ -1,22 +1,97 @@
-import { getTranslations } from "next-intl/server";
+"use client";
+
+import { useState, useEffect } from "react";
 import { StatsOverview } from "@/components/creator/stats-overview";
 import { RecentActivity } from "@/components/creator/recent-activity";
 import { Heading, BodyText } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  mockCreatorUser,
-  mockCreatorStats,
-  getCreatorActivity,
-} from "@/lib/mock-creator-data";
+import { Card, CardContent } from "@/components/ui/card";
+import { getCreatorStats, getCreatorActivity } from "@/lib/services/creator.service";
+import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
-import { PlusCircle, LayoutDashboard } from "lucide-react";
+import { PlusCircle, LayoutDashboard, Loader2 } from "lucide-react";
+import type { CreatorStats, ActivityItem } from "@/types/creator";
 
-export default async function CreatorDashboardPage() {
-  const t = await getTranslations("creator");
+export default function CreatorDashboardPage() {
+  const { user, isLoading: authLoading } = useAuth();
+  const [stats, setStats] = useState<CreatorStats | null>(null);
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Simulate RBAC - get data only for the mock creator user
-  const creatorActivity = getCreatorActivity(mockCreatorUser.userId);
+  useEffect(() => {
+    async function loadDashboardData() {
+      if (authLoading) return;
+
+      if (!user) {
+        setError("Please sign in to access the creator dashboard");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+        // Clear old data when refetching
+        setStats(null);
+        setActivities([]);
+
+        // Fetch stats and recent activity in parallel
+        const [statsData, activityData] = await Promise.all([
+          getCreatorStats(),
+          getCreatorActivity({ limit: 10 }),
+        ]);
+
+        setStats(statsData);
+        setActivities(activityData.activities);
+      } catch (err) {
+        console.error("Error loading dashboard data:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load dashboard data"
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDashboardData();
+  }, [user, authLoading]);
+
+  // Show loading state
+  if (authLoading || loading) {
+    return (
+      <div className="container py-12 md:py-16">
+        <div className="flex flex-col items-center justify-center py-12">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+          <BodyText muted>Loading dashboard...</BodyText>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error || !user) {
+    return (
+      <div className="container py-12 md:py-16">
+        <Card className="border-red-200 dark:border-red-800">
+          <CardContent className="pt-6">
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <LayoutDashboard className="h-12 w-12 text-red-600 dark:text-red-400 mb-4" />
+              <Heading level={3} className="mb-2">
+                Access Required
+              </Heading>
+              <BodyText muted className="mb-4">
+                {error || "Please sign in to access the creator dashboard"}
+              </BodyText>
+              <Link href="/auth">
+                <Button>Sign In</Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-12 md:py-16">
@@ -24,74 +99,48 @@ export default async function CreatorDashboardPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <LayoutDashboard className="h-8 w-8 text-primary" />
-          <Heading level={1}>{t("dashboard.title")}</Heading>
+          <Heading level={1}>Creator Dashboard</Heading>
         </div>
         <BodyText size="lg" className="text-muted-foreground">
-          {t("dashboard.welcome", {
-            name: `${mockCreatorUser.firstName} ${mockCreatorUser.lastName}`,
-          })}
+          Welcome back, {user.firstName} {user.lastName}!
         </BodyText>
         <BodyText size="sm" muted className="mt-1">
-          {t("dashboard.subtitle")}
+          Manage your campaigns and track your impact
         </BodyText>
       </div>
 
-      {/* Demo Notice */}
-      <Card className="mb-8 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-3">
-            <div className="bg-blue-500 text-white rounded-full p-2 shrink-0">
-              <LayoutDashboard className="h-4 w-4" />
-            </div>
-            <div>
-              <p className="font-semibold text-blue-900 dark:text-blue-100">
-                Demo Creator Dashboard
-              </p>
-              <p className="text-sm text-blue-800 dark:text-blue-200 mt-1">
-                This is a demonstration of Role-Based Access Control (RBAC). The
-                dashboard shows only campaigns owned by the mock user (ID:{" "}
-                {mockCreatorUser.userId}). In production, this would be replaced
-                with actual authentication and authorization.
-              </p>
-              <p className="text-xs text-blue-700 dark:text-blue-300 mt-2">
-                Owned Campaign IDs:{" "}
-                {mockCreatorUser.ownedCampaignIds.join(", ")}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Statistics Overview */}
       <div className="mb-8">
-        <StatsOverview stats={mockCreatorStats} />
+        {stats && <StatsOverview stats={stats} />}
       </div>
 
       {/* Quick Actions and Recent Activity */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Quick Actions */}
         <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Link href="/creator/campaigns">
-              <Button className="w-full" variant="default">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                {t("campaigns.title")}
-              </Button>
-            </Link>
-            <Link href="/creator/campaigns/new">
-              <Button className="w-full mt-2" variant="outline">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                {t("campaigns.createNew")}
-              </Button>
-            </Link>
+          <CardContent className="pt-6">
+            <Heading level={3} className="mb-4">
+              Quick Actions
+            </Heading>
+            <div className="space-y-3">
+              <Link href="/creator/campaigns">
+                <Button className="w-full" variant="default">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  My Campaigns
+                </Button>
+              </Link>
+              <Link href="/creator/campaigns/new">
+                <Button className="w-full" variant="outline">
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Create Campaign
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
 
         {/* Recent Activity */}
-        <RecentActivity activities={creatorActivity} />
+        <RecentActivity activities={activities} />
       </div>
     </div>
   );

@@ -20,7 +20,8 @@ export interface Notification {
 export interface NotificationContextType {
   notifications: Notification[];
   unreadCount: number;
-  markAsRead: (notificationId: string) => void;
-  markAllAsRead: () => void;
+  markAsRead: (notificationId: string) => void | Promise<void>;
+  markAllAsRead: () => void | Promise<void>;
   addNotification: (notification: Omit<Notification, "id" | "timestamp">) => void;
+  refetchNotifications: () => Promise<void>;
 }

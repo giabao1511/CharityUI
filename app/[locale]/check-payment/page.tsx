@@ -13,9 +13,11 @@ import { ArrowLeft, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useNotifications } from "@/contexts/notification-context";
 
 export default function CheckPaymentPage() {
   const searchParams = useSearchParams();
+  const { refetchNotifications } = useNotifications();
   const [loading, setLoading] = useState(true);
   const [paymentData, setPaymentData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
@@ -57,6 +59,12 @@ export default function CheckPaymentPage() {
         setPaymentData(response);
 
         console.log(response);
+
+        // If payment is successful, refetch notifications to get the new notification from backend
+        if (response.valid && isPaymentSuccessful(response.data.vnp_ResponseCode)) {
+          console.log("✅ Payment successful, fetching notifications...");
+          await refetchNotifications();
+        }
       } catch (err) {
         console.error("Payment verification error:", err);
         setError(
@@ -68,7 +76,7 @@ export default function CheckPaymentPage() {
     }
 
     verifyPayment();
-  }, [searchParams]);
+  }, [searchParams, refetchNotifications]);
 
   if (loading) {
     return (

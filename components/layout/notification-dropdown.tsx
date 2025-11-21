@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Bell, Check, CheckCheck, X } from "lucide-react";
+import { Bell, Check, CheckCheck, X, Wifi, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,10 +16,37 @@ import { useAuth } from "@/lib/auth-context";
 
 export function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const [socketConnected, setSocketConnected] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
   const { notifications, unreadCount, markAsRead, markAllAsRead } =
     useNotifications();
-  const { user } = useAuth();
+
+  // Monitor socket connection status
+  useEffect(() => {
+    if (!user) return;
+
+    const socket = getSocket();
+
+    const handleConnect = () => {
+      setSocketConnected(true);
+    };
+
+    const handleDisconnect = () => {
+      setSocketConnected(false);
+    };
+
+    socket.on("connect", handleConnect);
+    socket.on("disconnect", handleDisconnect);
+
+    // Set initial state
+    setSocketConnected(socket.connected);
+
+    return () => {
+      socket.off("connect", handleConnect);
+      socket.off("disconnect", handleDisconnect);
+    };
+  }, [user]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -60,25 +87,6 @@ export function NotificationDropdown() {
         return "ℹ️";
     }
   };
-  useEffect(() => {
-    if (!user) return;
-
-    const socket = getSocket();
-
-    socket.on("connect", () => {
-      console.log('join')
-      socket.emit("join-notify", user.userId);
-    });
-
-    socket.on("notification", (notif) => {
-      console.log("📩 New notif:", notif);
-    });
-
-    return () => {
-      socket.off("connect");
-      socket.off("notification");
-    };
-  }, [user]);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -107,7 +115,18 @@ export function NotificationDropdown() {
         <Card className="absolute right-0 mt-2 w-96 z-50 shadow-lg border-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Notifications</CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-lg">Notifications</CardTitle>
+                {user && (
+                  <div className="flex items-center gap-1" title={socketConnected ? "Real-time connected" : "Not connected"}>
+                    {socketConnected ? (
+                      <Wifi className="h-3 w-3 text-green-500" />
+                    ) : (
+                      <WifiOff className="h-3 w-3 text-gray-400" />
+                    )}
+                  </div>
+                )}
+              </div>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
                   <Button
