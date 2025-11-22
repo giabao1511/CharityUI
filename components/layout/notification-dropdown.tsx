@@ -8,17 +8,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BodyText } from "@/components/ui/typography";
 import { useNotifications } from "@/contexts/notification-context";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { getSocket } from "@/lib/socket";
 import { useAuth } from "@/lib/auth-context";
+import { useTranslations } from "next-intl";
 
 export function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+  const router = useRouter();
+  const t = useTranslations("notifications");
   const { notifications, unreadCount, markAsRead, markAllAsRead } =
     useNotifications();
 
@@ -116,9 +119,9 @@ export function NotificationDropdown() {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CardTitle className="text-lg">Notifications</CardTitle>
+                <CardTitle className="text-lg">{t("title")}</CardTitle>
                 {user && (
-                  <div className="flex items-center gap-1" title={socketConnected ? "Real-time connected" : "Not connected"}>
+                  <div className="flex items-center gap-1" title={socketConnected ? t("realTimeConnected") : t("notConnected")}>
                     {socketConnected ? (
                       <Wifi className="h-3 w-3 text-green-500" />
                     ) : (
@@ -136,7 +139,7 @@ export function NotificationDropdown() {
                     className="h-8 text-xs"
                   >
                     <CheckCheck className="h-4 w-4 mr-1" />
-                    Mark all read
+                    {t("markAllRead")}
                   </Button>
                 )}
                 <Button
@@ -155,9 +158,9 @@ export function NotificationDropdown() {
               {notifications.length === 0 ? (
                 <div className="py-12 text-center">
                   <Bell className="h-12 w-12 mx-auto mb-3 text-muted-foreground opacity-50" />
-                  <BodyText muted>No notifications yet</BodyText>
+                  <BodyText muted>{t("noNotifications")}</BodyText>
                   <BodyText size="sm" muted className="mt-1">
-                    We'll notify you when something important happens
+                    {t("noNotificationsDesc")}
                   </BodyText>
                 </div>
               ) : (
@@ -173,6 +176,7 @@ export function NotificationDropdown() {
                         markAsRead(notification.id);
                         if (notification.actionUrl) {
                           setIsOpen(false);
+                          router.push(notification.actionUrl);
                         }
                       }}
                     >
@@ -259,7 +263,7 @@ export function NotificationDropdown() {
               <div className="p-3 border-t bg-muted/30">
                 <Link href="/notifications">
                   <Button variant="ghost" size="sm" className="w-full">
-                    View all notifications
+                    {t("viewAll")}
                   </Button>
                 </Link>
               </div>

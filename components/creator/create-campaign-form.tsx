@@ -53,6 +53,10 @@ export function CreateCampaignForm() {
     startDate: "",
     endDate: "",
     targetAmount: "",
+    bankName: "",
+    bankAccount: "",
+    branch: "",
+    accountHolder: "",
   });
 
   // Load organizations and categories
@@ -142,6 +146,11 @@ export function CreateCampaignForm() {
       return;
     }
 
+    if (!formData.bankName || !formData.bankAccount || !formData.branch || !formData.accountHolder) {
+      toast.error("Please fill in all bank information fields");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -156,6 +165,10 @@ export function CreateCampaignForm() {
         startDate,
         endDate,
         targetAmount: parseFloat(formData.targetAmount),
+        bankName: formData.bankName,
+        bankAccount: formData.bankAccount,
+        branch: formData.branch,
+        accountHolder: formData.accountHolder,
         media: [],
       };
 
@@ -413,6 +426,67 @@ export function CreateCampaignForm() {
             <p className="text-xs text-muted-foreground">
               {t("targetAmountHelp")}
             </p>
+          </div>
+
+          {/* Bank Information Section */}
+          <div className="space-y-4 pt-4 border-t">
+            <h3 className="text-lg font-semibold">Bank Information</h3>
+
+            {/* Bank Name */}
+            <div className="space-y-2">
+              <Label htmlFor="bankName">
+                Bank Name <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="bankName"
+                value={formData.bankName}
+                onChange={(e) => handleChange("bankName", e.target.value)}
+                placeholder="e.g., Ngân hàng VCB"
+                required
+              />
+            </div>
+
+            {/* Bank Account */}
+            <div className="space-y-2">
+              <Label htmlFor="bankAccount">
+                Bank Account Number <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="bankAccount"
+                value={formData.bankAccount}
+                onChange={(e) => handleChange("bankAccount", e.target.value)}
+                placeholder="e.g., 03248328432"
+                required
+              />
+            </div>
+
+            {/* Branch */}
+            <div className="space-y-2">
+              <Label htmlFor="branch">
+                Branch <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="branch"
+                value={formData.branch}
+                onChange={(e) => handleChange("branch", e.target.value)}
+                placeholder="e.g., PGD Bạch Đằng"
+                required
+              />
+            </div>
+
+            {/* Account Holder */}
+            <div className="space-y-2">
+              <Label htmlFor="accountHolder">
+                Account Holder <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                id="accountHolder"
+                value={formData.accountHolder}
+                onChange={(e) => handleChange("accountHolder", e.target.value)}
+                placeholder="e.g., Nguyễn Văn A"
+                required
+              />
+            </div>
           </div>
 
           {/* Form Actions */}

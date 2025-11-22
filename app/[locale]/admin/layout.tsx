@@ -6,32 +6,35 @@ import { useAdminCheck } from "@/lib/hooks/useAdminCheck";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, LayoutDashboard, Building2, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface AdminLayoutProps {
   children: ReactNode;
 }
 
-const adminNav = [
-  {
-    title: "Dashboard",
-    href: "/admin",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Organizations",
-    href: "/admin/organizations",
-    icon: Building2,
-  },
-  {
-    title: "Users",
-    href: "/admin/users",
-    icon: Users,
-  },
-];
-
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const { checking, isAdmin } = useAdminCheck();
   const pathname = usePathname();
+  const t = useTranslations("admin");
+  const tCommon = useTranslations("common");
+
+  const adminNav = [
+    {
+      title: t("dashboard.title"),
+      href: "/admin",
+      icon: LayoutDashboard,
+    },
+    {
+      title: t("organizations.title"),
+      href: "/admin/organizations",
+      icon: Building2,
+    },
+    {
+      title: t("users.title"),
+      href: "/admin/users",
+      icon: Users,
+    },
+  ];
 
   // Show loading state while checking admin status
   if (checking) {
@@ -42,7 +45,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <div className="flex flex-col items-center justify-center text-center space-y-4">
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
               <p className="text-sm text-muted-foreground">
-                Verifying admin access...
+                {tCommon("loading")}
               </p>
             </div>
           </CardContent>
@@ -65,7 +68,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <div className="flex h-16 items-center border-b px-6">
             <Link href="/admin" className="flex items-center gap-2 font-semibold">
               <LayoutDashboard className="h-6 w-6" />
-              <span>Admin Panel</span>
+              <span>{t("dashboard.welcome")}</span>
             </Link>
           </div>
 
@@ -99,7 +102,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               href="/"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
-              ← Back to Website
+              ← {tCommon("back")}
             </Link>
           </div>
         </div>

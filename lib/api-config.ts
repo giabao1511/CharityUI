@@ -92,8 +92,6 @@ export const API_ENDPOINTS = {
     // Mark notification as read
     MARK_READ: (notificationId: string | number) =>
       `${API_BASE_URL}/v1/notifications/${notificationId}/read`,
-    // Mark all notifications as read
-    MARK_ALL_READ: `${API_BASE_URL}/v1/notifications/mark-all-read`,
   },
   // Admin endpoints (using existing user/org endpoints)
   ADMIN: {

@@ -39,7 +39,7 @@ export default function Home() {
       </section>
 
       {/* Platform Statistics */}
-      <section className="py-16 border-y bg-muted/30">
+      {/* <section className="py-16 border-y bg-muted/30">
         <div className="container">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <Card>
@@ -114,7 +114,7 @@ export default function Home() {
             </Card>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Featured Campaigns */}
       <section className="py-16 md:py-24">

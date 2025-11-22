@@ -9,13 +9,24 @@ import type { Notification } from "@/types/notification";
 export interface NotificationResponse {
   notificationId: number;
   userId: number;
-  type: string;
+  type: string | null;
   title: string;
-  message: string;
-  actionUrl?: string;
+  content: string;
   isRead: boolean;
-  metadata?: any;
   createdAt: string;
+  updatedAt: string;
+  user: {
+    userId: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    avatar: string | null;
+  };
+  campaign: {
+    campaignId: number;
+    title: string;
+    description: string;
+  } | null;
 }
 
 /**
@@ -40,16 +51,30 @@ export async function getNotifications(): Promise<Notification[]> {
     }
 
     // Transform backend response to frontend format
-    return result.data.map((notif) => ({
-      id: notif.notificationId.toString(),
-      type: notif.type as any,
-      title: notif.title,
-      message: notif.message,
-      read: notif.isRead,
-      timestamp: notif.createdAt,
-      actionUrl: notif.actionUrl,
-      metadata: notif.metadata,
-    }));
+    return result.data.map((notif) => {
+      // Construct actionUrl from campaign if available
+      const actionUrl = notif.campaign
+        ? `/campaigns/${notif.campaign.campaignId}`
+        : undefined;
+
+      // Construct metadata from user and campaign info
+      const metadata = {
+        userName: `${notif.user.firstName} ${notif.user.lastName}`,
+        campaignId: notif.campaign?.campaignId,
+        campaignTitle: notif.campaign?.title,
+      };
+
+      return {
+        id: notif.notificationId.toString(),
+        type: (notif.type || "donation") as Notification["type"],
+        title: notif.title,
+        message: notif.content,
+        read: notif.isRead,
+        timestamp: notif.createdAt,
+        actionUrl,
+        metadata,
+      };
+    });
   } catch (error) {
     console.error("Error fetching notifications:", error);
     return [];
@@ -66,7 +91,8 @@ export async function markNotificationAsRead(
     const result = await apiClient(
       API_ENDPOINTS.NOTIFICATIONS.MARK_READ(notificationId),
       {
-        method: "PATCH",
+        method: "PUT",
+        body: JSON.stringify({ isRead: true }),
       }
     );
 
@@ -84,20 +110,26 @@ export async function markNotificationAsRead(
 
 /**
  * Mark all notifications as read
+ * Note: Backend doesn't have mark-all-read endpoint, so we loop through all unread notifications
  */
 export async function markAllNotificationsAsRead(): Promise<boolean> {
   try {
-    const result = await apiClient(
-      API_ENDPOINTS.NOTIFICATIONS.MARK_ALL_READ,
-      {
-        method: "PATCH",
-      }
+    // First, get all notifications
+    const notifications = await getNotifications();
+
+    // Filter for unread notifications
+    const unreadNotifications = notifications.filter(notif => !notif.read);
+
+    if (unreadNotifications.length === 0) {
+      return true; // Nothing to mark
+    }
+
+    // Mark each unread notification as read using Promise.all
+    const promises = unreadNotifications.map(notif =>
+      markNotificationAsRead(notif.id)
     );
 
-    if (result.error) {
-      console.error("Error marking all notifications as read:", result.error);
-      return false;
-    }
+    await Promise.all(promises);
 
     return true;
   } catch (error) {

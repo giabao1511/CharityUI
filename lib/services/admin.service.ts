@@ -18,12 +18,6 @@ export interface AdminOrganization {
   statusId: number;
   createdAt: string;
   updatedAt: string;
-  banks?: Array<{
-    bankName: string;
-    accountNumber: string;
-    accountHolder: string;
-    branch?: string;
-  }>;
 }
 
 export interface AdminUser {
@@ -52,12 +46,6 @@ export interface CreateOrganizationData {
   description: string;
   website?: string;
   avatar?: string;
-  banks: Array<{
-    bankName: string;
-    accountNumber: string;
-    accountHolder: string;
-    branch?: string;
-  }>;
 }
 
 export interface UpdateUserData {

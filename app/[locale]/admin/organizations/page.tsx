@@ -1,28 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heading } from "@/components/ui/typography";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Search, Building2, Plus, Edit } from "lucide-react";
-import {
-  getAdminOrganizations,
-  createOrganization,
-  updateOrganization,
-  type AdminOrganization,
-  type CreateOrganizationData,
-} from "@/lib/services/admin.service";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -31,8 +11,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { Heading } from "@/components/ui/typography";
+import {
+  createOrganization,
+  getAdminOrganizations,
+  updateOrganization,
+  type AdminOrganization,
+  type CreateOrganizationData,
+} from "@/lib/services/admin.service";
+import { Building2, Edit, Loader2, Plus, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const STATUS_MAP = {
   1: { label: "Pending", variant: "default" as const, color: "text-yellow-600" },
@@ -62,14 +62,6 @@ export default function OrganizationsPage() {
     description: "",
     website: "",
     avatar: "",
-    banks: [
-      {
-        bankName: "",
-        accountNumber: "",
-        accountHolder: "",
-        branch: "",
-      },
-    ],
   });
 
   const loadOrganizations = async (page: number = currentPage) => {
@@ -110,14 +102,6 @@ export default function OrganizationsPage() {
       description: org.description || "",
       website: org.website || "",
       avatar: org.avatar || "",
-      banks: org.banks && org.banks.length > 0 ? org.banks : [
-        {
-          bankName: "",
-          accountNumber: "",
-          accountHolder: "",
-          branch: "",
-        },
-      ],
     });
     setEditDialogOpen(true);
   };
@@ -137,14 +121,6 @@ export default function OrganizationsPage() {
         description: "",
         website: "",
         avatar: "",
-        banks: [
-          {
-            bankName: "",
-            accountNumber: "",
-            accountHolder: "",
-            branch: "",
-          },
-        ],
       });
       loadOrganizations();
     } catch (err) {
@@ -257,43 +233,7 @@ export default function OrganizationsPage() {
                   placeholder="https://example.com/avatar.jpg"
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Bank Information *</Label>
-                <div className="space-y-2 border p-4 rounded-lg">
-                  <Input
-                    value={formData.banks[0].bankName}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      banks: [{ ...formData.banks[0], bankName: e.target.value }]
-                    })}
-                    placeholder="Bank Name"
-                  />
-                  <Input
-                    value={formData.banks[0].accountNumber}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      banks: [{ ...formData.banks[0], accountNumber: e.target.value }]
-                    })}
-                    placeholder="Account Number"
-                  />
-                  <Input
-                    value={formData.banks[0].accountHolder}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      banks: [{ ...formData.banks[0], accountHolder: e.target.value }]
-                    })}
-                    placeholder="Account Holder Name"
-                  />
-                  <Input
-                    value={formData.banks[0].branch}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      banks: [{ ...formData.banks[0], branch: e.target.value }]
-                    })}
-                    placeholder="Branch (optional)"
-                  />
-                </div>
-              </div>
+              
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
                   Cancel
@@ -376,43 +316,7 @@ export default function OrganizationsPage() {
                 placeholder="https://example.com/avatar.jpg"
               />
             </div>
-            <div className="space-y-2">
-              <Label>Bank Information *</Label>
-              <div className="space-y-2 border p-4 rounded-lg">
-                <Input
-                  value={formData.banks[0].bankName}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    banks: [{ ...formData.banks[0], bankName: e.target.value }]
-                  })}
-                  placeholder="Bank Name"
-                />
-                <Input
-                  value={formData.banks[0].accountNumber}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    banks: [{ ...formData.banks[0], accountNumber: e.target.value }]
-                  })}
-                  placeholder="Account Number"
-                />
-                <Input
-                  value={formData.banks[0].accountHolder}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    banks: [{ ...formData.banks[0], accountHolder: e.target.value }]
-                  })}
-                  placeholder="Account Holder Name"
-                />
-                <Input
-                  value={formData.banks[0].branch}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    banks: [{ ...formData.banks[0], branch: e.target.value }]
-                  })}
-                  placeholder="Branch (optional)"
-                />
-              </div>
-            </div>
+      
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
                 Cancel

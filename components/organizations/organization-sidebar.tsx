@@ -45,31 +45,6 @@ export function OrganizationSidebar({
         </Card>
       )}
 
-      {/* Bank Accounts */}
-      {organization.banks && organization.banks.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Bank Accounts</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {organization.banks.map((bank) => (
-              <div
-                key={bank.bankAccountId}
-                className="border-l-2 border-primary pl-3"
-              >
-                <p className="font-medium text-sm">{bank.bankName}</p>
-                <p className="text-xs text-muted-foreground">
-                  {bank.accountHolder}
-                </p>
-                {bank.branch && (
-                  <p className="text-xs text-muted-foreground">{bank.branch}</p>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
       {/* Organization Info */}
       <Card>
         <CardHeader>
