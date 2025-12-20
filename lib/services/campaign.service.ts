@@ -9,7 +9,6 @@ import type {
   Campaign,
   CampaignListResponse,
   CampaignQueryFilters,
-  CreateCampaignRequest,
   UpdateCampaignRequest,
   CampaignCategory,
 } from "@/types/campaign";
@@ -73,12 +72,14 @@ export async function getCampaigns(filters?: CampaignQueryFilters) {
 /**
  * Get a single campaign by ID
  */
-export async function getCampaignById(campaignId: string | number): Promise<any> {
+export async function getCampaignById(
+  campaignId: string | number
+): Promise<any> {
   const result = await apiClient<any>(
     API_ENDPOINTS.CAMPAIGNS.DETAIL(campaignId)
   );
 
-  console.log("rsss",result)
+  console.log("rsss", campaignId);
 
   if (result.error) {
     throw new Error(result.error.message);
@@ -100,11 +101,14 @@ export async function getCampaignById(campaignId: string | number): Promise<any>
  * Create a new campaign
  * Returns flexible type since API response structure may vary
  */
-export async function createCampaign(orgId: string | number, data: CreateCampaignRequest) {
-  const result = await apiClient<{ data: any }>(API_ENDPOINTS.CAMPAIGNS.CREATE(orgId), {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+export async function createCampaign(orgId: string | number, data: any) {
+  const result = await apiClient<{ data: any }>(
+    API_ENDPOINTS.CAMPAIGNS.CREATE(orgId),
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
 
   if (result.error) {
     throw new Error(result.error.message);
@@ -185,7 +189,11 @@ export async function uploadCampaignMedia(files: File[]) {
 /**
  * Get all campaign categories
  */
-export async function getCampaignCategories(page = 1, limit = 100, search = "") {
+export async function getCampaignCategories(
+  page = 1,
+  limit = 100,
+  search = ""
+) {
   const queryParams = new URLSearchParams({
     page: String(page),
     limit: String(limit),

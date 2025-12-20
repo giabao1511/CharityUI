@@ -43,7 +43,7 @@ export default async function CampaignsPage({
       limit,
       search,
       sortBy: sortBy as any,
-      sortOrder: sortOrder as "asc" | "desc",
+      sortOrder: sortOrder as "ASC" | "DESC",
       status,
     });
     campaigns = campaignListToMockFormat(response.funds);

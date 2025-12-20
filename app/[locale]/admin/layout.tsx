@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useAdminCheck } from "@/lib/hooks/useAdminCheck";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, LayoutDashboard, Building2, Users } from "lucide-react";
+import { Loader2, LayoutDashboard, Building2, Users, Target, Flag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
@@ -25,6 +25,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: LayoutDashboard,
     },
     {
+      title: t("campaigns.title"),
+      href: "/admin/campaigns",
+      icon: Target,
+    },
+    {
       title: t("organizations.title"),
       href: "/admin/organizations",
       icon: Building2,
@@ -33,6 +38,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       title: t("users.title"),
       href: "/admin/users",
       icon: Users,
+    },
+    {
+      title: t("reports.title"),
+      href: "/admin/reports",
+      icon: Flag,
     },
   ];
 

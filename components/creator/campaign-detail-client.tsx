@@ -13,7 +13,6 @@ import { exportDonationsToCSV } from "@/lib/utils/csv-export";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { MilestoneManager } from "@/components/creator/milestone-manager";
 import { VolunteerList } from "@/components/creator/volunteer-list";
 import { DonationsList } from "@/components/campaigns/donations-list";
 import { Heading, BodyText } from "@/components/ui/typography";
@@ -23,7 +22,6 @@ import {
   CampaignStatusNames,
   CampaignStatus,
 } from "@/types/campaign";
-import type { Milestone } from "@/types/campaign";
 import type { VolunteerRegistration } from "@/types/creator";
 import type { Donation } from "@/types";
 import {
@@ -178,7 +176,7 @@ export function CampaignDetailClient({
   }
 
   // Get milestones (empty array if not provided)
-  const milestones: Milestone[] = campaign.milestones || [];
+  const milestones: any[] = campaign.milestones || [];
 
   // Calculate progress
   const progress = calculateCampaignProgress({
@@ -321,9 +319,6 @@ export function CampaignDetailClient({
 
       {/* Management Sections */}
       <div className="space-y-6">
-        {/* Milestone Management */}
-        <MilestoneManager milestones={milestones} campaignId={id} />
-
         {/* Donations List */}
         <Card>
           <CardContent className="pt-6">

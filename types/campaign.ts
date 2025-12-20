@@ -1,35 +1,21 @@
 /**
- * Campaign (Fundraising Campaign) Types
- * Campaigns are created and managed by Organizations
- * Based on fund.ts but renamed to campaign and linked to organizations
+ * Campaign Types
+ * Based on actual API response structure
  */
-
-// Campaign Fundraising Methods
-export enum CampaignMethod {
-  MILESTONE = 1, // Milestone-based fundraising
-  TIME_BASED = 2, // Time-based fundraising
-}
-
-export const CampaignMethodNames = {
-  [CampaignMethod.MILESTONE]: "Milestone",
-  [CampaignMethod.TIME_BASED]: "Time-based",
-} as const;
 
 // Campaign Status
 export enum CampaignStatus {
-  DRAFT = 1,
-  ACTIVE = 2,
-  SUSPENDED = 3,
-  COMPLETED = 4,
-  CANCELLED = 5,
+  ACTIVE = 1,
+  PAUSED = 2,
+  COMPLETED = 3,
+  CLOSED = 4,
 }
 
 export const CampaignStatusNames = {
-  [CampaignStatus.DRAFT]: "Draft",
   [CampaignStatus.ACTIVE]: "Active",
-  [CampaignStatus.SUSPENDED]: "Suspended",
+  [CampaignStatus.PAUSED]: "Paused",
   [CampaignStatus.COMPLETED]: "Completed",
-  [CampaignStatus.CANCELLED]: "Cancelled",
+  [CampaignStatus.CLOSED]: "Closed",
 } as const;
 
 // Media Types
@@ -37,143 +23,67 @@ export enum MediaType {
   IMAGE = 1,
   VIDEO = 2,
   DOCUMENT = 3,
-  AUDIO = 4,
-  OTHER = 5,
 }
 
-// Milestone Status
-export enum MilestoneStatus {
-  PENDING = 1,
-  IN_PROGRESS = 2,
-  COMPLETED = 3,
+export const MediaTypeNames = {
+  [MediaType.IMAGE]: "Image",
+  [MediaType.VIDEO]: "Video",
+  [MediaType.DOCUMENT]: "Document",
+} as const;
+
+/**
+ * Campaign Organization
+ */
+export interface CampaignOrganization {
+  orgId: number;
+  orgName: string;
+  avatar: string;
 }
 
 /**
  * Campaign Category
  */
 export interface CampaignCategory {
-  categoryFundId: number;
-  categoryName: string;
-  logoIcon: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-/**
- * Campaign Media
- */
-export interface CampaignMedia {
-  fundMediaId: number;
-  fundId: number;
-  mediaType: MediaType;
-  url: string;
-}
-
-/**
- * Campaign Milestone
- */
-export interface Milestone {
-  milestoneId: number;
-  fundId: number;
-  title: string;
-  description: string;
-  targetAmount: number;
-  achievedAmount: number;
-  startDate: string; // ISO 8601
-  endDate: string; // ISO 8601
-  orderIndex: number;
-  milestoneStatusId: MilestoneStatus;
-}
-
-/**
- * Campaign Creator (User)
- */
-export interface CampaignCreator {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
-
-/**
- * Fundraising Method Info
- */
-export interface FundraisingMethod {
-  methodId: CampaignMethod;
-  methodName: string;
-}
-
-/**
- * Campaign Status Info
- */
-export interface CampaignStatusInfo {
-  fundStatusId: CampaignStatus;
-  fundStatusName: string;
-}
-
-/**
- * Campaign Category Info (simplified)
- */
-export interface CampaignCategoryInfo {
   categoryId: number;
   categoryName: string;
   logoIcon: string;
 }
 
 /**
- * Organization Info (for campaigns)
+ * Campaign Status Info
  */
-export interface CampaignOrganization {
-  orgId: number;
-  orgName: string;
-  email?: string;
-  avatar?: string;
-  description?: string;
-  website?: string;
+export interface CampaignStatusInfo {
+  campaignStatusId: number;
+  statusName: string;
 }
 
 /**
- * Main Campaign Interface (complete structure)
+ * Media Type Info
  */
-export interface Campaign {
-  fundId: number;
-  methodId: CampaignMethod;
-  fundName: string;
-  bannerUrl: string;
-  description: string;
-  bankAccountNumber: string;
-  bankName: string;
-  bankBranch: string;
-  purpose: string;
-  urlQrCode: string | null;
-  targetAmount: number;
-  currentAmount: number;
-  status: CampaignStatus;
-  categoryFund: number;
-  creatorId: number;
-  orgId?: number; // Link to organization
-  startDate: string; // ISO 8601
-  endDate: string; // ISO 8601
+export interface MediaTypeInfo {
+  mediaTypeId: number;
+  mediaName: string;
+}
+
+/**
+ * Campaign Media
+ */
+export interface CampaignMedia {
+  campaignMediaId: number;
+  campaignId: number;
+  url: string;
+  description: string | null;
   createdAt: string;
   updatedAt: string;
-
-  // Relations (populated in GET requests)
-  creator?: CampaignCreator;
-  fundraising?: FundraisingMethod;
-  fundStatus?: CampaignStatusInfo;
-  fundCategory?: CampaignCategoryInfo;
-  fundMedia?: CampaignMedia[];
-  milestones?: Milestone[];
-  organization?: CampaignOrganization; // Organization that owns this campaign
+  mediaType: MediaTypeInfo;
 }
 
 /**
- * Campaign List Item (used in list views)
+ * Campaign (List Item & Detail)
  */
-export interface CampaignListItem {
-  fundId: number;
-  fundName: string;
-  bannerUrl: string;
+export interface Campaign {
+  campaignId: number;
+  title: string;
   description: string;
   targetAmount: number;
   currentAmount: number;
@@ -181,89 +91,34 @@ export interface CampaignListItem {
   endDate: string;
   createdAt: string;
   updatedAt: string;
-  creator: CampaignCreator;
-  fundraising: FundraisingMethod;
-  fundStatus: CampaignStatusInfo;
-  fundCategory: CampaignCategoryInfo;
-  organization?: CampaignOrganization;
-}
-
-/**
- * Create Campaign Request Body
- */
-export interface CreateCampaignRequest {
-  methodId: CampaignMethod;
-  fundName: string;
-  bannerUrl: string;
-  description: string;
-  bankAccountNumber: string;
-  bankName: string;
-  bankBranch: string;
-  purpose: string;
-  urlQrCode?: string;
-  targetAmount?: number;
-  categoryFund: number;
-  orgId?: number; // Organization ID
-  startDate?: string; // ISO 8601
-  endDate?: string; // ISO 8601
-  mediaFund?: Array<{
-    mediaType: MediaType;
-    url: string;
-  }>;
-  milestones?: Array<{
-    title: string;
-    description: string;
-    targetAmount: number;
-    achievedAmount: number;
-    startDate: string;
-    endDate: string;
-    orderIndex: number;
-  }>;
-}
-
-/**
- * Update Campaign Request Body (all fields optional)
- */
-export interface UpdateCampaignRequest {
-  methodId?: CampaignMethod;
-  fundName?: string;
-  bannerUrl?: string;
-  description?: string;
-  bankAccountNumber?: string;
-  bankName?: string;
-  bankBranch?: string;
-  purpose?: string;
-  urlQrCode?: string;
-  targetAmount?: number;
-  categoryFund?: number;
-  startDate?: string;
-  endDate?: string;
-  status?: CampaignStatus;
-  mediaFund?: Array<{
-    mediaType: MediaType;
-    url: string;
-  }>;
-  milestones?: Array<{
-    title: string;
-    description: string;
-    targetAmount: number;
-    achievedAmount: number;
-    startDate: string;
-    endDate: string;
-    orderIndex: number;
-  }>;
+  organization: CampaignOrganization;
+  category: CampaignCategory;
+  status: CampaignStatusInfo;
+  media: CampaignMedia[];
 }
 
 /**
  * Campaign List Response (with pagination)
  */
 export interface CampaignListResponse {
-  funds: CampaignListItem[];
+  data: Campaign[];
   pagination: {
-    total: number;
     page: number;
     limit: number;
+    total: number;
   };
+}
+
+/**
+ * Update Campaign Request
+ */
+export interface UpdateCampaignRequest {
+  title?: string;
+  description?: string;
+  targetAmount?: number;
+  startDate?: string;
+  endDate?: string;
+  statusId?: number;
 }
 
 /**
@@ -273,20 +128,27 @@ export interface CampaignQueryFilters {
   page?: number;
   limit?: number;
   search?: string;
-  methodId?: CampaignMethod;
+  status?: number;
   categoryId?: number;
-  status?: CampaignStatus;
-  orgId?: number; // Filter by organization
-  sortBy?: "startDate" | "endDate" | "targetAmount" | "currentAmount" | "createdAt";
-  sortOrder?: "asc" | "desc";
+  organizationId?: number;
+  sortBy?:
+    | "title"
+    | "startDate"
+    | "createdAt"
+    | "targetAmount"
+    | "currentAmount";
+  sortOrder?: "ASC" | "DESC";
 }
 
 /**
  * Helper function to calculate campaign progress percentage
  */
-export function calculateCampaignProgress(campaign: Campaign | CampaignListItem): number {
+export function calculateCampaignProgress(campaign: Campaign): number {
   if (campaign.targetAmount === 0) return 0;
-  return Math.min(100, Math.round((campaign.currentAmount / campaign.targetAmount) * 100));
+  return Math.min(
+    100,
+    Math.round((campaign.currentAmount / campaign.targetAmount) * 100)
+  );
 }
 
 /**
@@ -300,12 +162,12 @@ export function calculateDaysRemaining(endDate: string): number {
 }
 
 /**
- * Helper function to format campaign amount
+ * Helper function to format campaign amount (VND)
  */
 export function formatCampaignAmount(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("vi-VN", {
     style: "currency",
-    currency: "USD",
+    currency: "VND",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);
@@ -314,19 +176,6 @@ export function formatCampaignAmount(amount: number): string {
 /**
  * Helper function to check if campaign is active
  */
-export function isCampaignActive(campaign: Campaign | CampaignListItem): boolean {
-  if ('status' in campaign && typeof campaign.status === 'number') {
-    return campaign.status === CampaignStatus.ACTIVE;
-  }
-  if ('fundStatus' in campaign) {
-    return campaign.fundStatus?.fundStatusId === CampaignStatus.ACTIVE;
-  }
-  return false;
-}
-
-/**
- * Helper function to get campaign slug
- */
-export function getCampaignSlug(campaign: Campaign | CampaignListItem): string {
-  return `${campaign.fundId}`;
+export function isCampaignActive(campaign: Campaign): boolean {
+  return campaign.status.campaignStatusId === CampaignStatus.ACTIVE;
 }

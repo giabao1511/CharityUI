@@ -24,13 +24,13 @@ export function OrganizationSidebar({
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Wallet className="w-5 h-5" />
-              Financial Overview
+              Tổng quan tài chính
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <p className="text-sm text-muted-foreground mb-1">
-                Total Balance
+                Tổng cộng số dư
               </p>
               <p className="text-2xl font-bold">
                 ${wallet.balance.toLocaleString()}
@@ -50,7 +50,7 @@ export function OrganizationSidebar({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="w-5 h-5" />
-            Organization Info
+            Thông tin tổ chức
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">

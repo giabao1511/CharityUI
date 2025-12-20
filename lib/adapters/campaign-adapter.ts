@@ -4,19 +4,27 @@
  * This adapter bridges the backend API structure with the frontend UI expectations
  */
 
-import type { Campaign, CampaignListItem, CampaignStatus } from "@/types/campaign";
 import type { Fund, Volunteer } from "@/types";
-import type { CreatorCampaignItem, VolunteerRegistration } from "@/types/creator";
+import type {
+  CreatorCampaignItem,
+  VolunteerRegistration,
+} from "@/types/creator";
+import { CampaignItem } from "@/types/fund";
 
 /**
  * Transform API volunteer (VolunteerRegistration) to public Volunteer type
  */
-export function transformVolunteerForPublic(apiVolunteer: VolunteerRegistration): Volunteer {
+export function transformVolunteerForPublic(
+  apiVolunteer: VolunteerRegistration
+): Volunteer {
   // Map API statuses to public volunteer statuses
   let status: "pending" | "active" | "rejected" = "pending";
   if (apiVolunteer.status === "active" || apiVolunteer.status === "approved") {
     status = "active";
-  } else if (apiVolunteer.status === "rejected" || apiVolunteer.status === "inactive") {
+  } else if (
+    apiVolunteer.status === "rejected" ||
+    apiVolunteer.status === "inactive"
+  ) {
     status = "rejected";
   } else if (apiVolunteer.status === "pending") {
     status = "pending";
@@ -38,11 +46,17 @@ export function transformVolunteerForPublic(apiVolunteer: VolunteerRegistration)
  * @param apiCampaign - Campaign data from API
  * @param volunteers - Optional volunteer data (should be fetched separately from /v1/volunteers/:campaignId)
  */
-export function campaignToMockFormat(apiCampaign: any, volunteers: VolunteerRegistration[] = []): Fund {
+export function campaignToMockFormat(
+  apiCampaign: any,
+  volunteers: VolunteerRegistration[] = []
+): Fund {
   // Handle new API response structure
   const campaignId = apiCampaign.campaignId || apiCampaign.fundId;
   const title = apiCampaign.title || apiCampaign.fundName;
-  const category = apiCampaign.category?.categoryName || apiCampaign.fundCategory?.categoryName || "General";
+  const category =
+    apiCampaign.category?.categoryName ||
+    apiCampaign.fundCategory?.categoryName ||
+    "General";
 
   // Get banner from media array (first image) or bannerUrl
   const bannerUrl = apiCampaign.media?.[0]?.url || apiCampaign.bannerUrl || "";
@@ -56,7 +70,7 @@ export function campaignToMockFormat(apiCampaign: any, volunteers: VolunteerRegi
     status = apiCampaign.status.campaignStatusId === 1 ? "active" : "completed";
   } else if (apiCampaign.fundStatus?.fundStatusId) {
     status = apiCampaign.fundStatus.fundStatusId === 2 ? "active" : "completed";
-  } else if (typeof apiCampaign.status === 'number') {
+  } else if (typeof apiCampaign.status === "number") {
     status = apiCampaign.status === 2 ? "active" : "completed";
   }
 
@@ -130,12 +144,14 @@ export function campaignListToMockFormat(apiCampaigns: any[]): Fund[] {
       : apiCampaign.organization?.orgName || "Unknown Creator";
 
     // Get category name (new API: category object, old API: fundCategory object)
-    const categoryName = apiCampaign.category?.categoryName ||
-                        apiCampaign.fundCategory?.categoryName ||
-                        "General";
+    const categoryName =
+      apiCampaign.category?.categoryName ||
+      apiCampaign.fundCategory?.categoryName ||
+      "General";
 
     // Get banner URL (new API: from media array, old API: bannerUrl field)
-    const bannerUrl = apiCampaign.media?.[0]?.url || apiCampaign.bannerUrl || "";
+    const bannerUrl =
+      apiCampaign.media?.[0]?.url || apiCampaign.bannerUrl || "";
 
     // Get all media URLs (new API provides media array)
     const mediaUrls = apiCampaign.media?.map((media: any) => media.url) || [];
@@ -143,16 +159,19 @@ export function campaignListToMockFormat(apiCampaigns: any[]): Fund[] {
     // Get status (new API: status.campaignStatusId, old API: fundStatus.fundStatusId)
     let status: "active" | "completed" | "cancelled" = "active";
     if (apiCampaign.status?.campaignStatusId) {
-      status = apiCampaign.status.campaignStatusId === 1 ? "active" : "completed";
+      status =
+        apiCampaign.status.campaignStatusId === 1 ? "active" : "completed";
     } else if (apiCampaign.fundStatus?.fundStatusId) {
-      status = apiCampaign.fundStatus.fundStatusId === 2 ? "active" : "completed";
+      status =
+        apiCampaign.fundStatus.fundStatusId === 2 ? "active" : "completed";
     }
 
     return {
       id: `${campaignId}`,
       slug: `${campaignId}`,
       title: title,
-      shortDescription: apiCampaign.description?.substring(0, 150) + "..." || "",
+      shortDescription:
+        apiCampaign.description?.substring(0, 150) + "..." || "",
       fullDescription: apiCampaign.description || "",
       creator: creatorName,
       category: categoryName,
@@ -233,7 +252,7 @@ export function campaignListItemToCreatorItem(
  * Convert array of API CampaignListItem to CreatorCampaignItem array
  */
 export function campaignListToCreatorItems(
-  apiCampaigns: CampaignListItem[]
+  apiCampaigns: CampaignItem[]
 ): CreatorCampaignItem[] {
   return apiCampaigns.map(campaignListItemToCreatorItem);
 }

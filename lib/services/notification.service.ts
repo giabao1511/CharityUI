@@ -60,7 +60,7 @@ export async function getNotifications(): Promise<Notification[]> {
       // Construct metadata from user and campaign info
       const metadata = {
         userName: `${notif.user.firstName} ${notif.user.lastName}`,
-        campaignId: notif.campaign?.campaignId,
+        campaignId: notif.campaign?.campaignId?.toString(),
         campaignTitle: notif.campaign?.title,
       };
 

@@ -16,19 +16,17 @@ export const FundMethodNames = {
 
 // Fund Status
 export enum FundStatus {
-  DRAFT = 1,
-  ACTIVE = 2,
-  SUSPENDED = 3,
-  COMPLETED = 4,
-  CANCELLED = 5,
+  ACTIVE = 1,
+  PAUSED = 2,
+  COMPLETED = 3,
+  CLOSED = 4,
 }
 
 export const FundStatusNames = {
-  [FundStatus.DRAFT]: "Draft",
   [FundStatus.ACTIVE]: "Active",
-  [FundStatus.SUSPENDED]: "Suspended",
+  [FundStatus.PAUSED]: "Paused",
   [FundStatus.COMPLETED]: "Completed",
-  [FundStatus.CANCELLED]: "Cancelled",
+  [FundStatus.CLOSED]: "Closed",
 } as const;
 
 // Media Types
@@ -153,23 +151,54 @@ export interface Fund {
 }
 
 /**
- * Fund List Item (used in list views)
+ * Campaign Item (used in list views)
  */
-export interface FundListItem {
-  fundId: number;
-  fundName: string;
-  bannerUrl: string;
-  description: string;
+export interface CampaignItem {
   targetAmount: number;
   currentAmount: number;
-  startDate: string;
-  endDate: string;
-  createdAt: string;
-  updatedAt: string;
-  creator: FundCreator;
-  fundraising: FundraisingMethod;
-  fundStatus: FundStatusInfo;
-  fundCategory: FundCategoryInfo;
+  campaignId: number;
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  organization: Organization;
+  category: Category;
+  status: Status;
+  media: MediaTypeCampaign[];
+}
+
+export interface Category {
+  categoryId: number;
+  categoryName: string;
+  logoIcon: string;
+}
+
+export interface Media {
+  campaignMediaId: number;
+  campaignId: number;
+  url: string;
+  description: null;
+  createdAt: Date;
+  updatedAt: Date;
+  mediaType: MediaTypeCampaign;
+}
+
+export interface MediaTypeCampaign {
+  mediaTypeId: number;
+  mediaName: string;
+}
+
+export interface Organization {
+  orgId: number;
+  orgName: string;
+  avatar: string;
+}
+
+export interface Status {
+  campaignStatusId: number;
+  statusName: string;
 }
 
 /**
@@ -241,7 +270,7 @@ export interface UpdateFundRequest {
  * Fund List Response (with pagination)
  */
 export interface FundListResponse {
-  funds: FundListItem[];
+  funds: CampaignItem[];
   pagination: {
     total: number;
     page: number;
@@ -259,16 +288,24 @@ export interface FundQueryFilters {
   methodId?: FundMethod;
   categoryId?: number;
   status?: FundStatus;
-  sortBy?: "startDate" | "endDate" | "targetAmount" | "currentAmount" | "createdAt";
+  sortBy?:
+    | "startDate"
+    | "endDate"
+    | "targetAmount"
+    | "currentAmount"
+    | "createdAt";
   sortOrder?: "asc" | "desc";
 }
 
 /**
  * Helper function to calculate fund progress percentage
  */
-export function calculateFundProgress(fund: Fund | FundListItem): number {
+export function calculateFundProgress(fund: Fund | CampaignItem): number {
   if (fund.targetAmount === 0) return 0;
-  return Math.min(100, Math.round((fund.currentAmount / fund.targetAmount) * 100));
+  return Math.min(
+    100,
+    Math.round((fund.currentAmount / fund.targetAmount) * 100)
+  );
 }
 
 /**

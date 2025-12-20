@@ -93,6 +93,37 @@ export const API_ENDPOINTS = {
     MARK_READ: (notificationId: string | number) =>
       `${API_BASE_URL}/v1/notifications/${notificationId}/read`,
   },
+  // Comment endpoints
+  COMMENTS: {
+    // Get comments for a campaign
+    LIST: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/comments/${campaignId}`,
+    // Create a new comment
+    CREATE: `${API_BASE_URL}/v1/comments`,
+    // Upload comment media
+    UPLOAD_MEDIA: `${API_BASE_URL}/v1/comments/uploads`,
+  },
+  // Report endpoints
+  REPORTS: {
+    // Get report reasons
+    REASONS: `${API_BASE_URL}/v1/reasons`,
+    // Create a new report
+    CREATE: `${API_BASE_URL}/v1/reports`,
+    // Get reports by campaign ID
+    LIST_BY_CAMPAIGN: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/reports?campaignId=${campaignId}`,
+    // Update report status
+    UPDATE_STATUS: (reportId: string | number) =>
+      `${API_BASE_URL}/v1/reports/${reportId}`,
+  },
+  // Wallet endpoints
+  WALLETS: {
+    // Get wallets by user ID
+    LIST: (userId: string | number) => `${API_BASE_URL}/v1/wallets/${userId}`,
+    // Get wallet detail by wallet ID
+    DETAIL: (walletId: string | number) =>
+      `${API_BASE_URL}/v1/wallets/detail/${walletId}`,
+  },
   // Admin endpoints (using existing user/org endpoints)
   ADMIN: {
     // Organizations - using main organization endpoints

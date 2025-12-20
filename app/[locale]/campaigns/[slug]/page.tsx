@@ -2,6 +2,7 @@ import { CampaignRewardSection } from "@/components/campaigns/campaign-reward-se
 import { CampaignTabs } from "@/components/campaigns/campaign-tabs";
 import { ContributionSidebar } from "@/components/campaigns/contribution-sidebar";
 import { CampaignBannerSlideshow } from "@/components/campaigns/campaign-banner-slideshow";
+import { ReportDialog } from "@/components/campaigns/report-dialog";
 import { BodyText, Heading } from "@/components/ui/typography";
 import { campaignToMockFormat } from "@/lib/adapters/campaign-adapter";
 import { mockCampaigns } from "@/lib/data";
@@ -70,8 +71,14 @@ export default async function CampaignDetailPage({
 
       {/* Campaign Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-          <span>{campaign.category}</span>
+        <div className="flex items-center justify-between gap-4 mb-2">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>{campaign.category}</span>
+          </div>
+          <ReportDialog
+            campaignId={parseInt(campaign.id)}
+            campaignTitle={campaign.title}
+          />
         </div>
         <Heading level={1} className="mb-4">
           {campaign.title}

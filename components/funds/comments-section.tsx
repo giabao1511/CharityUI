@@ -21,7 +21,7 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
 
   const handleSubmitComment = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newComment.trim()) {
       toast.error("Please enter a comment");
       return;
@@ -34,7 +34,7 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
 
   const handleSubmitReply = (e: React.FormEvent, commentId: string) => {
     e.preventDefault();
-    
+
     if (!replyText.trim()) {
       toast.error("Please enter a reply");
       return;
@@ -47,7 +47,7 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
   };
 
   const renderComment = (comment: Comment, isReply = false) => (
-    <div key={comment.id} className={isReply ? "ml-12 mt-4" : ""}>
+    <div key={comment.commentId} className={isReply ? "ml-12 mt-4" : ""}>
       <Card className={isReply ? "bg-muted/30" : ""}>
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
@@ -59,71 +59,36 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
             {/* Comment content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
-                <BodyText weight="semibold">{comment.author}</BodyText>
+                <BodyText weight="semibold">{comment.user.email}</BodyText>
                 <BodyText size="sm" muted>
-                  {new Date(comment.date).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
+                  {new Date(comment.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
                   })}
                 </BodyText>
               </div>
 
-              <BodyText className="mb-3 whitespace-pre-wrap">{comment.content}</BodyText>
+              <BodyText className="mb-3 whitespace-pre-wrap">
+                {comment.content}
+              </BodyText>
 
               {/* Reply button */}
               {!isReply && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setReplyingTo(comment.id)}
+                  onClick={() => setReplyingTo(String(comment.commentId))}
                   className="text-primary"
                 >
                   <MessageCircle className="h-4 w-4 mr-1" aria-hidden="true" />
                   Reply
                 </Button>
               )}
-
-              {/* Reply form */}
-              {replyingTo === comment.id && (
-                <form onSubmit={(e) => handleSubmitReply(e, comment.id)} className="mt-4">
-                  <Textarea
-                    value={replyText}
-                    onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Write your reply..."
-                    rows={3}
-                    className="mb-2"
-                    aria-label="Reply to comment"
-                  />
-                  <div className="flex gap-2">
-                    <Button type="submit" size="sm">
-                      Post Reply
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setReplyingTo(null);
-                        setReplyText("");
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </form>
-              )}
             </div>
           </div>
         </CardContent>
       </Card>
-
-      {/* Render replies */}
-      {comment.replies && comment.replies.length > 0 && (
-        <div className="space-y-4 mt-4">
-          {comment.replies.map((reply) => renderComment(reply, true))}
-        </div>
-      )}
     </div>
   );
 
@@ -132,7 +97,9 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
       {/* New comment form */}
       <Card>
         <CardContent className="p-6">
-          <Heading level={3} gutterBottom>Post a Comment</Heading>
+          <Heading level={3} gutterBottom>
+            Post a Comment
+          </Heading>
           <form onSubmit={handleSubmitComment} className="space-y-4">
             <div>
               <Label htmlFor="new-comment">Your comment</Label>
@@ -154,11 +121,9 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
       {/* Comments list */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <Heading level={3}>
-            Comments & Questions
-          </Heading>
+          <Heading level={3}>Comments & Questions</Heading>
           <BodyText muted>
-            {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
+            {comments.length} {comments.length === 1 ? "comment" : "comments"}
           </BodyText>
         </div>
 
@@ -166,7 +131,8 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
           <Card>
             <CardContent className="py-12 text-center">
               <BodyText muted>
-                No comments yet. Be the first to ask a question or share your thoughts!
+                No comments yet. Be the first to ask a question or share your
+                thoughts!
               </BodyText>
             </CardContent>
           </Card>

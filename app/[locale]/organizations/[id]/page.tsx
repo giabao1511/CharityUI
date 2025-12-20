@@ -1,10 +1,9 @@
-import { notFound } from "next/navigation";
-import { Heading, BodyText } from "@/components/ui/typography";
-import { getOrganizationById } from "@/lib/services/organization.service";
 import { OrganizationHeader } from "@/components/organizations/organization-header";
-import { OrganizationTabs } from "@/components/organizations/organization-tabs";
 import { OrganizationSidebar } from "@/components/organizations/organization-sidebar";
+import { OrganizationTabs } from "@/components/organizations/organization-tabs";
+import { getOrganizationById } from "@/lib/services/organization.service";
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 
 export default async function OrganizationDetailPage({
   params,

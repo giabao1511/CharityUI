@@ -75,12 +75,44 @@ export interface Donation {
   status: DonationStatus;
 }
 
-export interface Comment {
+// Legacy Comment interface for mock data
+export interface CommentLegacy {
   id: string;
   author: string;
   content: string;
   date: string;
-  replies?: Comment[];
+  replies?: CommentLegacy[];
+}
+
+// Comment media interface (for API)
+export interface CommentMedia {
+  mediaTypeId: number;
+  url: string;
+}
+
+// Comment interface (for API)
+export interface Comment {
+  commentId: number;
+  campaignId: number;
+  userId: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    userId: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    avatar?: string;
+  };
+  media?: CommentMedia[];
+}
+
+// Create comment request interface
+export interface CreateCommentRequest {
+  campaignId: number;
+  content: string;
+  media?: CommentMedia[];
 }
 
 export interface ContributionHistory {
@@ -116,7 +148,7 @@ export interface Fund {
   rewardTiers: RewardTier[];
   contributors: Contributor[];
   volunteers: Volunteer[];
-  comments: Comment[];
+  comments: CommentLegacy[]; // Using legacy comment type for mock data
   // Organization info (from API)
   organization?: {
     orgId: number;
@@ -138,3 +170,45 @@ export interface PlatformStats {
   activeCampaigns: number;
   totalBackers: number;
 }
+
+// Report Reason interface
+export interface ReportReason {
+  reasonId: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Create Report Request interface
+export interface CreateReportRequest {
+  targetId: number;
+  reasonId: number;
+  description: string;
+}
+
+// Report interface (API response)
+export interface Report {
+  reportId: number;
+  targetType: string;
+  description: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  reason: {
+    reasonId: number;
+    title: string;
+  };
+  reporter: {
+    userId: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  target: {
+    campaignId: number;
+    title: string;
+  };
+}
+
+// Export wallet types
+export * from "./wallet";

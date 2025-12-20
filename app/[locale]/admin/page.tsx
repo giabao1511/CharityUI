@@ -2,12 +2,20 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heading } from "@/components/ui/typography";
-import { Building2, Users, LayoutDashboard } from "lucide-react";
+import { Building2, Users, LayoutDashboard, Target } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function AdminDashboardPage() {
   const quickLinks = [
+    {
+      title: "Campaigns",
+      description: "Manage fundraising campaigns and approvals",
+      href: "/admin/campaigns",
+      icon: Target,
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+    },
     {
       title: "Organizations",
       description: "Create and manage platform organizations",
@@ -98,6 +106,15 @@ export default function AdminDashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3 text-sm">
+            <div className="flex items-start gap-2">
+              <Target className="h-4 w-4 mt-0.5 text-purple-600" />
+              <div>
+                <p className="font-medium">Campaign Management</p>
+                <p className="text-muted-foreground">
+                  View all campaigns, approve or suspend fundraisers, edit campaign details, and monitor progress
+                </p>
+              </div>
+            </div>
             <div className="flex items-start gap-2">
               <Building2 className="h-4 w-4 mt-0.5 text-blue-600" />
               <div>

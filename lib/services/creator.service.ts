@@ -19,10 +19,7 @@ import type {
   ActivityItem,
   VolunteerRegistration,
 } from "@/types/creator";
-import type {
-  CreateCampaignRequest,
-  UpdateCampaignRequest,
-} from "@/types/campaign";
+import type { UpdateCampaignRequest } from "@/types/campaign";
 
 /**
  * Get creator dashboard statistics
@@ -35,7 +32,7 @@ export async function getCreatorStats(): Promise<CreatorStats> {
 
     // Calculate stats from campaigns
     const totalCampaigns = campaigns.length;
-    const activeCampaigns = campaigns.filter(c => c.status === 1).length;
+    const activeCampaigns = campaigns.filter((c) => c.status === 1).length;
     const totalRaised = campaigns.reduce(
       (sum, c) => sum + (c.currentAmount || 0),
       0
@@ -103,24 +100,27 @@ export async function getCreatorCampaigns(filters?: {
   }
 
   // Handle nested data structure
-  const campaigns = result.data?.data || result.data?.funds || result.data || [];
+  const campaigns =
+    result.data?.data || result.data?.funds || result.data || [];
 
   // Transform to CreatorCampaignItem format
-  const transformedCampaigns: CreatorCampaignItem[] = campaigns.map((campaign: any) => ({
-    fundId: campaign.fundId || campaign.id,
-    fundName: campaign.fundName || campaign.name,
-    bannerUrl: campaign.bannerUrl || campaign.imageUrl || "",
-    status: campaign.status || 1,
-    statusName: campaign.statusName || "Active",
-    targetAmount: campaign.targetAmount || campaign.goalAmount || 0,
-    currentAmount: campaign.currentAmount || 0,
-    startDate: campaign.startDate || "",
-    endDate: campaign.endDate || "",
-    backersCount: campaign.backersCount || campaign.backers || 0,
-    volunteersCount: campaign.volunteersCount || 0,
-    createdAt: campaign.createdAt || new Date().toISOString(),
-    updatedAt: campaign.updatedAt || new Date().toISOString(),
-  }));
+  const transformedCampaigns: CreatorCampaignItem[] = campaigns.map(
+    (campaign: any) => ({
+      fundId: campaign.fundId || campaign.id,
+      fundName: campaign.fundName || campaign.name,
+      bannerUrl: campaign.bannerUrl || campaign.imageUrl || "",
+      status: campaign.status || 1,
+      statusName: campaign.statusName || "Active",
+      targetAmount: campaign.targetAmount || campaign.goalAmount || 0,
+      currentAmount: campaign.currentAmount || 0,
+      startDate: campaign.startDate || "",
+      endDate: campaign.endDate || "",
+      backersCount: campaign.backersCount || campaign.backers || 0,
+      volunteersCount: campaign.volunteersCount || 0,
+      createdAt: campaign.createdAt || new Date().toISOString(),
+      updatedAt: campaign.updatedAt || new Date().toISOString(),
+    })
+  );
 
   return {
     campaigns: transformedCampaigns,
@@ -149,44 +149,57 @@ export async function getCreatorActivity(filters?: {
 
     // Filter by specific campaign if provided
     const campaignsToFetch = filters?.campaignId
-      ? campaigns.filter(c => c.fundId === filters.campaignId)
+      ? campaigns.filter((c) => c.fundId === filters.campaignId)
       : campaigns.slice(0, 10); // Fetch donations for up to 10 campaigns to avoid overload
 
     // Fetch donations for each campaign and convert to activity items
     for (const campaign of campaignsToFetch) {
       try {
-        const { getCreatorCampaignDonations } = await import("./donation.service");
-        const donationsResult = await getCreatorCampaignDonations(campaign.fundId, {
-          limit: 20, // Get recent 20 donations per campaign
-        });
+        const { getCreatorCampaignDonations } = await import(
+          "./donation.service"
+        );
+        const donationsResult = await getCreatorCampaignDonations(
+          campaign.fundId,
+          {
+            limit: 20, // Get recent 20 donations per campaign
+          }
+        );
 
         // Convert donations to activity items
-        const donationActivities: ActivityItem[] = (donationsResult.data || []).map((donation: any) => ({
+        const donationActivities: ActivityItem[] = (
+          donationsResult.data || []
+        ).map((donation: any) => ({
           id: `donation-${donation.donationId}`,
           type: "donation" as const,
           campaignId: campaign.fundId,
           campaignName: campaign.fundName,
           description: `New donation of ${donation.amount}`,
-          userName: donation.isAnonymous ? "Anonymous" : (donation.fullName || "Anonymous"),
+          userName: donation.isAnonymous
+            ? "Anonymous"
+            : donation.fullName || "Anonymous",
           amount: parseFloat(donation.amount),
           timestamp: donation.donateDate,
         }));
 
         activities.push(...donationActivities);
       } catch (error) {
-        console.error(`Error fetching donations for campaign ${campaign.fundId}:`, error);
+        console.error(
+          `Error fetching donations for campaign ${campaign.fundId}:`,
+          error
+        );
       }
     }
 
     // Sort by timestamp (most recent first)
-    activities.sort((a, b) =>
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    activities.sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     );
 
     // Apply type filter
     let filteredActivities = activities;
     if (filters?.type) {
-      filteredActivities = activities.filter(a => a.type === filters.type);
+      filteredActivities = activities.filter((a) => a.type === filters.type);
     }
 
     // Apply pagination
@@ -301,7 +314,9 @@ export async function getCampaignVolunteers(
 
     // Apply status filter client-side if provided
     if (filters?.status) {
-      volunteers = volunteers.filter((v: VolunteerRegistration) => v.status === filters.status);
+      volunteers = volunteers.filter(
+        (v: VolunteerRegistration) => v.status === filters.status
+      );
     }
 
     return {
@@ -377,7 +392,7 @@ export async function updateVolunteerStatus(
  */
 export async function createCreatorCampaign(
   organizationId: string | number,
-  data: CreateCampaignRequest
+  data: any
 ): Promise<any> {
   const result = await apiClient<{ data: any }>(
     API_ENDPOINTS.CAMPAIGNS.CREATE(organizationId),
@@ -440,9 +455,10 @@ export async function getCampaignAnalytics(campaignId: string | number) {
       backersCount: campaign.backersCount || campaign.backers || 0,
       volunteersCount: campaign.volunteersCount || 0,
       donationsCount: campaign.donationsCount || 0,
-      averageDonation: campaign.currentAmount && campaign.backersCount
-        ? campaign.currentAmount / campaign.backersCount
-        : 0,
+      averageDonation:
+        campaign.currentAmount && campaign.backersCount
+          ? campaign.currentAmount / campaign.backersCount
+          : 0,
       recentDonations: [], // TODO: Add when donations endpoint is available
     },
   };
@@ -495,7 +511,7 @@ export async function createMilestone(
   // );
 
   // For now, simulate successful creation
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   return {
     milestoneId: Date.now(),
@@ -521,7 +537,7 @@ export async function updateMilestone(
   }
 ) {
   // TODO: When backend implements
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   return {
     milestoneId,
@@ -538,7 +554,7 @@ export async function updateMilestone(
  */
 export async function deleteMilestone(milestoneId: string | number) {
   // TODO: When backend implements
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   return { success: true };
 }
@@ -594,7 +610,7 @@ export async function postCampaignUpdate(
   }
 ) {
   // TODO: When backend implements
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   return {
     updateId: Date.now(),

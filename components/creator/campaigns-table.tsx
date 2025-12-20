@@ -28,13 +28,11 @@ export function CampaignsTable({ campaigns }: CampaignsTableProps) {
     switch (status) {
       case CampaignStatus.ACTIVE:
         return "default";
-      case CampaignStatus.DRAFT:
+      case CampaignStatus.PAUSED:
         return "secondary";
       case CampaignStatus.COMPLETED:
         return "outline";
-      case CampaignStatus.SUSPENDED:
-        return "destructive";
-      case CampaignStatus.CANCELLED:
+      case CampaignStatus.CLOSED:
         return "destructive";
       default:
         return "secondary";

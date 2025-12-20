@@ -36,7 +36,7 @@ export function CampaignTabs({
           Volunteers ({campaign.volunteers.length})
         </TabsTrigger>
         <TabsTrigger value="comments">
-          Comments ({campaign.comments.length})
+          Comments
         </TabsTrigger>
       </TabsList>
 
@@ -190,7 +190,7 @@ export function CampaignTabs({
       </TabsContent>
 
       <TabsContent value="comments" className="mt-0">
-        <CommentsSection comments={campaign.comments} />
+        <CommentsSection campaignId={parseInt(campaign.id)} />
       </TabsContent>
     </Tabs>
   );

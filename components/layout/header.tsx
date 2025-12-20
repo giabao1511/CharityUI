@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { Heart, User, Menu, X, LayoutDashboard } from "lucide-react";
+import { Heart, User, Menu, X, LayoutDashboard, Wallet } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { UserMenu } from "@/components/user-menu";
@@ -211,6 +211,21 @@ export function Header() {
             >
               {t("nav.profile")}
             </Link>
+            {user && (
+              <Link
+                href="/wallet"
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors hover:text-primary rounded-md",
+                  isActive("/wallet")
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground"
+                )}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Wallet className="h-4 w-4" />
+                {t("nav.wallet")}
+              </Link>
+            )}
             {hasCreatorRole && (
               <Link
                 href="/creator"

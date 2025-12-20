@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, LogOut, Settings, Heart } from "lucide-react";
+import { User, LogOut, Settings, Heart, Wallet } from "lucide-react";
 import { toast } from "sonner";
 
 export function UserMenu() {
@@ -73,6 +73,10 @@ export function UserMenu() {
         <DropdownMenuItem onClick={() => router.push("/profile")}>
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/wallet")}>
+          <Wallet className="mr-2 h-4 w-4" />
+          <span>My Wallets</span>
         </DropdownMenuItem>
         {hasCreatorRole && (
           <DropdownMenuItem onClick={() => router.push("/creator")}>
