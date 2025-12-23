@@ -366,8 +366,8 @@
       "viewCampaign": "Xem Chiến Dịch"
     },
     "detail": {
-      "pledged": "đã cam kết của",
-      "goal": "mục tiêu",
+      "pledged": "đã cam kết của {amount} mục tiêu",
+      "percentFunded": "{percent}% đã quyên góp",
       "backersCount": "người ủng hộ",
       "daysToGo": "ngày còn lại",
       "campaignActive": "Chiến Dịch Đang Hoạt Động",
@@ -376,11 +376,13 @@
       "enterAmount": "Nhập số tiền",
       "backThisCampaign": "Ủng Hộ Chiến Dịch Này",
       "selectedReward": "Phần Thưởng Đã Chọn:",
-      "minimumContribution": "Nhập số tiền bạn muốn đóng góp (tối thiểu $1)"
+      "minimumContribution": "Nhập số tiền bạn muốn đóng góp (tối thiểu 10.000d)"
     },
     "tabs": {
       "description": "Mô Tả & Cập Nhật",
       "milestones": "Mốc Quan Trọng",
+      "donations": "Đóng Góp",
+      "volunteers": "Tình nguyện viên",
       "contributors": "Người Đóng Góp",
       "comments": "Bình Luận"
     },
@@ -398,6 +400,11 @@
       "completed": "Đã Hoàn Thành",
       "inProgress": "Đang Thực Hiện",
       "pending": "Đang Chờ"
+    },
+    "donations": {
+      "recentDonation": "Đóng Góp Gần Đây",
+      "noDonation": "Chưa có đóng góp nào. Hãy là người đầu tiên ủng hộ chiến dịch này!",
+      "loadingDonations": "Đang tải đóng góp..."
     },
     "messages": {
       "invalidAmount": "Số Tiền Không Hợp Lệ",
@@ -831,6 +838,51 @@
       "errorLoadingCampaigns": "Không thể tải danh sách chiến dịch",
       "errorLoadingReports": "Không thể tải danh sách báo cáo",
       "errorUpdatingStatus": "Không thể cập nhật trạng thái báo cáo"
+    },
+    "withdrawals": {
+      "title": "Quản lý rút tiền",
+      "description": "Xem xét và quản lý các yêu cầu rút tiền",
+      "filters": "Bộ lọc",
+      "status": "Trạng thái",
+      "selectStatus": "Chọn trạng thái",
+      "allStatuses": "Tất cả trạng thái",
+      "pending": "Chờ xử lý",
+      "approved": "Đã duyệt",
+      "rejected": "Đã từ chối",
+      "withdrawalsList": "Danh sách rút tiền",
+      "total": "Tổng cộng",
+      "noWithdrawals": "Không có yêu cầu rút tiền nào",
+      "withdrawalId": "Mã rút tiền",
+      "campaignId": "Mã chiến dịch",
+      "requester": "Người yêu cầu",
+      "amount": "Số tiền",
+      "purpose": "Mục đích",
+      "requestedAt": "Ngày yêu cầu",
+      "viewDetails": "Xem chi tiết",
+      "page": "Trang",
+      "of": "của",
+      "previous": "Trước",
+      "next": "Tiếp",
+      "withdrawalDetails": "Chi tiết rút tiền",
+      "viewFullDetails": "Xem chi tiết đầy đủ của yêu cầu rút tiền",
+      "requesterInfo": "Thông tin người yêu cầu",
+      "approverInfo": "Thông tin người duyệt",
+      "name": "Tên",
+      "email": "Email",
+      "fromWallet": "Từ ví",
+      "toWallet": "Đến ví",
+      "walletId": "Mã ví",
+      "balance": "Số dư",
+      "approvedAt": "Ngày duyệt",
+      "reasonRejected": "Lý do từ chối",
+      "errorLoadingWithdrawals": "Không thể tải danh sách rút tiền",
+      "actions": "Thao tác",
+      "approve": "Duyệt",
+      "reject": "Từ chối",
+      "approveSuccess": "Đã duyệt yêu cầu rút tiền thành công",
+      "rejectSuccess": "Đã từ chối yêu cầu rút tiền thành công",
+      "approveError": "Không thể duyệt yêu cầu rút tiền",
+      "rejectError": "Không thể từ chối yêu cầu rút tiền"
     }
   },
   "notifications": {

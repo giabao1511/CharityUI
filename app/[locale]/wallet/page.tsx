@@ -89,7 +89,6 @@ export default function WalletPage() {
 
       setIsLoading(true);
       const data = await getUserWallets(userId);
-      console.log(data)
       setWallets(data);
     } catch (error) {
       console.error("Error loading wallets:", error);

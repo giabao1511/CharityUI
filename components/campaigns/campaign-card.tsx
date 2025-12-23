@@ -1,22 +1,31 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { BodyText } from "@/components/ui/typography";
 import { Link } from "@/i18n/navigation";
 import { formatCurrency } from "@/lib/currency";
-import { Fund } from "@/types";
-import { Calendar, Users } from "lucide-react";
+import { CampaignItem } from "@/types/fund";
+import { Calendar } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface CampaignCardProps {
-  campaign: Fund;
+  campaign: CampaignItem;
 }
 
 export function CampaignCard({ campaign }: CampaignCardProps) {
   const t = useTranslations("campaigns.card");
-  const percentageFunded = Math.round((campaign.currentAmount / campaign.goalAmount) * 100);
+  const percentageFunded = Math.round(
+    (campaign.currentAmount / campaign.targetAmount) * 100
+  );
   const daysLeft = Math.ceil(
     (new Date(campaign.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
   );
@@ -34,13 +43,15 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
 
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="line-clamp-2 text-xl min-h-[3.5rem]">{campaign.title}</CardTitle>
+          <CardTitle className="line-clamp-2 text-xl min-h-[3.5rem]">
+            {campaign.title}
+          </CardTitle>
           <span className="shrink-0 rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-            {campaign.category}
+            {campaign.category.categoryName}
           </span>
         </div>
         <CardDescription className="line-clamp-2">
-          {campaign.shortDescription}
+          {campaign.description}
         </CardDescription>
       </CardHeader>
 
@@ -51,7 +62,7 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
               {formatCurrency(campaign.currentAmount)}
             </span>
             <span className="text-muted-foreground">
-              of {formatCurrency(campaign.goalAmount)}
+              of {formatCurrency(campaign.targetAmount)}
             </span>
           </div>
           <Progress value={percentageFunded} className="h-2" />
@@ -62,33 +73,31 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
 
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
-            <Users className="h-4 w-4" aria-hidden="true" />
-            <span>{campaign.backers} {t("backers")}</span>
-          </div>
-          <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4" aria-hidden="true" />
-            <span>{daysLeft > 0 ? t("daysLeft", { days: daysLeft }) : t("ended")}</span>
+            <span>
+              {daysLeft > 0 ? t("daysLeft", { days: daysLeft }) : t("ended")}
+            </span>
           </div>
         </div>
 
         <div className="text-sm text-muted-foreground">
           {t("by")}{" "}
-          {campaign.organization ? (
+          {campaign.organization && (
             <Link
               href={`/organizations/${campaign.organization.orgId}`}
               className="font-medium text-foreground hover:text-primary transition-colors hover:underline"
             >
-              {campaign.creator}
+              {campaign.organization.orgName}
             </Link>
-          ) : (
-            <span className="font-medium text-foreground">{campaign.creator}</span>
           )}
         </div>
       </CardContent>
 
       <CardFooter className="mt-auto">
         <Button asChild className="w-full">
-          <Link href={`/campaigns/${campaign.slug}`}>{t("viewCampaign")}</Link>
+          <Link href={`/campaigns/${campaign.campaignId}`}>
+            {t("viewCampaign")}
+          </Link>
         </Button>
       </CardFooter>
     </Card>

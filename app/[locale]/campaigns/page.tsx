@@ -1,10 +1,8 @@
 import { CampaignCard } from "@/components/campaigns/campaign-card";
 import { CampaignFilters } from "@/components/campaigns/campaign-filters";
 import { BodyText, Heading } from "@/components/ui/typography";
-import { campaignListToMockFormat } from "@/lib/adapters/campaign-adapter";
-import { mockCampaigns } from "@/lib/data";
 import { getCampaigns } from "@/lib/services/campaign.service";
-import type { Fund } from "@/types";
+import { CampaignItem } from "@/types/fund";
 import { getTranslations } from "next-intl/server";
 
 export default async function CampaignsPage({
@@ -31,7 +29,7 @@ export default async function CampaignsPage({
   const status = params.status ? parseInt(params.status) : undefined;
 
   // Fetch campaigns from the API with fallback to mock data
-  let campaigns: Fund[] = [];
+  let campaigns: CampaignItem[] = [];
   let error = null;
   let totalCount = 0;
   let totalPages = 1;
@@ -46,15 +44,11 @@ export default async function CampaignsPage({
       sortOrder: sortOrder as "ASC" | "DESC",
       status,
     });
-    campaigns = campaignListToMockFormat(response.funds);
-    totalCount = response.pagination.total;
+    campaigns = response.campaigns;
+    totalCount = response.pagination!.total;
     totalPages = Math.ceil(totalCount / limit);
   } catch (err) {
     error = err instanceof Error ? err.message : "Failed to load campaigns";
-    console.error("Error fetching campaigns:", err);
-    // Fallback to mock data if API fails
-    campaigns = mockCampaigns;
-    totalCount = mockCampaigns.length;
     totalPages = Math.ceil(totalCount / limit);
   }
 
@@ -102,7 +96,7 @@ export default async function CampaignsPage({
       {campaigns.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {campaigns.map((campaign) => (
-            <CampaignCard key={campaign.id} campaign={campaign} />
+            <CampaignCard key={campaign.campaignId} campaign={campaign} />
           ))}
         </div>
       ) : (

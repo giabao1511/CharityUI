@@ -131,6 +131,7 @@ export interface CampaignQueryFilters {
   status?: number;
   categoryId?: number;
   organizationId?: number;
+  userId?: number;
   sortBy?:
     | "title"
     | "startDate"

@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BodyText, Heading, Large } from "@/components/ui/typography";
+import { BodyText, Heading } from "@/components/ui/typography";
 import { Link } from "@/i18n/navigation";
-import { platformStats } from "@/lib/data";
-import { ArrowRight, Heart, Target, TrendingUp, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export default function Home() {

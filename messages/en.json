@@ -366,8 +366,8 @@
       "viewCampaign": "View Campaign"
     },
     "detail": {
-      "pledged": "pledged of",
-      "goal": "goal",
+      "pledged": "pledged of {amount} goal",
+      "percentFunded": "{percent} funded",
       "backersCount": "backers",
       "daysToGo": "days to go",
       "campaignActive": "Campaign Active",
@@ -381,6 +381,8 @@
     "tabs": {
       "description": "Description & Updates",
       "milestones": "Milestones",
+      "donations": "Donations",
+      "volunteers": "Volunteers",
       "contributors": "Contributors",
       "comments": "Comments"
     },
@@ -398,6 +400,11 @@
       "completed": "Completed",
       "inProgress": "In Progress",
       "pending": "Pending"
+    },
+    "donations": {
+      "recentDonation": "Recent Donations",
+      "noDonations": "No donations yet. Be the first to contribute!",
+      "loadingDonation": "Loading donations..."
     },
     "messages": {
       "invalidAmount": "Invalid Amount",
@@ -831,6 +838,51 @@
       "errorLoadingCampaigns": "Failed to load campaigns",
       "errorLoadingReports": "Failed to load reports",
       "errorUpdatingStatus": "Failed to update report status"
+    },
+    "withdrawals": {
+      "title": "Withdrawals Management",
+      "description": "Review and manage withdrawal requests",
+      "filters": "Filters",
+      "status": "Status",
+      "selectStatus": "Select status",
+      "allStatuses": "All Statuses",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "withdrawalsList": "Withdrawals List",
+      "total": "Total",
+      "noWithdrawals": "No withdrawals found",
+      "withdrawalId": "Withdrawal ID",
+      "campaignId": "Campaign ID",
+      "requester": "Requester",
+      "amount": "Amount",
+      "purpose": "Purpose",
+      "requestedAt": "Requested At",
+      "viewDetails": "View Details",
+      "page": "Page",
+      "of": "of",
+      "previous": "Previous",
+      "next": "Next",
+      "withdrawalDetails": "Withdrawal Details",
+      "viewFullDetails": "View full withdrawal details and information",
+      "requesterInfo": "Requester Information",
+      "approverInfo": "Approver Information",
+      "name": "Name",
+      "email": "Email",
+      "fromWallet": "From Wallet",
+      "toWallet": "To Wallet",
+      "walletId": "Wallet ID",
+      "balance": "Balance",
+      "approvedAt": "Approved At",
+      "reasonRejected": "Rejection Reason",
+      "errorLoadingWithdrawals": "Failed to load withdrawals",
+      "actions": "Actions",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approveSuccess": "Withdrawal approved successfully",
+      "rejectSuccess": "Withdrawal rejected successfully",
+      "approveError": "Failed to approve withdrawal",
+      "rejectError": "Failed to reject withdrawal"
     }
   },
   "notifications": {

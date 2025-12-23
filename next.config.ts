@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
         hostname: 'twitter-s3-nodejs.s3.ap-southeast-2.amazonaws.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'givenow.vn',
+        pathname: '/**',
+      },
     ],
   },
 };

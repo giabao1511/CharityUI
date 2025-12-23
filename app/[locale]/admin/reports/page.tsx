@@ -70,7 +70,7 @@ export default function ReportsManagementPage() {
       setIsLoadingCampaigns(true);
       const response = await getCampaigns();
       // getCampaigns returns { funds: [...], pagination: {...} }
-      setCampaigns(response.funds || []);
+      setCampaigns(response.campaigns || []);
     } catch (error) {
       console.error("Error loading campaigns:", error);
       toast.error(t("errorLoadingCampaigns"));

@@ -13,7 +13,7 @@ import { Wallet, GetWalletsResponse } from "@/types/wallet";
  */
 export async function getUserWallets(userId: number): Promise<Wallet[]> {
   try {
-    const result = await apiClient<GetWalletsResponse>(
+    const result = await apiClient<Wallet[]>(
       API_ENDPOINTS.WALLETS.LIST(userId)
     );
 
@@ -21,10 +21,7 @@ export async function getUserWallets(userId: number): Promise<Wallet[]> {
       throw new Error(result.error.message || "Failed to fetch user wallets");
     }
 
-    console.log("dataa", result.data);
-
-    // API returns { data: { data: [...] } }
-    return result.data?.data || [];
+    return result.data || [];
   } catch (error) {
     console.error("Error fetching user wallets:", error);
     throw error;

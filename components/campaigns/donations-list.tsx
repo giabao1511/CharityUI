@@ -6,7 +6,7 @@ import { User, Heart, Loader2 } from "lucide-react";
 import { Donation } from "@/types";
 import { Heading, BodyText } from "@/components/ui/typography";
 import { formatCurrency } from "@/lib/currency";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   getDonorDisplayName,
   parseDonationAmount,
@@ -30,6 +30,7 @@ export function DonationsList({
   initialPage = 1,
   initialTotalPages = 1,
 }: DonationsListProps) {
+  const t = useTranslations("campaigns.donations");
   const locale = useLocale() as "en" | "vi";
   const [donations, setDonations] = useState<Donation[]>(initialDonations);
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -47,7 +48,11 @@ export function DonationsList({
   useEffect(() => {
     async function fetchDonations() {
       // Skip fetch if we're on the initial page and have initial data
-      if (currentPage === initialPage && initialDonations.length > 0 && donations === initialDonations) {
+      if (
+        currentPage === initialPage &&
+        initialDonations.length > 0 &&
+        donations === initialDonations
+      ) {
         return;
       }
 
@@ -87,7 +92,7 @@ export function DonationsList({
       <Card>
         <CardContent className="py-12 text-center">
           <Loader2 className="h-12 w-12 mx-auto mb-3 text-primary animate-spin" />
-          <BodyText muted>Loading donations...</BodyText>
+          <BodyText muted>{t("loadingDonations")}</BodyText>
         </CardContent>
       </Card>
     );
@@ -98,9 +103,7 @@ export function DonationsList({
       <Card>
         <CardContent className="py-12 text-center">
           <Heart className="h-12 w-12 mx-auto mb-3 text-muted-foreground opacity-50" />
-          <BodyText muted>
-            No donations yet. Be the first to support this campaign!
-          </BodyText>
+          <BodyText muted>{t("noDonation")}</BodyText>
         </CardContent>
       </Card>
     );
@@ -109,7 +112,7 @@ export function DonationsList({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-6">
-        <Heading level={3}>Recent Donations</Heading>
+        <Heading level={3}>{t("recentDonation")}</Heading>
         <Badge variant="secondary">
           {donations.length} {donations.length === 1 ? "donation" : "donations"}
         </Badge>

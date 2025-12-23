@@ -118,39 +118,6 @@ export interface FundCategoryInfo {
 }
 
 /**
- * Main Fund Interface (complete structure)
- */
-export interface Fund {
-  fundId: number;
-  methodId: FundMethod;
-  fundName: string;
-  bannerUrl: string;
-  description: string;
-  bankAccountNumber: string;
-  bankName: string;
-  bankBranch: string;
-  purpose: string;
-  urlQrCode: string | null;
-  targetAmount: number;
-  currentAmount: number;
-  status: FundStatus;
-  categoryFund: number;
-  creatorId: number;
-  startDate: string; // ISO 8601
-  endDate: string; // ISO 8601
-  createdAt: string;
-  updatedAt: string;
-
-  // Relations (populated in GET requests)
-  creator?: FundCreator;
-  fundraising?: FundraisingMethod;
-  fundStatus?: FundStatusInfo;
-  fundCategory?: FundCategoryInfo;
-  fundMedia?: FundMedia[];
-  milestones?: Milestone[];
-}
-
-/**
  * Campaign Item (used in list views)
  */
 export interface CampaignItem {
@@ -165,8 +132,18 @@ export interface CampaignItem {
   updatedAt: Date;
   organization: Organization;
   category: Category;
-  status: Status;
-  media: MediaTypeCampaign[];
+  status: CampaignStatus;
+  media: Media[];
+}
+
+export interface Media {
+  campaignMediaId: number;
+  campaignId: number;
+  url: string;
+  description: null;
+  createdAt: Date;
+  updatedAt: Date;
+  mediaType: MediaTypeCampaign;
 }
 
 export interface Category {
@@ -196,9 +173,36 @@ export interface Organization {
   avatar: string;
 }
 
-export interface Status {
+export interface CampaignStatus {
   campaignStatusId: number;
   statusName: string;
+}
+
+export interface VolunteerStatus {
+  volunteerStatusId: 1 | 2 | 3;
+  statusName: string;
+}
+
+export interface Volunteer {
+  registrationId: number;
+  campaignId: number;
+  registeredAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  userInfo: UserInfo;
+  status: VolunteerStatus;
+  volunteerId: number;
+  userName: string;
+  userEmail: string;
+  skills?: string[];
+  availability?: string;
+}
+
+export interface UserInfo {
+  userId: number;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 /**
@@ -300,7 +304,7 @@ export interface FundQueryFilters {
 /**
  * Helper function to calculate fund progress percentage
  */
-export function calculateFundProgress(fund: Fund | CampaignItem): number {
+export function calculateFundProgress(fund: CampaignItem): number {
   if (fund.targetAmount === 0) return 0;
   return Math.min(
     100,

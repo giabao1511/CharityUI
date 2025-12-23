@@ -5,12 +5,12 @@
 
 import { apiClient, API_ENDPOINTS } from "@/lib/api-config";
 import type {
-  Fund,
   FundListResponse,
   FundQueryFilters,
   CreateFundRequest,
   UpdateFundRequest,
   FundCategory,
+  CampaignItem,
 } from "@/types/fund";
 
 /**
@@ -56,8 +56,10 @@ export async function getFunds(filters?: FundQueryFilters) {
 /**
  * Get a single fund by ID
  */
-export async function getFundById(fundId: string | number): Promise<Fund> {
-  const result = await apiClient<Fund>(
+export async function getFundById(
+  fundId: string | number
+): Promise<CampaignItem> {
+  const result = await apiClient<CampaignItem>(
     API_ENDPOINTS.FUNDS.DETAIL(fundId)
   );
 
@@ -77,10 +79,13 @@ export async function getFundById(fundId: string | number): Promise<Fund> {
  * Create a new fund
  */
 export async function createFund(data: CreateFundRequest) {
-  const result = await apiClient<{ data: Fund }>(API_ENDPOINTS.FUNDS.CREATE, {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  const result = await apiClient<{ data: CampaignItem }>(
+    API_ENDPOINTS.FUNDS.CREATE,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
 
   if (result.error) {
     throw new Error(result.error.message);
@@ -96,7 +101,7 @@ export async function updateFund(
   fundId: string | number,
   data: UpdateFundRequest
 ) {
-  const result = await apiClient<{ data: Fund }>(
+  const result = await apiClient<{ data: CampaignItem }>(
     API_ENDPOINTS.FUNDS.UPDATE(fundId),
     {
       method: "PUT",

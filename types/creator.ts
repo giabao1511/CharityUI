@@ -13,7 +13,7 @@ export interface VolunteerRegistration {
   userName: string;
   userEmail: string;
   registeredAt: string;
-  status: "pending" | "approved" | "rejected" | "active" | "inactive";
+  status: "pending" | "rejected" | "active";
   skills?: string[];
   availability?: string;
   notes?: string;
@@ -42,25 +42,6 @@ export interface CreatorStats {
   totalVolunteers: number;
   totalDonations: number;
   totalBackers: number;
-}
-
-/**
- * Campaign List Item for Creator
- */
-export interface CreatorCampaignItem {
-  fundId: number;
-  fundName: string;
-  bannerUrl: string;
-  status: number;
-  statusName: string;
-  targetAmount: number;
-  currentAmount: number;
-  startDate: string;
-  endDate: string;
-  backersCount: number;
-  volunteersCount: number;
-  createdAt: string;
-  updatedAt: string;
 }
 
 /**

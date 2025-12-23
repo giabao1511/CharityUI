@@ -1,21 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { StatsOverview } from "@/components/creator/stats-overview";
 import { RecentActivity } from "@/components/creator/recent-activity";
-import { Heading, BodyText } from "@/components/ui/typography";
+import { StatsOverview } from "@/components/creator/stats-overview";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getCreatorStats, getCreatorActivity } from "@/lib/services/creator.service";
+import { BodyText, Heading } from "@/components/ui/typography";
 import { useAuth } from "@/lib/auth-context";
+import { Building2, LayoutDashboard, Loader2, PlusCircle, Target } from "lucide-react";
 import Link from "next/link";
-import { PlusCircle, LayoutDashboard, Loader2 } from "lucide-react";
-import type { CreatorStats, ActivityItem } from "@/types/creator";
+import { useEffect, useState } from "react";
 
 export default function CreatorDashboardPage() {
   const { user, isLoading: authLoading } = useAuth();
-  const [stats, setStats] = useState<CreatorStats | null>(null);
-  const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,18 +28,6 @@ export default function CreatorDashboardPage() {
       try {
         setLoading(true);
         setError(null);
-        // Clear old data when refetching
-        setStats(null);
-        setActivities([]);
-
-        // Fetch stats and recent activity in parallel
-        const [statsData, activityData] = await Promise.all([
-          getCreatorStats(),
-          getCreatorActivity({ limit: 10 }),
-        ]);
-
-        setStats(statsData);
-        setActivities(activityData.activities);
       } catch (err) {
         console.error("Error loading dashboard data:", err);
         setError(
@@ -109,27 +93,28 @@ export default function CreatorDashboardPage() {
         </BodyText>
       </div>
 
-      {/* Statistics Overview */}
-      <div className="mb-8">
-        {stats && <StatsOverview stats={stats} />}
-      </div>
-
-      {/* Quick Actions and Recent Activity */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Quick Actions */}
-        <Card>
+      {/* Quick Actions Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+        {/* Campaigns Card */}
+        <Card className="hover:shadow-md transition-shadow">
           <CardContent className="pt-6">
-            <Heading level={3} className="mb-4">
-              Quick Actions
-            </Heading>
-            <div className="space-y-3">
-              <Link href="/creator/campaigns">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Target className="h-5 w-5 text-primary" />
+              </div>
+              <Heading level={3}>Campaigns</Heading>
+            </div>
+            <BodyText muted className="mb-4">
+              Manage your fundraising campaigns and track their progress
+            </BodyText>
+            <div className="space-y-2">
+              <Link href="/creator/campaigns" className="block">
                 <Button className="w-full" variant="default">
                   <LayoutDashboard className="mr-2 h-4 w-4" />
-                  My Campaigns
+                  View All Campaigns
                 </Button>
               </Link>
-              <Link href="/creator/campaigns/new">
+              <Link href="/creator/campaigns/new" className="block">
                 <Button className="w-full" variant="outline">
                   <PlusCircle className="mr-2 h-4 w-4" />
                   Create Campaign
@@ -139,8 +124,61 @@ export default function CreatorDashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Recent Activity */}
-        <RecentActivity activities={activities} />
+        {/* Organizations Card */}
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20">
+                <Building2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <Heading level={3}>Organizations</Heading>
+            </div>
+            <BodyText muted className="mb-4">
+              Manage your organizations and their settings
+            </BodyText>
+            <div className="space-y-2">
+              <Link href="/creator/organizations" className="block">
+                <Button className="w-full" variant="default">
+                  <Building2 className="mr-2 h-4 w-4" />
+                  View Organizations
+                </Button>
+              </Link>
+              <Link href="/organizations/create" className="block">
+                <Button className="w-full" variant="outline">
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Create Organization
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Stats Card */}
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/20">
+                <LayoutDashboard className="h-5 w-5 text-green-600 dark:text-green-400" />
+              </div>
+              <Heading level={3}>Quick Access</Heading>
+            </div>
+            <BodyText muted className="mb-4">
+              Shortcuts to frequently used actions
+            </BodyText>
+            <div className="space-y-2">
+              <Link href="/creator/campaigns" className="block">
+                <Button className="w-full" variant="outline">
+                  View All Campaigns
+                </Button>
+              </Link>
+              <Link href="/wallet" className="block">
+                <Button className="w-full" variant="outline">
+                  Manage Wallet
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

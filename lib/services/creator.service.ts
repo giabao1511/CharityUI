@@ -12,219 +12,11 @@
  * Note: Milestones are not yet implemented in the backend and use simulated responses
  */
 
-import { apiClient, API_ENDPOINTS } from "@/lib/api-config";
-import type {
-  CreatorStats,
-  CreatorCampaignItem,
-  ActivityItem,
-  VolunteerRegistration,
-} from "@/types/creator";
+import { API_ENDPOINTS, apiClient } from "@/lib/api-config";
 import type { UpdateCampaignRequest } from "@/types/campaign";
-
-/**
- * Get creator dashboard statistics
- * Aggregates data from user's campaigns using existing endpoints
- */
-export async function getCreatorStats(): Promise<CreatorStats> {
-  try {
-    // Fetch all user's campaigns
-    const { campaigns } = await getCreatorCampaigns({ limit: 1000 });
-
-    // Calculate stats from campaigns
-    const totalCampaigns = campaigns.length;
-    const activeCampaigns = campaigns.filter((c) => c.status === 1).length;
-    const totalRaised = campaigns.reduce(
-      (sum, c) => sum + (c.currentAmount || 0),
-      0
-    );
-    const totalBackers = campaigns.reduce(
-      (sum, c) => sum + (c.backersCount || 0),
-      0
-    );
-
-    return {
-      totalRaised,
-      activeCampaignsCount: activeCampaigns,
-      totalVolunteers: campaigns.reduce(
-        (sum, c) => sum + (c.volunteersCount || 0),
-        0
-      ),
-      totalDonations: totalBackers, // Using backers count as donation count
-      totalBackers,
-    };
-  } catch (error) {
-    console.error("Error getting creator stats:", error);
-    // Return empty stats on error
-    return {
-      totalRaised: 0,
-      activeCampaignsCount: 0,
-      totalVolunteers: 0,
-      totalDonations: 0,
-      totalBackers: 0,
-    };
-  }
-}
-
-/**
- * Get campaigns owned/managed by the creator
- * Uses existing CAMPAIGNS API endpoint
- */
-export async function getCreatorCampaigns(filters?: {
-  status?: number;
-  page?: number;
-  limit?: number;
-  search?: string;
-}): Promise<{
-  campaigns: CreatorCampaignItem[];
-  pagination?: { page: number; limit: number; total: number };
-}> {
-  const queryParams = new URLSearchParams();
-
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        queryParams.append(key, String(value));
-      }
-    });
-  }
-
-  // Use existing campaigns list endpoint
-  const url = `${API_ENDPOINTS.CAMPAIGNS.LIST}${
-    queryParams.toString() ? `?${queryParams.toString()}` : ""
-  }`;
-
-  const result = await apiClient<any>(url);
-
-  if (result.error) {
-    throw new Error(result.error.message);
-  }
-
-  // Handle nested data structure
-  const campaigns =
-    result.data?.data || result.data?.funds || result.data || [];
-
-  // Transform to CreatorCampaignItem format
-  const transformedCampaigns: CreatorCampaignItem[] = campaigns.map(
-    (campaign: any) => ({
-      fundId: campaign.fundId || campaign.id,
-      fundName: campaign.fundName || campaign.name,
-      bannerUrl: campaign.bannerUrl || campaign.imageUrl || "",
-      status: campaign.status || 1,
-      statusName: campaign.statusName || "Active",
-      targetAmount: campaign.targetAmount || campaign.goalAmount || 0,
-      currentAmount: campaign.currentAmount || 0,
-      startDate: campaign.startDate || "",
-      endDate: campaign.endDate || "",
-      backersCount: campaign.backersCount || campaign.backers || 0,
-      volunteersCount: campaign.volunteersCount || 0,
-      createdAt: campaign.createdAt || new Date().toISOString(),
-      updatedAt: campaign.updatedAt || new Date().toISOString(),
-    })
-  );
-
-  return {
-    campaigns: transformedCampaigns,
-    pagination: result.pagination,
-  };
-}
-
-/**
- * Get recent activity for creator's campaigns
- * Aggregates activity from donations across all campaigns
- */
-export async function getCreatorActivity(filters?: {
-  campaignId?: number;
-  type?: string;
-  page?: number;
-  limit?: number;
-}): Promise<{
-  activities: ActivityItem[];
-  pagination?: { page: number; limit: number; total: number };
-}> {
-  try {
-    const activities: ActivityItem[] = [];
-
-    // Get creator's campaigns
-    const { campaigns } = await getCreatorCampaigns({ limit: 1000 });
-
-    // Filter by specific campaign if provided
-    const campaignsToFetch = filters?.campaignId
-      ? campaigns.filter((c) => c.fundId === filters.campaignId)
-      : campaigns.slice(0, 10); // Fetch donations for up to 10 campaigns to avoid overload
-
-    // Fetch donations for each campaign and convert to activity items
-    for (const campaign of campaignsToFetch) {
-      try {
-        const { getCreatorCampaignDonations } = await import(
-          "./donation.service"
-        );
-        const donationsResult = await getCreatorCampaignDonations(
-          campaign.fundId,
-          {
-            limit: 20, // Get recent 20 donations per campaign
-          }
-        );
-
-        // Convert donations to activity items
-        const donationActivities: ActivityItem[] = (
-          donationsResult.data || []
-        ).map((donation: any) => ({
-          id: `donation-${donation.donationId}`,
-          type: "donation" as const,
-          campaignId: campaign.fundId,
-          campaignName: campaign.fundName,
-          description: `New donation of ${donation.amount}`,
-          userName: donation.isAnonymous
-            ? "Anonymous"
-            : donation.fullName || "Anonymous",
-          amount: parseFloat(donation.amount),
-          timestamp: donation.donateDate,
-        }));
-
-        activities.push(...donationActivities);
-      } catch (error) {
-        console.error(
-          `Error fetching donations for campaign ${campaign.fundId}:`,
-          error
-        );
-      }
-    }
-
-    // Sort by timestamp (most recent first)
-    activities.sort(
-      (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
-
-    // Apply type filter
-    let filteredActivities = activities;
-    if (filters?.type) {
-      filteredActivities = activities.filter((a) => a.type === filters.type);
-    }
-
-    // Apply pagination
-    const page = filters?.page || 1;
-    const limit = filters?.limit || 20;
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginatedActivities = filteredActivities.slice(start, end);
-
-    return {
-      activities: paginatedActivities,
-      pagination: {
-        page,
-        limit,
-        total: filteredActivities.length,
-      },
-    };
-  } catch (error) {
-    console.error("Error getting creator activity:", error);
-    return {
-      activities: [],
-      pagination: { page: 1, limit: 20, total: 0 },
-    };
-  }
-}
+import type { VolunteerRegistration } from "@/types/creator";
+import type { OrganizationListItem } from "@/types/organization";
+import { Volunteer } from "@/types/fund";
 
 /**
  * Helper function to map API volunteer status ID to our status string
@@ -250,7 +42,6 @@ function mapStatusToId(status: VolunteerRegistration["status"]): number {
     case "pending":
       return 1;
     case "active":
-    case "approved": // Map approved to active in API
       return 2;
     case "rejected":
       return 3;
@@ -278,6 +69,34 @@ function transformApiVolunteer(apiVolunteer: any): VolunteerRegistration {
 }
 
 /**
+ * Transform API volunteer response to Volunteer type (from fund.ts)
+ */
+function transformApiVolunteerToVolunteer(apiVolunteer: any): Volunteer {
+  return {
+    registrationId: apiVolunteer.registrationId,
+    campaignId: apiVolunteer.campaignId,
+    registeredAt: new Date(apiVolunteer.registeredAt),
+    createdAt: new Date(apiVolunteer.createdAt),
+    updatedAt: new Date(apiVolunteer.updatedAt),
+    userInfo: {
+      userId: apiVolunteer.userInfo.userId,
+      firstName: apiVolunteer.userInfo.firstName,
+      lastName: apiVolunteer.userInfo.lastName,
+      email: apiVolunteer.userInfo.email,
+    },
+    status: {
+      volunteerStatusId: apiVolunteer.status.volunteerStatusId,
+      statusName: apiVolunteer.status.statusName,
+    },
+    volunteerId: apiVolunteer.registrationId,
+    userName: `${apiVolunteer.userInfo.firstName} ${apiVolunteer.userInfo.lastName}`,
+    userEmail: apiVolunteer.userInfo.email,
+    skills: apiVolunteer.skills || [],
+    availability: apiVolunteer.availability || "",
+  };
+}
+
+/**
  * Get volunteers for a specific campaign
  * Uses REAL API: GET /v1/volunteers/:campaignId
  */
@@ -289,7 +108,7 @@ export async function getCampaignVolunteers(
     limit?: number;
   }
 ): Promise<{
-  volunteers: VolunteerRegistration[];
+  volunteers: Volunteer[];
   pagination?: { page: number; limit: number; total: number };
 }> {
   try {
@@ -308,14 +127,16 @@ export async function getCampaignVolunteers(
       throw new Error(result.error.message);
     }
 
-    // Transform API response to our VolunteerRegistration type
-    const apiVolunteers = result.data || [];
-    let volunteers = apiVolunteers.map(transformApiVolunteer);
+    // Transform API response to Volunteer type
+    let volunteers = result.data || [];
 
     // Apply status filter client-side if provided
     if (filters?.status) {
+      const statusId = mapStatusToId(
+        filters.status as VolunteerRegistration["status"]
+      );
       volunteers = volunteers.filter(
-        (v: VolunteerRegistration) => v.status === filters.status
+        (v: Volunteer) => v.status.volunteerStatusId === statusId
       );
     }
 
@@ -648,6 +469,52 @@ export async function getCampaignUpdates(
     console.error("Error getting campaign updates:", error);
     return {
       updates: [],
+      pagination: { page: 1, limit: 10, total: 0 },
+    };
+  }
+}
+
+/**
+ * Get organizations by user ID with pagination
+ * Uses REAL API: GET /v1/organizations/?page=1&limit=10&userId=2
+ */
+export async function getOrganizationsByUserId(
+  userId: string | number,
+  filters?: {
+    page?: number;
+    limit?: number;
+  }
+): Promise<{
+  organizations: OrganizationListItem[];
+  pagination?: { page: number; limit: number; total: number };
+}> {
+  try {
+    // Build query parameters
+    const queryParams = new URLSearchParams();
+    queryParams.append("userId", String(userId));
+    if (filters?.page) queryParams.append("page", String(filters.page));
+    if (filters?.limit) queryParams.append("limit", String(filters.limit));
+
+    const url = `${API_ENDPOINTS.ORGANIZATIONS.LIST}?${queryParams.toString()}`;
+
+    const result = await apiClient<OrganizationListItem[]>(url);
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
+    return {
+      organizations: result.data || [],
+      pagination: result.pagination || {
+        page: filters?.page || 1,
+        limit: filters?.limit || 10,
+        total: result.data?.length || 0,
+      },
+    };
+  } catch (error) {
+    console.error("Error getting organizations by userId:", error);
+    return {
+      organizations: [],
       pagination: { page: 1, limit: 10, total: 0 },
     };
   }

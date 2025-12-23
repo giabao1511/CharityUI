@@ -1,28 +1,34 @@
-import { CampaignRewardSection } from "@/components/campaigns/campaign-reward-section";
+import { CampaignBannerSlideshow } from "@/components/campaigns/campaign-banner-slideshow";
 import { CampaignTabs } from "@/components/campaigns/campaign-tabs";
 import { ContributionSidebar } from "@/components/campaigns/contribution-sidebar";
-import { CampaignBannerSlideshow } from "@/components/campaigns/campaign-banner-slideshow";
 import { ReportDialog } from "@/components/campaigns/report-dialog";
 import { BodyText, Heading } from "@/components/ui/typography";
-import { campaignToMockFormat } from "@/lib/adapters/campaign-adapter";
-import { mockCampaigns } from "@/lib/data";
+import { Link } from "@/i18n/navigation";
 import { getCampaignById } from "@/lib/services/campaign.service";
 import { getCampaignVolunteers } from "@/lib/services/creator.service";
 import { getCampaignDonations } from "@/lib/services/donation.service";
-import type { Fund, Donation } from "@/types";
+import type { Donation } from "@/types";
+import { CampaignItem, Volunteer } from "@/types/fund";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Link } from "@/i18n/navigation";
 
 export default async function CampaignDetailPage({
   params,
 }: {
-  readonly params: Promise<{ slug: string; locale: string }>;
+  readonly params: Promise<{ id: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { id } = await params;
   const t = await getTranslations("campaigns");
 
-  let campaign: Fund | null = null;
+  let campaign: CampaignItem | null = null;
+  let volunteers: {
+    volunteers: Volunteer[];
+    pagination?: {
+      page: number;
+      limit: number;
+      total: number;
+    };
+  } | null = null;
   let donations: Donation[] = [];
   let totalDonations = 0;
   let error = null;
@@ -30,21 +36,19 @@ export default async function CampaignDetailPage({
   // Try to fetch from API using the slug as campaign ID
   try {
     // Fetch campaign, volunteers, and donations in parallel (first page only)
-    const [apiCampaign, volunteersData, donationsData] = await Promise.all([
-      getCampaignById(slug),
-      getCampaignVolunteers(slug),
-      getCampaignDonations(slug, { page: 1, limit: 10 }),
+    const [detailCampaign, volunteersData, donationsData] = await Promise.all([
+      getCampaignById(id),
+      getCampaignVolunteers(id),
+      getCampaignDonations(id, { page: 1, limit: 10 }),
     ]);
 
-    campaign = campaignToMockFormat(apiCampaign, volunteersData.volunteers);
+    volunteers = volunteersData;
+    campaign = detailCampaign;
     donations = donationsData.data || [];
     totalDonations = donationsData.pagination?.total || 0;
   } catch (err) {
     error = err instanceof Error ? err.message : "Failed to load campaign";
     console.error("Error fetching campaign from API:", err);
-
-    // Fallback to mock data if API fails
-    campaign = mockCampaigns.find((c) => c.slug === slug) || null;
   }
 
   if (!campaign) {
@@ -52,7 +56,7 @@ export default async function CampaignDetailPage({
   }
 
   const percentageFunded = Math.round(
-    (campaign.currentAmount / campaign.goalAmount) * 100
+    (campaign.currentAmount / campaign.targetAmount) * 100
   );
   const daysLeft = Math.ceil(
     (new Date(campaign.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
@@ -73,10 +77,10 @@ export default async function CampaignDetailPage({
       <div className="mb-8">
         <div className="flex items-center justify-between gap-4 mb-2">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>{campaign.category}</span>
+            <span>{campaign.category.categoryName}</span>
           </div>
           <ReportDialog
-            campaignId={parseInt(campaign.id)}
+            campaignId={parseInt(String(campaign.campaignId))}
             campaignTitle={campaign.title}
           />
         </div>
@@ -84,21 +88,17 @@ export default async function CampaignDetailPage({
           {campaign.title}
         </Heading>
         <BodyText size="xl" muted>
-          {campaign.shortDescription}
+          {campaign.description}
         </BodyText>
         <div className="mt-4 text-sm text-muted-foreground">
           {t("card.by")}{" "}
-          {campaign.organization ? (
+          {campaign.organization && (
             <Link
               href={`/organizations/${campaign.organization.orgId}`}
               className="font-medium text-foreground hover:text-primary transition-colors hover:underline"
             >
-              {campaign.creator}
+              {campaign.organization.orgName}
             </Link>
-          ) : (
-            <span className="font-medium text-foreground">
-              {campaign.creator}
-            </span>
           )}
         </div>
       </div>
@@ -107,47 +107,16 @@ export default async function CampaignDetailPage({
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
           {/* Campaign Banner Slideshow */}
-          {campaign.mediaUrls && campaign.mediaUrls.length > 0 ? (
+          {campaign.media && campaign.media.length > 0 && (
             <CampaignBannerSlideshow
-              images={campaign.mediaUrls}
+              images={campaign.media.map((item) => item.url)}
               alt={campaign.title}
             />
-          ) : campaign.imageUrl ? (
-            <div className="aspect-video w-full overflow-hidden rounded-lg">
-              <img
-                src={campaign.imageUrl}
-                alt={campaign.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ) : campaign.videoUrl ? (
-            <div className="aspect-video w-full overflow-hidden rounded-lg">
-              <iframe
-                src={campaign.videoUrl}
-                title={campaign.title}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          ) : (
-            <div
-              className="aspect-video w-full overflow-hidden rounded-lg bg-muted"
-              aria-hidden="true"
-            >
-              <div className="h-full w-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <span className="text-muted-foreground">{t("card.image")}</span>
-              </div>
-            </div>
-          )}
-
-          {/* Reward Tiers - Only show if campaign has rewards */}
-          {campaign.rewardTiers && campaign.rewardTiers.length > 0 && (
-            <CampaignRewardSection rewardTiers={campaign.rewardTiers} />
           )}
 
           {/* Campaign Tabs - Client Component */}
           <CampaignTabs
+            volunteers={volunteers!}
             campaign={campaign}
             initialDonations={donations}
             totalDonations={totalDonations}
@@ -156,13 +125,11 @@ export default async function CampaignDetailPage({
 
         {/* Sidebar - Client Component */}
         <ContributionSidebar
-          campaignId={campaign.id}
-          goalAmount={campaign.goalAmount}
+          campaignId={campaign.campaignId}
+          goalAmount={campaign.targetAmount}
           currentAmount={campaign.currentAmount}
-          backers={campaign.backers}
           daysLeft={daysLeft}
           percentageFunded={percentageFunded}
-          rewardTiers={campaign.rewardTiers}
         />
       </div>
     </div>

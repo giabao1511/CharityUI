@@ -3,15 +3,18 @@
 import { useState, useMemo } from "react";
 import { CampaignCard } from "@/components/campaigns/campaign-card";
 import { CampaignFilters } from "@/components/campaigns/campaign-filters";
-import { Fund } from "@/types";
 import { BodyText } from "@/components/ui/typography";
+import { CampaignItem } from "@/types/fund";
 
 interface CampaignListClientProps {
-  campaigns: Fund[];
+  campaigns: CampaignItem[];
   categories: string[];
 }
 
-export function CampaignListClient({ campaigns, categories }: CampaignListClientProps) {
+export function CampaignListClient({
+  campaigns,
+  categories,
+}: CampaignListClientProps) {
   const [filters, setFilters] = useState({
     searchQuery: "",
     selectedCategory: "All Categories",
@@ -22,12 +25,16 @@ export function CampaignListClient({ campaigns, categories }: CampaignListClient
     // Filter campaigns
     let filtered = campaigns.filter((campaign) => {
       const matchesSearch =
-        campaign.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-        campaign.shortDescription.toLowerCase().includes(filters.searchQuery.toLowerCase());
+        campaign.title
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase()) ||
+        campaign.description
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase());
 
       const matchesCategory =
         filters.selectedCategory === "All Categories" ||
-        campaign.category === filters.selectedCategory;
+        campaign.category.categoryName === filters.selectedCategory;
 
       return matchesSearch && matchesCategory;
     });
@@ -36,11 +43,11 @@ export function CampaignListClient({ campaigns, categories }: CampaignListClient
     return [...filtered].sort((a, b) => {
       switch (filters.sortBy) {
         case "recent":
-          return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+          return (
+            new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+          );
         case "mostFunded":
           return b.currentAmount - a.currentAmount;
-        case "trending":
-          return b.backers - a.backers;
         case "endingSoon":
           return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
         default:
@@ -57,7 +64,8 @@ export function CampaignListClient({ campaigns, categories }: CampaignListClient
 
         {/* Results Count */}
         <div className="text-sm text-muted-foreground">
-          Showing {filteredAndSortedCampaigns.length} of {campaigns.length} campaigns
+          Showing {filteredAndSortedCampaigns.length} of {campaigns.length}{" "}
+          campaigns
         </div>
       </div>
 
@@ -65,7 +73,7 @@ export function CampaignListClient({ campaigns, categories }: CampaignListClient
       {filteredAndSortedCampaigns.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredAndSortedCampaigns.map((campaign) => (
-            <CampaignCard key={campaign.id} campaign={campaign} />
+            <CampaignCard key={campaign.campaignId} campaign={campaign} />
           ))}
         </div>
       ) : (

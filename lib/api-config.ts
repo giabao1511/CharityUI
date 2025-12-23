@@ -50,9 +50,9 @@ export const API_ENDPOINTS = {
     DETAIL: (campaignId: string | number) =>
       `${API_BASE_URL}/v1/campaigns/detail/${campaignId}`,
     UPDATE: (campaignId: string | number) =>
-      `${API_BASE_URL}/v1/fund-charity/${campaignId}`,
+      `${API_BASE_URL}/v1/campaigns/detail/${campaignId}`,
     UPLOAD_BANNER: `${API_BASE_URL}/v1/fund-charity/upload-banner`,
-    UPLOAD_MEDIA: `${API_BASE_URL}/v1/fund-charity/upload-media`,
+    UPLOAD_MEDIA: `${API_BASE_URL}/v1/campaigns/upload-media`,
   },
   // Legacy alias for backward compatibility (funds = campaigns)
   FUNDS: {
@@ -123,6 +123,19 @@ export const API_ENDPOINTS = {
     // Get wallet detail by wallet ID
     DETAIL: (walletId: string | number) =>
       `${API_BASE_URL}/v1/wallets/detail/${walletId}`,
+  },
+  // Withdrawal endpoints
+  WITHDRAWALS: {
+    // Create withdrawal request
+    CREATE: `${API_BASE_URL}/v1/withdrawals`,
+    // Get withdrawals list with filters
+    LIST: `${API_BASE_URL}/v1/withdrawals`,
+    // Approve withdrawal request
+    APPROVE: (withdrawalId: string | number) =>
+      `${API_BASE_URL}/v1/withdrawals/${withdrawalId}/approved`,
+    // Reject withdrawal request
+    REJECT: (withdrawalId: string | number) =>
+      `${API_BASE_URL}/v1/withdrawals/${withdrawalId}/rejected`,
   },
   // Admin endpoints (using existing user/org endpoints)
   ADMIN: {

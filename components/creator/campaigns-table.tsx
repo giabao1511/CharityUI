@@ -12,13 +12,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CampaignStatus, formatCampaignAmount } from "@/types/campaign";
-import type { CreatorCampaignItem } from "@/types/creator";
-import { Eye, Target, Users } from "lucide-react";
+import { CampaignItem } from "@/types/fund";
+import { Edit, Eye, Target, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 interface CampaignsTableProps {
-  readonly campaigns: CreatorCampaignItem[];
+  readonly campaigns: CampaignItem[];
 }
 
 export function CampaignsTable({ campaigns }: CampaignsTableProps) {
@@ -44,7 +44,7 @@ export function CampaignsTable({ campaigns }: CampaignsTableProps) {
     return Math.min(100, Math.round((current / target) * 100));
   };
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: string | Date): string => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
@@ -73,10 +73,6 @@ export function CampaignsTable({ campaigns }: CampaignsTableProps) {
             <TableHead>{t("table.campaign")}</TableHead>
             <TableHead>{t("table.status")}</TableHead>
             <TableHead>{t("table.raised")}</TableHead>
-            <TableHead className="text-center">{t("table.backers")}</TableHead>
-            <TableHead className="text-center">
-              {t("table.volunteers")}
-            </TableHead>
             <TableHead>{t("table.endDate")}</TableHead>
             <TableHead className="text-right">{t("table.actions")}</TableHead>
           </TableRow>
@@ -89,18 +85,22 @@ export function CampaignsTable({ campaigns }: CampaignsTableProps) {
             );
 
             return (
-              <TableRow key={campaign.fundId}>
+              <TableRow key={campaign.campaignId}>
                 <TableCell className="font-medium max-w-xs">
                   <div className="space-y-1">
-                    <div className="font-semibold">{campaign.fundName}</div>
+                    <div className="font-semibold">{campaign.title}</div>
                     <div className="text-xs text-muted-foreground">
-                      ID: {campaign.fundId}
+                      ID: {campaign.campaignId}
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={getStatusBadgeVariant(campaign.status)}>
-                    {campaign.statusName}
+                  <Badge
+                    variant={getStatusBadgeVariant(
+                      campaign.status.campaignStatusId
+                    )}
+                  >
+                    {campaign.status.statusName}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -119,31 +119,21 @@ export function CampaignsTable({ campaigns }: CampaignsTableProps) {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-center">
-                  <div className="flex flex-col items-center">
-                    <span className="font-semibold">
-                      {campaign.backersCount.toLocaleString()}
-                    </span>
-                    <Users className="h-3 w-3 text-muted-foreground mt-1" />
-                  </div>
-                </TableCell>
-                <TableCell className="text-center">
-                  <div className="flex flex-col items-center">
-                    <span className="font-semibold">
-                      {campaign.volunteersCount}
-                    </span>
-                    <Users className="h-3 w-3 text-muted-foreground mt-1" />
-                  </div>
-                </TableCell>
                 <TableCell>
                   <div className="text-sm">{formatDate(campaign.endDate)}</div>
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <Link href={`/creator/campaigns/${campaign.fundId}`}>
+                    <Link href={`/creator/campaigns/${campaign.campaignId}`}>
                       <Button size="sm" variant="outline">
                         <Eye className="h-4 w-4 mr-1" />
                         {t("table.manage")}
+                      </Button>
+                    </Link>
+                    <Link href={`/creator/campaigns/${campaign.campaignId}/edit`}>
+                      <Button size="sm" variant="default">
+                        <Edit className="h-4 w-4 mr-1" />
+                        Edit
                       </Button>
                     </Link>
                   </div>

@@ -1,11 +1,11 @@
 /**
  * LEGACY MOCK TYPES - FOR DEMONSTRATION PURPOSES ONLY
- * 
+ *
  * These types represent the old mock data structure used for UI demos.
  * For actual API integration, use the types from './fund.ts' instead.
- * 
+ *
  * @deprecated Use Fund types from './fund.ts' for real API integration
- * 
+ *
  * Relationship:
  * - Mock "Campaign" → Real "Fund" (from API)
  * - Mock "Milestone" → Real "Milestone" (from API)
@@ -125,38 +125,6 @@ export interface ContributionHistory {
   status: "completed" | "pending" | "shipped";
 }
 
-export interface Fund {
-  id: string;
-  slug: string;
-  title: string;
-  shortDescription: string;
-  fullDescription: string;
-  creator: string;
-  category: string;
-  goalAmount: number;
-  currentAmount: number;
-  currency: string;
-  imageUrl: string;
-  mediaUrls: string[];
-  videoUrl?: string;
-  startDate: string;
-  endDate: string;
-  status: "active" | "completed" | "cancelled";
-  backers: number;
-  milestones: Milestone[];
-  updates: CampaignUpdate[];
-  rewardTiers: RewardTier[];
-  contributors: Contributor[];
-  volunteers: Volunteer[];
-  comments: CommentLegacy[]; // Using legacy comment type for mock data
-  // Organization info (from API)
-  organization?: {
-    orgId: number;
-    orgName: string;
-    avatar?: string;
-  };
-}
-
 export interface CampaignUpdate {
   id: string;
   title: string;
@@ -212,3 +180,6 @@ export interface Report {
 
 // Export wallet types
 export * from "./wallet";
+
+// Export withdrawal types
+export * from "./withdrawal";

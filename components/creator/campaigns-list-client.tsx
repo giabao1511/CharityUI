@@ -1,21 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { CampaignsTable } from "@/components/creator/campaigns-table";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Pagination } from "@/components/ui/pagination";
 import { useAuth } from "@/lib/auth-context";
 import { getCampaigns } from "@/lib/services/campaign.service";
-import { campaignListToCreatorItems } from "@/lib/adapters/campaign-adapter";
-import { CampaignsTable } from "@/components/creator/campaigns-table";
-import type { CreatorCampaignItem } from "@/types/creator";
-import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CampaignItem } from "@/types/fund";
+import { AlertCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+const ITEMS_PER_PAGE = 10;
 
 export function CampaignsListClient() {
   const { user } = useAuth();
-  const [campaigns, setCampaigns] = useState<CreatorCampaignItem[]>([]);
+  const [campaigns, setCampaigns] = useState<CampaignItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     async function loadCampaigns() {
@@ -29,31 +34,38 @@ export function CampaignsListClient() {
       try {
         setLoading(true);
         setError(null);
-        setCampaigns([]); // Clear old data when refetching
 
-        // Fetch all campaigns
-        // TODO: Add filter for campaigns owned by current user when backend supports it
-        const response = await getCampaigns({
-          page: 1,
-          limit: 100,
+        // Fetch campaigns with pagination filtered by userId
+        const campaignsList = await getCampaigns({
+          page: currentPage,
+          limit: ITEMS_PER_PAGE,
+          userId: user.userId,
         });
 
-        console.log("Campaigns API Response:", response);
+        console.log("Campaigns API Response:", campaignsList);
 
         // Convert to CreatorCampaignItem format
-        if (response.funds && Array.isArray(response.funds)) {
-          const creatorCampaigns = campaignListToCreatorItems(response.funds);
-          setCampaigns(creatorCampaigns);
+        if (campaignsList.campaigns && Array.isArray(campaignsList.campaigns)) {
+          setCampaigns(campaignsList.campaigns);
+
+          // Set pagination info
+          if (campaignsList.pagination) {
+            setTotalItems(campaignsList.pagination.total || 0);
+            setTotalPages(
+              Math.ceil((campaignsList.pagination.total || 0) / ITEMS_PER_PAGE)
+            );
+          }
         } else {
-          console.warn("Unexpected campaigns response structure:", response);
+          console.warn(
+            "Unexpected campaigns response structure:",
+            campaignsList
+          );
           setCampaigns([]);
         }
       } catch (error) {
         console.error("Error loading campaigns:", error);
         setError(
-          error instanceof Error
-            ? error.message
-            : "Failed to load campaigns"
+          error instanceof Error ? error.message : "Failed to load campaigns"
         );
       } finally {
         setLoading(false);
@@ -61,7 +73,7 @@ export function CampaignsListClient() {
     }
 
     loadCampaigns();
-  }, [user]);
+  }, [user, currentPage]);
 
   // Loading state
   if (loading) {
@@ -86,10 +98,10 @@ export function CampaignsListClient() {
         <CardContent className="pt-6">
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <AlertCircle className="h-12 w-12 text-red-600 dark:text-red-400 mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Error Loading Campaigns</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              {error}
-            </p>
+            <h3 className="text-lg font-semibold mb-2">
+              Error Loading Campaigns
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">{error}</p>
             <div className="flex gap-3">
               {!user && (
                 <Button asChild>
@@ -109,6 +121,22 @@ export function CampaignsListClient() {
     );
   }
 
-  // Success state - render the table
-  return <CampaignsTable campaigns={campaigns} />;
+  // Success state - render the table with pagination
+  return (
+    <div className="space-y-4">
+      <CampaignsTable campaigns={campaigns} />
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+      {totalItems > 0 && (
+        <p className="text-sm text-muted-foreground text-center">
+          Showing {campaigns.length} of {totalItems} campaigns
+        </p>
+      )}
+    </div>
+  );
 }

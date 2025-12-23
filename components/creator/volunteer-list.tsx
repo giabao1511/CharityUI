@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -12,40 +12,43 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { VolunteerRegistration } from "@/types/creator";
 import { Users, Mail, Calendar, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { updateVolunteerStatus } from "@/lib/services/creator.service";
+import { Volunteer } from "@/types/fund";
 
 interface VolunteerListProps {
-  readonly volunteers: VolunteerRegistration[];
+  readonly volunteers: Volunteer[];
   readonly campaignId: number;
+  readonly onUpdate?: () => void;
 }
 
 export function VolunteerList({
   volunteers,
   campaignId,
+  onUpdate,
 }: VolunteerListProps) {
   const t = useTranslations("creator.volunteers");
   const [volunteerList, setVolunteerList] =
-    useState<VolunteerRegistration[]>(volunteers);
+    useState<Volunteer[]>(volunteers);
   const [loadingStates, setLoadingStates] = useState<Record<number, boolean>>({});
 
+  // Sync with incoming volunteers prop
+  useEffect(() => {
+    setVolunteerList(volunteers);
+  }, [volunteers]);
+
   const getStatusBadgeVariant = (
-    status: VolunteerRegistration["status"]
+    status: Volunteer["status"]
   ) => {
-    switch (status) {
-      case "active":
+    switch (status.volunteerStatusId) {
+      case 2: // active
         return "default";
-      case "approved":
-        return "secondary";
-      case "pending":
+      case 1: // pending
         return "outline";
-      case "rejected":
+      case 3: // rejected
         return "destructive";
-      case "inactive":
-        return "secondary";
       default:
         return "outline";
     }
@@ -53,22 +56,38 @@ export function VolunteerList({
 
   const handleStatusUpdate = async (
     volunteerId: number,
-    newStatus: VolunteerRegistration["status"],
+    statusId: 1 | 2 | 3,
+    statusName: string,
     successMessage: string
   ) => {
     setLoadingStates((prev) => ({ ...prev, [volunteerId]: true }));
 
     try {
+      // Map status ID to status string for the API
+      const statusString = statusId === 1 ? "pending" : statusId === 2 ? "active" : "rejected";
+
       // Call the API to update volunteer status
-      await updateVolunteerStatus(volunteerId, newStatus);
+      await updateVolunteerStatus(volunteerId, statusString);
 
       // Update local state on success
+      const newStatus: Volunteer["status"] = {
+        volunteerStatusId: statusId,
+        statusName: statusName
+      };
+
       setVolunteerList((prev) =>
         prev.map((v) =>
-          v.volunteerId === volunteerId ? { ...v, status: newStatus } : v
+          v.registrationId === volunteerId
+            ? { ...v, status: newStatus }
+            : v
         )
       );
       toast.success(successMessage);
+
+      // Call onUpdate callback if provided
+      if (onUpdate) {
+        onUpdate();
+      }
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to update status"
@@ -79,19 +98,15 @@ export function VolunteerList({
   };
 
   const handleApprove = (volunteerId: number) => {
-    handleStatusUpdate(volunteerId, "approved", t("approved"));
+    handleStatusUpdate(volunteerId, 2, "Active", t("approved"));
   };
 
   const handleReject = (volunteerId: number) => {
-    handleStatusUpdate(volunteerId, "rejected", t("rejected"));
+    handleStatusUpdate(volunteerId, 3, "Rejected", t("rejected"));
   };
 
-  const handleActivate = (volunteerId: number) => {
-    handleStatusUpdate(volunteerId, "active", t("statusUpdated"));
-  };
-
-  const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+  const formatDate = (date: Date | string): string => {
+    return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -157,7 +172,7 @@ export function VolunteerList({
                         variant={getStatusBadgeVariant(volunteer.status)}
                         className="capitalize"
                       >
-                        {t(`status.${volunteer.status}`)}
+                        {volunteer.status.statusName}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -184,7 +199,7 @@ export function VolunteerList({
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        {volunteer.status === "pending" && (
+                        {volunteer.status.volunteerStatusId === 1 && (
                           <>
                             <Button
                               size="sm"
@@ -216,26 +231,10 @@ export function VolunteerList({
                             </Button>
                           </>
                         )}
-                        {volunteer.status === "approved" && (
-                          <Button
-                            size="sm"
-                            variant="default"
-                            onClick={() => handleActivate(volunteer.volunteerId)}
-                            disabled={loadingStates[volunteer.volunteerId]}
-                          >
-                            {loadingStates[volunteer.volunteerId] ? (
-                              <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                            ) : (
-                              <CheckCircle className="h-4 w-4 mr-1" />
-                            )}
-                            {t("actions.activate")}
-                          </Button>
-                        )}
-                        {(volunteer.status === "active" ||
-                          volunteer.status === "rejected" ||
-                          volunteer.status === "inactive") && (
+                        {(volunteer.status.volunteerStatusId === 2 ||
+                          volunteer.status.volunteerStatusId === 3) && (
                           <Badge variant="outline" className="capitalize">
-                            {t(`status.${volunteer.status}`)}
+                            {volunteer.status.statusName}
                           </Badge>
                         )}
                       </div>

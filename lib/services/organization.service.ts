@@ -161,3 +161,32 @@ export async function uploadOrganizationMedia(files: File[]) {
 
   return result.data!.data;
 }
+
+/**
+ * Update organization media files (replaces existing media)
+ */
+export async function updateOrganizationMedia(files: File[]) {
+  const formData = new FormData();
+  files.forEach((file) => {
+    formData.append("files", file);
+  });
+
+  const result = await apiClient<{
+    data: Array<{
+      Location: string;
+      Key: string;
+      ETag: string;
+      Bucket: string;
+    }>;
+  }>(API_ENDPOINTS.ORGANIZATIONS.UPLOAD_MEDIA, {
+    method: "POST",
+    body: formData,
+    headers: {} as any,
+  });
+
+  if (result.error) {
+    throw new Error(result.error.message);
+  }
+
+  return result.data!.data;
+}

@@ -4,12 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { BodyText, Heading } from "@/components/ui/typography";
 import type { Organization } from "@/types/organization";
 import { Globe, Mail, MapPin, Phone, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface OrganizationHeaderProps {
   readonly organization: Organization;
 }
 
 export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
+  const t = useTranslations("organizations.detail");
   const statusName = organization.status?.orgStatusName;
   const isActive = organization.statusId === 2;
 
@@ -55,7 +57,7 @@ export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
           <div className="flex items-start gap-2">
             <MapPin className="w-5 h-5 mt-0.5 text-muted-foreground flex-shrink-0" />
             <div>
-              <p className="text-sm font-medium">Address</p>
+              <p className="text-sm font-medium">{t("address")}</p>
               <p className="text-sm text-muted-foreground">
                 {organization.address}
               </p>
@@ -67,7 +69,7 @@ export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
           <div className="flex items-start gap-2">
             <Mail className="w-5 h-5 mt-0.5 text-muted-foreground flex-shrink-0" />
             <div>
-              <p className="text-sm font-medium">Email</p>
+              <p className="text-sm font-medium">{t("email")}</p>
               <a
                 href={`mailto:${organization.email}`}
                 className="text-sm text-primary hover:underline"
@@ -82,7 +84,7 @@ export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
           <div className="flex items-start gap-2">
             <Phone className="w-5 h-5 mt-0.5 text-muted-foreground flex-shrink-0" />
             <div>
-              <p className="text-sm font-medium">Phone</p>
+              <p className="text-sm font-medium">{t("phone")}</p>
               <a
                 href={`tel:${organization.phoneNumber}`}
                 className="text-sm text-primary hover:underline"
@@ -97,7 +99,7 @@ export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
           <div className="flex items-start gap-2">
             <Globe className="w-5 h-5 mt-0.5 text-muted-foreground flex-shrink-0" />
             <div>
-              <p className="text-sm font-medium">Website</p>
+              <p className="text-sm font-medium">{t("website")}</p>
               <a
                 href={organization.website}
                 target="_blank"

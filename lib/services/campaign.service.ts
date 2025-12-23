@@ -4,13 +4,12 @@
  * Campaigns are managed by organizations
  */
 
-import { apiClient, API_ENDPOINTS } from "@/lib/api-config";
+import { API_ENDPOINTS, apiClient } from "@/lib/api-config";
 import type {
   Campaign,
-  CampaignListResponse,
+  CampaignCategory,
   CampaignQueryFilters,
   UpdateCampaignRequest,
-  CampaignCategory,
 } from "@/types/campaign";
 
 /**
@@ -38,32 +37,11 @@ export async function getCampaigns(filters?: CampaignQueryFilters) {
     throw new Error(result.error.message);
   }
 
-  console.log("API Response:", result.data);
-
-  // New API structure: { data: [...campaigns], pagination: {...} }
-  if (result.data && Array.isArray(result.data) && result.pagination) {
+  if (result.data) {
     return {
-      funds: result.data,
+      campaigns: result.data,
       pagination: result.pagination,
     };
-  }
-
-  // Handle nested data structure
-  if (result.data?.data && Array.isArray(result.data.data)) {
-    return {
-      funds: result.data.data,
-      pagination: result.data.pagination || result.pagination,
-    };
-  }
-
-  // Legacy structure: { data: { funds: [...], pagination: {...} } }
-  if (result.data?.data && "funds" in result.data.data) {
-    return result.data.data;
-  }
-
-  // Backend might return the data directly (with funds array)
-  if (result.data && "funds" in result.data) {
-    return result.data as unknown as CampaignListResponse;
   }
 
   throw new Error("Invalid response structure from API");
@@ -78,8 +56,6 @@ export async function getCampaignById(
   const result = await apiClient<any>(
     API_ENDPOINTS.CAMPAIGNS.DETAIL(campaignId)
   );
-
-  console.log("rsss", campaignId);
 
   if (result.error) {
     throw new Error(result.error.message);
@@ -136,7 +112,9 @@ export async function updateCampaign(
     throw new Error(result.error.message);
   }
 
-  return result.data!.data;
+  console.log(result)
+
+  return result;
 }
 
 /**

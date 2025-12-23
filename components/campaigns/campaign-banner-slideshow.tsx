@@ -10,7 +10,10 @@ interface CampaignBannerSlideshowProps {
   alt: string;
 }
 
-export function CampaignBannerSlideshow({ images, alt }: CampaignBannerSlideshowProps) {
+export function CampaignBannerSlideshow({
+  images,
+  alt,
+}: CampaignBannerSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Auto-advance slideshow every 5 seconds
@@ -44,14 +47,12 @@ export function CampaignBannerSlideshow({ images, alt }: CampaignBannerSlideshow
   if (images.length === 1) {
     return (
       <div className="aspect-video w-full overflow-hidden rounded-lg">
-        <img
-          src={images[0]}
-          alt={alt}
-          className="w-full h-full object-cover"
-        />
+        <img src={images[0]} alt={alt} className="w-full h-full object-cover" />
       </div>
     );
   }
+
+  console.log(images);
 
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-lg group">

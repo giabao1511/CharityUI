@@ -1,41 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { DonationsList } from "@/components/campaigns/donations-list";
+import { VolunteersListClient } from "@/components/creator/volunteers-list-client";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { BodyText, Heading } from "@/components/ui/typography";
 import { useAuth } from "@/lib/auth-context";
 import { getCampaignById } from "@/lib/services/campaign.service";
-import { getCampaignVolunteers } from "@/lib/services/creator.service";
 import {
-  getCreatorCampaignDonations,
   getAllCampaignDonations,
+  getCreatorCampaignDonations,
 } from "@/lib/services/donation.service";
 import { exportDonationsToCSV } from "@/lib/utils/csv-export";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { VolunteerList } from "@/components/creator/volunteer-list";
-import { DonationsList } from "@/components/campaigns/donations-list";
-import { Heading, BodyText } from "@/components/ui/typography";
-import {
-  formatCampaignAmount,
-  calculateCampaignProgress,
-  CampaignStatusNames,
-  CampaignStatus,
-} from "@/types/campaign";
-import type { VolunteerRegistration } from "@/types/creator";
 import type { Donation } from "@/types";
 import {
-  Loader2,
+  calculateCampaignProgress,
+  CampaignStatus,
+  CampaignStatusNames,
+  formatCampaignAmount,
+} from "@/types/campaign";
+import {
   AlertCircle,
+  ArrowLeft,
+  Calendar,
   DollarSign,
+  Download,
+  Loader2,
   Target,
   Users,
-  Calendar,
-  ArrowLeft,
-  Download,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface CampaignDetailClientProps {
@@ -46,9 +43,7 @@ export function CampaignDetailClient({
   campaignId,
 }: CampaignDetailClientProps) {
   const { user } = useAuth();
-  const router = useRouter();
   const [campaign, setCampaign] = useState<any>(null);
-  const [volunteers, setVolunteers] = useState<VolunteerRegistration[]>([]);
   const [donations, setDonations] = useState<Donation[]>([]);
   const [totalDonations, setTotalDonations] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -69,30 +64,24 @@ export function CampaignDetailClient({
         setError(null);
         // Clear old data when refetching
         setCampaign(null);
-        setVolunteers([]);
         setDonations([]);
         setTotalDonations(0);
 
-        // Fetch campaign details, volunteers, and donations in parallel (first page only)
-        const [campaignData, volunteersData, donationsData] = await Promise.all(
-          [
-            getCampaignById(campaignId),
-            getCampaignVolunteers(campaignId),
-            getCreatorCampaignDonations(campaignId, {
-              page: 1,
-              limit: 10,
-            }).catch(() => ({
-              data: [],
-              pagination: { total: 0, page: 1, limit: 10 },
-            })),
-          ]
-        );
+        // Fetch campaign details and donations in parallel (first page only)
+        const [campaignData, donationsData] = await Promise.all([
+          getCampaignById(campaignId),
+          getCreatorCampaignDonations(campaignId, {
+            page: 1,
+            limit: 10,
+          }).catch(() => ({
+            data: [],
+            pagination: { total: 0, page: 1, limit: 10 },
+          })),
+        ]);
 
         console.log("Campaign detail API response:", campaignData);
-        console.log("Volunteers API response:", volunteersData);
         console.log("Donations API response:", donationsData);
         setCampaign(campaignData);
-        setVolunteers(volunteersData.volunteers || []);
         setDonations(donationsData.data || []);
         setTotalDonations(donationsData.pagination?.total || 0);
       } catch (error) {
@@ -361,7 +350,7 @@ export function CampaignDetailClient({
         </Card>
 
         {/* Volunteer Management */}
-        <VolunteerList volunteers={volunteers} campaignId={id} />
+        <VolunteersListClient campaignId={id} />
       </div>
     </div>
   );
