@@ -92,6 +92,8 @@ export const API_ENDPOINTS = {
     // Mark notification as read
     MARK_READ: (notificationId: string | number) =>
       `${API_BASE_URL}/v1/notifications/${notificationId}/read`,
+    // Mark all notifications as read
+    MARK_ALL_READ: `${API_BASE_URL}/v1/notifications/read-all`,
   },
   // Comment endpoints
   COMMENTS: {
@@ -123,6 +125,11 @@ export const API_ENDPOINTS = {
     // Get wallet detail by wallet ID
     DETAIL: (walletId: string | number) =>
       `${API_BASE_URL}/v1/wallets/detail/${walletId}`,
+  },
+  // Transaction endpoints
+  TRANSACTIONS: {
+    // Get transactions with filters
+    LIST: `${API_BASE_URL}/v1/transactions`,
   },
   // Withdrawal endpoints
   WITHDRAWALS: {

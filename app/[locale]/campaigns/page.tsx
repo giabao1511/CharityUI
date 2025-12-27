@@ -26,7 +26,7 @@ export default async function CampaignsPage({
   const search = params.search || "";
   const sortBy = params.sortBy || "startDate";
   const sortOrder = params.sortOrder || "DESC";
-  const status = params.status ? parseInt(params.status) : undefined;
+  const status = params.status ? parseInt(params.status) : 1;
 
   // Fetch campaigns from the API with fallback to mock data
   let campaigns: CampaignItem[] = [];
@@ -88,7 +88,10 @@ export default async function CampaignsPage({
 
         {/* Results Count */}
         <div className="text-sm text-muted-foreground mt-4">
-          Showing {campaigns.length} of {totalCount} campaigns
+          {t("show", {
+            count: campaigns.length,
+            total: totalCount,
+          })}
         </div>
       </div>
 

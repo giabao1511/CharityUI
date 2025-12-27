@@ -179,6 +179,8 @@
     "saturday": "Saturday: 10:00 AM - 4:00 PM",
     "sunday": "Sunday: Closed",
     "form": {
+      "sendUsaMessage": "Send Us a Message",
+      "fillOut": "Fill out the form below and we'll get back to you as soon as possible.",
       "name": "Name",
       "namePlaceholder": "Your name",
       "email": "Email",
@@ -294,7 +296,19 @@
         "fraudulent": "The campaign is fraudulent or violates our terms",
         "failedRewards": "The creator fails to fulfil promised rewards",
         "cancelled": "The campaign is cancelled before funds are transferred",
-        "fees": "CharityHub charges a platform fee of 5% on all successful contributions, plus payment processing fees."
+        "fees": "CharityHub charges a platform fee of 5% on all successful contributions, plus payment processing fees.",
+        "successMessage": "Thank you for your generous donation! Your contribution will make a real difference.",
+        "successTitle": "Donation Successful",
+        "paymentVerificationFailed": "Payment Verification Failed",
+        "paymentFailedDesc": "Unable to verify your payment. Please contact support if you believe this is an error.",
+        "transactionId": "Transaction ID:",
+        "amount": "Amount:",
+        "bank": "Bank:",
+        "transactionNo": "Transaction No.:",
+        "message": "Message:",
+        "date": "Date:",
+        "backToHome": "Back to Home",
+        "exploreCampaigns": "Explore More Campaigns"
       },
       "ip": {
         "title": "5. Intellectual Property",
@@ -330,6 +344,7 @@
     "subtitle": "Discover and support fundraising campaigns from verified organizations",
     "search": "Search campaigns...",
     "searchPlaceholder": "Search by title or description",
+    "show": "Showing {count} of {total} campaigns",
     "filter": {
       "searchPlaceholder": "Search by name or description",
       "category": "Category",
@@ -376,7 +391,9 @@
       "enterAmount": "Enter amount",
       "backThisCampaign": "Back This Campaign",
       "selectedReward": "Selected Reward:",
-      "minimumContribution": "Enter the amount you would like to contribute (minimum $1)"
+      "minimumContribution": "Enter the amount you would like to contribute (minimum $1)",
+      "invalidAmount": "Invalid Amount",
+      "invalidAmountDesc": "Please enter a valid contribution amount."
     },
     "tabs": {
       "description": "Description & Updates",
@@ -882,18 +899,46 @@
       "approveSuccess": "Withdrawal approved successfully",
       "rejectSuccess": "Withdrawal rejected successfully",
       "approveError": "Failed to approve withdrawal",
-      "rejectError": "Failed to reject withdrawal"
+      "rejectError": "Failed to reject withdrawal",
+      "rejectWithdrawal": "Reject Withdrawal",
+      "rejectWithdrawalDescription": "Provide a reason for rejecting this withdrawal request",
+      "rejectionReason": "Rejection Reason",
+      "rejectionReasonPlaceholder": "Enter the reason for rejecting this withdrawal request...",
+      "provideDetailedReason": "Provide a clear and detailed explanation for the rejection",
+      "reasonRequired": "Rejection reason is required",
+      "reasonTooShort": "Rejection reason must be at least 3 characters",
+      "confirmReject": "Confirm Rejection",
+      "cancel": "Cancel"
     }
   },
   "notifications": {
     "title": "Notifications",
+    "description": "Stay updated with all your notifications in one place",
     "noNotifications": "No notifications yet",
     "noNotificationsDesc": "We'll notify you when something important happens",
     "markAsRead": "Mark as read",
     "markAllRead": "Mark all read",
     "viewAll": "View all notifications",
+    "viewDetails": "View Details",
     "realTimeConnected": "Real-time connected",
-    "notConnected": "Not connected"
+    "notConnected": "Not connected",
+    "totalNotifications": "Total Notifications",
+    "unread": "Unread",
+    "read": "Read",
+    "new": "New",
+    "refresh": "Refresh",
+    "filterByStatus": "Filter by Status",
+    "filterByType": "Filter by Type",
+    "allNotifications": "All Notifications",
+    "allTypes": "All Types",
+    "types": {
+      "donation": "Donation",
+      "volunteer": "Volunteer",
+      "milestone": "Milestone",
+      "campaign": "Campaign",
+      "comment": "Comment",
+      "system": "System"
+    }
   },
   "wallet": {
     "title": "My Wallets",
@@ -926,9 +971,68 @@
     "accountNumber": "Account Number",
     "accountHolder": "Account Holder",
     "branch": "Branch",
+    "bankName": "Bank Name",
     "notAuthenticated": "Please sign in to view your wallets",
     "sessionExpired": "Your session has expired. Please sign in again",
     "errorLoadingWallets": "Failed to load wallets",
-    "errorLoadingDetails": "Failed to load wallet details"
+    "errorLoadingDetails": "Failed to load wallet details",
+    "currentBalance": "Current Balance",
+    "backToWallets": "Back to Wallets",
+    "walletNotFound": "Wallet not found",
+    "refresh": "Refresh",
+    "transactionHistory": "Transaction History",
+    "viewAllTransactions": "View all transactions for this wallet",
+    "allTypes": "All Types",
+    "donation": "Donation",
+    "withdrawal": "Withdrawal",
+    "noTransactions": "No transactions found",
+    "transactionId": "Transaction ID",
+    "amount": "Amount",
+    "balanceBefore": "Balance Before",
+    "balanceAfter": "Balance After",
+    "date": "Date",
+    "showingResults": "Showing {from} to {to} of {total} transactions",
+    "errorLoadingTransactions": "Failed to load transactions",
+    "requestWithdrawal": "Request Withdrawal",
+    "createWithdrawalRequest": "Create Withdrawal Request",
+    "withdrawalRequestDescription": "Submit a withdrawal request for your campaign wallet",
+    "withdrawalAmount": "Withdrawal Amount",
+    "withdrawalPurpose": "Purpose",
+    "withdrawalPurposePlaceholder": "Describe the purpose of this withdrawal...",
+    "describePurposeOfWithdrawal": "Provide a clear explanation for this withdrawal",
+    "amountRequired": "Amount is required",
+    "amountMustBePositive": "Amount must be greater than 0",
+    "amountExceedsBalance": "Amount exceeds available balance",
+    "purposeRequired": "Purpose is required",
+    "walletNoCampaign": "This wallet is not associated with a campaign",
+    "withdrawalRequestSuccess": "Withdrawal request submitted successfully",
+    "withdrawalRequestError": "Failed to submit withdrawal request",
+    "maxAmount": "Maximum",
+    "campaign": "Campaign",
+    "cancel": "Cancel",
+    "submitRequest": "Submit Request"
+  },
+  "footer": {
+    "description": "Making a difference, one campaign at a time. Join thousands of people supporting causes that matter.",
+    "quickLinks": {
+      "title": "Quick Links",
+      "home": "Home",
+      "campaigns": "Campaigns",
+      "contactUs": "Contact Us"
+    },
+    "support": {
+      "title": "Support",
+      "helpCenter": "Help Center",
+      "safetySecurity": "Safety & Security",
+      "termOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "community": {
+      "title": "Community",
+      "blog": "Blog",
+      "successStories": "Success Stories",
+      "press": "Press",
+      "career": "Career"
+    }
   }
 }

@@ -95,11 +95,15 @@ export async function approveWithdrawal(withdrawalId: number) {
 /**
  * Reject a withdrawal request
  */
-export async function rejectWithdrawal(withdrawalId: number) {
+export async function rejectWithdrawal(
+  withdrawalId: number,
+  reasonRejected: string
+) {
   const result = await apiClient<{ data: Withdrawal }>(
     API_ENDPOINTS.WITHDRAWALS.REJECT(withdrawalId),
     {
       method: "POST",
+      body: JSON.stringify({ reasonRejected }),
     }
   );
 

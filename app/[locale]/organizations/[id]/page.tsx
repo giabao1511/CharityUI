@@ -18,6 +18,7 @@ export default async function OrganizationDetailPage({
 
   try {
     organization = await getOrganizationById(id);
+    console.log("org", organization)
   } catch (err) {
     error = err instanceof Error ? err.message : "Failed to load organization";
     console.error("Error fetching organization:", err);

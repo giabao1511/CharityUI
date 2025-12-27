@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useNotifications } from "@/contexts/notification-context";
+import { useTranslations } from "next-intl";
 
 export default function CheckPaymentPage() {
   const searchParams = useSearchParams();
@@ -22,6 +23,7 @@ export default function CheckPaymentPage() {
   const [paymentData, setPaymentData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const hasChecked = useRef(false);
+  const t = useTranslations("terms.sections.payments");
 
   useEffect(() => {
     async function verifyPayment() {
@@ -61,7 +63,10 @@ export default function CheckPaymentPage() {
         console.log(response);
 
         // If payment is successful, refetch notifications to get the new notification from backend
-        if (response.valid && isPaymentSuccessful(response.data.vnp_ResponseCode)) {
+        if (
+          response.valid &&
+          isPaymentSuccessful(response.data.vnp_ResponseCode)
+        ) {
           console.log("✅ Payment successful, fetching notifications...");
           await refetchNotifications();
         }
@@ -96,7 +101,7 @@ export default function CheckPaymentPage() {
     );
   }
 
-  if (error || !paymentData) {
+  if (error || !paymentData || !paymentData.valid) {
     return (
       <div className="container py-12 md:py-16">
         <Card className="max-w-2xl mx-auto border-red-200 dark:border-red-800">
@@ -105,21 +110,18 @@ export default function CheckPaymentPage() {
               <XCircle className="h-16 w-16 text-red-600 dark:text-red-400" />
             </div>
             <CardTitle className="text-2xl">
-              Payment Verification Failed
+              {t("paymentVerificationFailed")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="text-center">
-              <BodyText muted>
-                {error ||
-                  "Unable to verify your payment. Please contact support if you believe this is an error."}
-              </BodyText>
+              <BodyText muted>{error || t("paymentFailedDesc")}</BodyText>
             </div>
             <div className="flex gap-3 justify-center">
               <Link href="/">
                 <Button variant="outline">
                   <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Home
+                  {t("backToHome")}
                 </Button>
               </Link>
             </div>
@@ -130,7 +132,8 @@ export default function CheckPaymentPage() {
   }
 
   // First check backend validation, then VNPay response code
-  const success = paymentData.valid && isPaymentSuccessful(paymentData.data.vnp_ResponseCode);
+  const success =
+    paymentData.valid && isPaymentSuccessful(paymentData.data.vnp_ResponseCode);
   const amount = parseInt(paymentData.data?.vnp_Amount) / 100; // VNPay returns amount in smallest unit
 
   return (
@@ -151,53 +154,49 @@ export default function CheckPaymentPage() {
             )}
           </div>
           <CardTitle className="text-2xl">
-            {success ? "Payment Successful!" : "Payment Failed"}
+            {success ? t("successTitle") : t("failedTitle")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="text-center">
             <BodyText className="mb-2">{paymentData.message}</BodyText>
-            {success && (
-              <BodyText muted>
-                Thank you for your generous donation! Your contribution will
-                make a real difference.
-              </BodyText>
-            )}
+            {success && <BodyText muted>{t("successMessage")}</BodyText>}
           </div>
 
           <div className="bg-muted/50 rounded-lg p-6 space-y-3">
             <div className="flex justify-between items-center">
-              <BodyText muted>Transaction ID:</BodyText>
+              <BodyText muted>{t("transactionId")}</BodyText>
               <BodyText weight="semibold">
                 {paymentData.data.vnp_TxnRef}
               </BodyText>
             </div>
             <div className="flex justify-between items-center">
-              <BodyText muted>Amount:</BodyText>
+              <BodyText muted>{t("amount")}</BodyText>
               <BodyText weight="semibold" className="text-lg">
                 {formatVND(amount)}
               </BodyText>
             </div>
             <div className="flex justify-between items-center">
-              <BodyText muted>Bank:</BodyText>
+              <BodyText muted>{t("bank")}</BodyText>
               <BodyText weight="semibold">
-                {paymentData.data.vnp_BankCode} ({paymentData.data.vnp_CardType})
+                {paymentData.data.vnp_BankCode} ({paymentData.data.vnp_CardType}
+                )
               </BodyText>
             </div>
             <div className="flex justify-between items-center">
-              <BodyText muted>Transaction No:</BodyText>
+              <BodyText muted>{t("transactionNo")}</BodyText>
               <BodyText weight="semibold">
                 {paymentData.data.vnp_TransactionNo}
               </BodyText>
             </div>
             <div className="flex justify-between items-center">
-              <BodyText muted>Message:</BodyText>
+              <BodyText muted>{t("message")}</BodyText>
               <BodyText weight="semibold">
                 {paymentData.data.vnp_OrderInfo}
               </BodyText>
             </div>
             <div className="flex justify-between items-center">
-              <BodyText muted>Date:</BodyText>
+              <BodyText muted>{t("date")}</BodyText>
               <BodyText weight="semibold">
                 {paymentData.data?.vnp_PayDate.replace(
                   /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,
@@ -211,11 +210,11 @@ export default function CheckPaymentPage() {
             <Link href="/">
               <Button variant="outline">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
+                {t("backToHome")}
               </Button>
             </Link>
             <Link href="/campaigns">
-              <Button>Explore More Campaigns</Button>
+              <Button>{t("exploreCampaigns")}</Button>
             </Link>
           </div>
         </CardContent>

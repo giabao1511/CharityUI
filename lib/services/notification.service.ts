@@ -92,7 +92,6 @@ export async function markNotificationAsRead(
       API_ENDPOINTS.NOTIFICATIONS.MARK_READ(notificationId),
       {
         method: "PUT",
-        body: JSON.stringify({ isRead: true }),
       }
     );
 
@@ -110,26 +109,20 @@ export async function markNotificationAsRead(
 
 /**
  * Mark all notifications as read
- * Note: Backend doesn't have mark-all-read endpoint, so we loop through all unread notifications
  */
 export async function markAllNotificationsAsRead(): Promise<boolean> {
   try {
-    // First, get all notifications
-    const notifications = await getNotifications();
-
-    // Filter for unread notifications
-    const unreadNotifications = notifications.filter(notif => !notif.read);
-
-    if (unreadNotifications.length === 0) {
-      return true; // Nothing to mark
-    }
-
-    // Mark each unread notification as read using Promise.all
-    const promises = unreadNotifications.map(notif =>
-      markNotificationAsRead(notif.id)
+    const result = await apiClient(
+      API_ENDPOINTS.NOTIFICATIONS.MARK_ALL_READ,
+      {
+        method: "PUT",
+      }
     );
 
-    await Promise.all(promises);
+    if (result.error) {
+      console.error("Error marking all notifications as read:", result.error);
+      return false;
+    }
 
     return true;
   } catch (error) {

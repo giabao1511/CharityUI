@@ -1,12 +1,16 @@
 "use client";
 
-import { RecentActivity } from "@/components/creator/recent-activity";
-import { StatsOverview } from "@/components/creator/stats-overview";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BodyText, Heading } from "@/components/ui/typography";
 import { useAuth } from "@/lib/auth-context";
-import { Building2, LayoutDashboard, Loader2, PlusCircle, Target } from "lucide-react";
+import {
+  Building2,
+  LayoutDashboard,
+  Loader2,
+  PlusCircle,
+  Target,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

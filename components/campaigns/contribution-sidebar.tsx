@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,28 +8,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Calendar, Users, Target, Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { RewardTier } from "@/types";
-import { BodyText } from "@/components/ui/typography";
+import { useAuth } from "@/lib/auth-context";
 import { formatCurrency } from "@/lib/currency";
-import { useLocale, useTranslations } from "next-intl";
 import { createPayment } from "@/lib/services/payment.service";
+import { Calendar, Loader2, Target } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { toast } from "sonner";
+import { CurrencyInput } from "../ui/currency-input";
 import { GuestDonationDialog } from "./guest-donation-dialog";
 import { LoggedInDonationDialog } from "./logged-in-donation-dialog";
-import { useAuth } from "@/lib/auth-context";
 
 interface ContributionSidebarProps {
-  campaignId: string | number;
-  goalAmount: number;
-  currentAmount: number;
-  daysLeft: number;
-  percentageFunded: number;
-  selectedTierId?: string | null;
+  readonly campaignId: string | number;
+  readonly goalAmount: number;
+  readonly currentAmount: number;
+  readonly daysLeft: number;
+  readonly percentageFunded: number;
 }
 
 export function ContributionSidebar({
@@ -38,22 +35,19 @@ export function ContributionSidebar({
   currentAmount,
   daysLeft,
   percentageFunded,
-  selectedTierId: externalSelectedTierId = null,
 }: ContributionSidebarProps) {
   const { user } = useAuth();
   const t = useTranslations("campaigns.detail");
-  const [contributionAmount, setContributionAmount] = useState("");
-  const [selectedTierId, setSelectedTierId] = useState<string | null>(
-    externalSelectedTierId
-  );
+
+  const [contributionAmount, setContributionAmount] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showGuestDialog, setShowGuestDialog] = useState(false);
   const [showLoggedInDialog, setShowLoggedInDialog] = useState(false);
 
-  const handleContribute = async (amount: string) => {
-    if (!amount || Number.parseFloat(amount) <= 0) {
-      toast.error("Invalid Amount", {
-        description: "Please enter a valid contribution amount.",
+  const handleContribute = async (amount: number) => {
+    if (!amount || amount <= 0) {
+      toast.error(t("invalidAmount"), {
+        description: t("invalidAmountDesc"),
       });
       return;
     }
@@ -75,7 +69,7 @@ export function ContributionSidebar({
     message,
     isAnonymous,
   }: {
-    amount?: string;
+    amount?: number;
     email?: string;
     phoneNumber?: string;
     message?: string;
@@ -84,9 +78,7 @@ export function ContributionSidebar({
     setIsProcessing(true);
 
     try {
-      const amountInVND = Math.round(
-        Number.parseFloat(amount || contributionAmount)
-      );
+      const amountInVND = Math.round(amount || contributionAmount);
 
       // Create payment and get VNPay URL
       const paymentUrl = await createPayment({
@@ -144,7 +136,7 @@ export function ContributionSidebar({
       <GuestDonationDialog
         open={showGuestDialog}
         onOpenChange={setShowGuestDialog}
-        amount={Number.parseFloat(contributionAmount) || 0}
+        amount={contributionAmount || 0}
         campaignId={campaignId}
         onSubmit={handleGuestDonation}
       />
@@ -153,7 +145,7 @@ export function ContributionSidebar({
         <LoggedInDonationDialog
           open={showLoggedInDialog}
           onOpenChange={setShowLoggedInDialog}
-          amount={Number.parseFloat(contributionAmount) || 0}
+          amount={contributionAmount || 0}
           campaignId={campaignId}
           userEmail={user.email}
           onSubmit={handleLoggedInDonation}
@@ -205,13 +197,11 @@ export function ContributionSidebar({
             <Label htmlFor="contribution-amount">
               {t("contributionAmount")}
             </Label>
-            <Input
+            <CurrencyInput
               id="contribution-amount"
-              type="number"
-              placeholder={t("enterAmount")}
               value={contributionAmount}
-              onChange={(e) => setContributionAmount(e.target.value)}
-              min="1"
+              onChange={setContributionAmount}
+              placeholder={t("enterAmount")}
               aria-required="true"
               aria-describedby="contribution-hint"
             />
@@ -239,21 +229,21 @@ export function ContributionSidebar({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setContributionAmount("10000")}
+              onClick={() => setContributionAmount(10000)}
             >
               {formatCurrency(10000)}
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setContributionAmount("100000")}
+              onClick={() => setContributionAmount(100000)}
             >
               {formatCurrency(100000)}
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setContributionAmount("1000000")}
+              onClick={() => setContributionAmount(1000000)}
             >
               {formatCurrency(1000000)}
             </Button>

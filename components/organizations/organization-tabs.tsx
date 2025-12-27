@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BodyText, Heading } from "@/components/ui/typography";
 import { Link } from "@/i18n/navigation";
+import { formatCurrency } from "@/lib/currency";
 import type { Organization } from "@/types/organization";
 import { ArrowRight, Briefcase, Image as ImageIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -88,14 +89,14 @@ export function OrganizationTabs({ organization }: OrganizationTabsProps) {
                     <div className="flex justify-between items-center text-sm">
                       <div>
                         <span className="font-semibold">
-                          ${campaign.currentAmount.toLocaleString()}
+                          {formatCurrency(campaign.currentAmount)}
                         </span>
                         <span className="text-muted-foreground">
                           {" "}
                           {t("raisedOf")}{" "}
                         </span>
                         <span className="font-semibold">
-                          ${campaign.targetAmount.toLocaleString()}
+                          {formatCurrency(campaign.targetAmount)}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">

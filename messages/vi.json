@@ -70,8 +70,8 @@
     "cta": {
       "title": "Sẵn Sàng Tạo Nên Tác Động?",
       "subtitle": "Dù bạn đang muốn bắt đầu quỹ của riêng mình hay ủng hộ các mục đích hiện có, mọi đóng góp đều tạo nên sự khác biệt.",
-      "startCampaign": "Bắt Đầu Quỹ",
-      "browseCampaigns": "Duyệt Quỹ"
+      "startFund": "Bắt Đầu Quỹ",
+      "browseFunds": "Duyệt Quỹ"
     }
   },
   "funds": {
@@ -179,6 +179,8 @@
     "saturday": "Thứ Bảy: 10:00 SA - 4:00 CH",
     "sunday": "Chủ Nhật: Đóng cửa",
     "form": {
+      "sendUsaMessage": "Gửi Tin Nhắn Cho Chúng Tôi",
+      "fillOut": "Vui lòng điền biểu mẫu bên dưới và chúng tôi sẽ phản hồi bạn sớm nhất có thể.",
       "name": "Tên",
       "namePlaceholder": "Tên của bạn",
       "email": "Email",
@@ -294,7 +296,19 @@
         "fraudulent": "Quỹ là gian lận hoặc vi phạm điều khoản của chúng tôi",
         "failedRewards": "Người tạo không thực hiện được phần thưởng đã hứa",
         "cancelled": "Quỹ bị hủy trước khi chuyển tiền",
-        "fees": "CharityHub tính phí nền tảng 5% trên tất cả các đóng góp thành công, cộng với phí xử lý thanh toán."
+        "fees": "CharityHub tính phí nền tảng 5% trên tất cả các đóng góp thành công, cộng với phí xử lý thanh toán.",
+        "successMessage": "Cảm ơn bạn vì khoản đóng góp hào phóng! Sự đóng góp của bạn sẽ tạo ra khác biệt thực sự.",
+        "successTitle": "Đóng Góp Thành Công",
+        "paymentVerificationFailed": "Xác Minh Thanh Toán Thất Bại",
+        "paymentFailedDesc": "Không thể xử lý thanh toán của bạn. Vui lòng thử lại.",
+        "transactionId": "ID Giao Dịch:",
+        "amount": "Số Tiền:",
+        "bank": "Ngân Hàng:",
+        "transactionNo": "Số Giao Dịch:",
+        "message": "Tin Nhắn:",
+        "date": "Ngày:",
+        "backToHome": "Quay Lại Trang Chủ",
+        "exploreCampaigns": "Khám Phá Quỹ"
       },
       "ip": {
         "title": "5. Sở Hữu Trí Tuệ",
@@ -330,6 +344,7 @@
     "subtitle": "Khám phá và ủng hộ các chiến dịch gây quỹ từ các tổ chức đã xác minh",
     "search": "Tìm kiếm chiến dịch...",
     "searchPlaceholder": "Tìm theo tiêu đề hoặc mô tả",
+    "show": "Hiển thị {count} trong {total} chiến dịch",
     "filter": {
       "searchPlaceholder": "Tìm theo tên hoặc mô tả",
       "category": "Danh Mục",
@@ -376,7 +391,9 @@
       "enterAmount": "Nhập số tiền",
       "backThisCampaign": "Ủng Hộ Chiến Dịch Này",
       "selectedReward": "Phần Thưởng Đã Chọn:",
-      "minimumContribution": "Nhập số tiền bạn muốn đóng góp (tối thiểu 10.000d)"
+      "minimumContribution": "Nhập số tiền bạn muốn đóng góp (tối thiểu 10.000d)",
+      "invalidAmount": "Số Tiền Không Hợp Lệ",
+      "invalidAmountDesc": "Vui lòng nhập số tiền đóng góp hợp lệ."
     },
     "tabs": {
       "description": "Mô Tả & Cập Nhật",
@@ -649,6 +666,7 @@
     "confirm": "Xác nhận",
     "yes": "Có",
     "no": "Không",
+    "loading": "Đang tải",
     "nav": {
       "home": "Trang chủ",
       "campaigns": "Chiến dịch",
@@ -882,18 +900,46 @@
       "approveSuccess": "Đã duyệt yêu cầu rút tiền thành công",
       "rejectSuccess": "Đã từ chối yêu cầu rút tiền thành công",
       "approveError": "Không thể duyệt yêu cầu rút tiền",
-      "rejectError": "Không thể từ chối yêu cầu rút tiền"
+      "rejectError": "Không thể từ chối yêu cầu rút tiền",
+      "rejectWithdrawal": "Từ chối rút tiền",
+      "rejectWithdrawalDescription": "Cung cấp lý do từ chối yêu cầu rút tiền này",
+      "rejectionReason": "Lý do từ chối",
+      "rejectionReasonPlaceholder": "Nhập lý do từ chối yêu cầu rút tiền này...",
+      "provideDetailedReason": "Cung cấp lý do rõ ràng và chi tiết cho việc từ chối",
+      "reasonRequired": "Lý do từ chối là bắt buộc",
+      "reasonTooShort": "Lý do từ chối phải có ít nhất 3 ký tự",
+      "confirmReject": "Xác nhận từ chối",
+      "cancel": "Hủy"
     }
   },
   "notifications": {
     "title": "Thông báo",
+    "description": "Theo dõi tất cả thông báo của bạn tại một nơi",
     "noNotifications": "Chưa có thông báo",
     "noNotificationsDesc": "Chúng tôi sẽ thông báo khi có điều quan trọng xảy ra",
     "markAsRead": "Đánh dấu đã đọc",
     "markAllRead": "Đánh dấu tất cả đã đọc",
     "viewAll": "Xem tất cả thông báo",
+    "viewDetails": "Xem chi tiết",
     "realTimeConnected": "Kết nối thời gian thực",
-    "notConnected": "Chưa kết nối"
+    "notConnected": "Chưa kết nối",
+    "totalNotifications": "Tổng số thông báo",
+    "unread": "Chưa đọc",
+    "read": "Đã đọc",
+    "new": "Mới",
+    "refresh": "Làm mới",
+    "filterByStatus": "Lọc theo trạng thái",
+    "filterByType": "Lọc theo loại",
+    "allNotifications": "Tất cả thông báo",
+    "allTypes": "Tất cả loại",
+    "types": {
+      "donation": "Quyên góp",
+      "volunteer": "Tình nguyện",
+      "milestone": "Cột mốc",
+      "campaign": "Chiến dịch",
+      "comment": "Bình luận",
+      "system": "Hệ thống"
+    }
   },
   "wallet": {
     "title": "Ví của tôi",
@@ -926,9 +972,68 @@
     "accountNumber": "Số tài khoản",
     "accountHolder": "Chủ tài khoản",
     "branch": "Chi nhánh",
+    "bankName": "Tên ngân hàng",
     "notAuthenticated": "Vui lòng đăng nhập để xem ví của bạn",
     "sessionExpired": "Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại",
     "errorLoadingWallets": "Không thể tải danh sách ví",
-    "errorLoadingDetails": "Không thể tải chi tiết ví"
+    "errorLoadingDetails": "Không thể tải chi tiết ví",
+    "currentBalance": "Số dư hiện tại",
+    "backToWallets": "Quay lại danh sách ví",
+    "walletNotFound": "Không tìm thấy ví",
+    "refresh": "Làm mới",
+    "transactionHistory": "Lịch sử giao dịch",
+    "viewAllTransactions": "Xem tất cả giao dịch của ví này",
+    "allTypes": "Tất cả loại",
+    "donation": "Quyên góp",
+    "withdrawal": "Rút tiền",
+    "noTransactions": "Không có giao dịch nào",
+    "transactionId": "Mã giao dịch",
+    "amount": "Số tiền",
+    "balanceBefore": "Số dư trước",
+    "balanceAfter": "Số dư sau",
+    "date": "Ngày",
+    "showingResults": "Hiển thị {from} đến {to} trong tổng số {total} giao dịch",
+    "errorLoadingTransactions": "Không thể tải lịch sử giao dịch",
+    "requestWithdrawal": "Yêu cầu rút tiền",
+    "createWithdrawalRequest": "Tạo yêu cầu rút tiền",
+    "withdrawalRequestDescription": "Gửi yêu cầu rút tiền từ ví chiến dịch của bạn",
+    "withdrawalAmount": "Số tiền rút",
+    "withdrawalPurpose": "Mục đích",
+    "withdrawalPurposePlaceholder": "Mô tả mục đích của việc rút tiền này...",
+    "describePurposeOfWithdrawal": "Cung cấp lý do rõ ràng cho việc rút tiền này",
+    "amountRequired": "Số tiền là bắt buộc",
+    "amountMustBePositive": "Số tiền phải lớn hơn 0",
+    "amountExceedsBalance": "Số tiền vượt quá số dư khả dụng",
+    "purposeRequired": "Mục đích là bắt buộc",
+    "walletNoCampaign": "Ví này không liên kết với chiến dịch nào",
+    "withdrawalRequestSuccess": "Gửi yêu cầu rút tiền thành công",
+    "withdrawalRequestError": "Không thể gửi yêu cầu rút tiền",
+    "maxAmount": "Tối đa",
+    "campaign": "Chiến dịch",
+    "cancel": "Hủy",
+    "submitRequest": "Gửi yêu cầu"
+  },
+  "footer": {
+    "description": "Tạo nên sự khác biệt, từng chiến dịch một. Hãy cùng hàng ngàn người ủng hộ những mục tiêu có ý nghĩa.",
+    "quickLinks": {
+      "title": "Liên kết nhanh",
+      "home": "Trang chủ",
+      "campaigns": "Chiến dịch",
+      "contactUs": "Liên hệ chúng tôi"
+    },
+    "support": {
+      "title": "Hỗ trợ",
+      "helpCenter": "Trung tâm trợ giúp",
+      "safetySecurity": "An toàn & Bảo mật",
+      "termOfService": "Điều khoản dịch vụ",
+      "privacyPolicy": "Chính sách bảo mật"
+    },
+    "community": {
+      "title": "Cộng đồng",
+      "blog": "Blog",
+      "successStories": "Câu chuyện thành công",
+      "press": "Truyền thông",
+      "career": "Nghề nghiệp"
+    }
   }
 }

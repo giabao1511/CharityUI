@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Wallet, Users, Calendar } from "lucide-react";
 import type { Organization } from "@/types/organization";
+import { formatCurrency } from "@/lib/currency";
 
 interface OrganizationSidebarProps {
   readonly organization: Organization;
@@ -14,12 +15,13 @@ export function OrganizationSidebar({
   organization,
 }: OrganizationSidebarProps) {
   const wallet = organization.wallets?.[0];
+  console.log("wallet", wallet);
   const campaignsCount = organization.campaigns?.length || 0;
 
   return (
     <div className="space-y-6">
       {/* Financial Stats */}
-      {wallet && (
+      {/* {wallet && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -33,7 +35,7 @@ export function OrganizationSidebar({
                 Tổng cộng số dư
               </p>
               <p className="text-2xl font-bold">
-                ${wallet.balance.toLocaleString()}
+                {formatCurrency(wallet.balance)}
               </p>
             </div>
             <div className="pt-4 border-t">
@@ -43,7 +45,7 @@ export function OrganizationSidebar({
             </div>
           </CardContent>
         </Card>
-      )}
+      )} */}
 
       {/* Organization Info */}
       <Card>

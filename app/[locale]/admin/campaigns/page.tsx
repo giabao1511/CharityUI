@@ -111,9 +111,12 @@ export default function CampaignsPage() {
   const limit = 12;
 
   const [formData, setFormData] = useState({
-    fundName: "",
+    title: "",
     description: "",
-    status: FundStatus.ACTIVE,
+    targetAmount: 0,
+    startDate: "",
+    endDate: "",
+    statusId: FundStatus.ACTIVE,
   });
 
   const loadCampaigns = async (page: number = currentPage) => {
@@ -174,15 +177,49 @@ export default function CampaignsPage() {
   const handleEdit = (campaign: CampaignItem) => {
     setSelectedCampaign(campaign);
     setFormData({
-      fundName: campaign.title,
+      title: campaign.title,
       description: campaign.description,
-      status: campaign.status.campaignStatusId || FundStatus.ACTIVE,
+      targetAmount: campaign.targetAmount,
+      startDate: new Date(campaign.startDate).toISOString().split('T')[0],
+      endDate: new Date(campaign.endDate).toISOString().split('T')[0],
+      statusId: campaign.status.campaignStatusId || FundStatus.ACTIVE,
     });
     setEditDialogOpen(true);
   };
 
   const handleUpdate = async () => {
     if (!selectedCampaign) return;
+
+    // Validation
+    if (!formData.title.trim()) {
+      toast.error("Campaign title is required");
+      return;
+    }
+
+    if (!formData.description.trim()) {
+      toast.error("Campaign description is required");
+      return;
+    }
+
+    if (formData.targetAmount <= 0) {
+      toast.error("Target amount must be greater than 0");
+      return;
+    }
+
+    if (selectedCampaign && formData.targetAmount < selectedCampaign.currentAmount) {
+      toast.error(`Target amount cannot be less than the current amount raised (${formatCurrency(selectedCampaign.currentAmount)})`);
+      return;
+    }
+
+    if (!formData.startDate || !formData.endDate) {
+      toast.error("Start date and end date are required");
+      return;
+    }
+
+    if (new Date(formData.endDate) <= new Date(formData.startDate)) {
+      toast.error("End date must be after start date");
+      return;
+    }
 
     try {
       setProcessingId(selectedCampaign.campaignId);
@@ -522,7 +559,7 @@ export default function CampaignsPage() {
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Campaign</DialogTitle>
             <DialogDescription>
@@ -530,58 +567,133 @@ export default function CampaignsPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div>
-              <Label>Campaign Name *</Label>
-              <Input
-                value={formData.fundName}
-                onChange={(e) =>
-                  setFormData({ ...formData, fundName: e.target.value })
-                }
-                placeholder="Campaign name"
-              />
+            {/* Campaign Info Section */}
+            {selectedCampaign && (
+              <div className="grid gap-4 sm:grid-cols-2 p-4 bg-muted/50 rounded-lg">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Organization</Label>
+                  <p className="text-sm font-medium">{selectedCampaign.organization.orgName}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Category</Label>
+                  <p className="text-sm font-medium">{selectedCampaign.category?.categoryName || "General"}</p>
+                </div>
+              </div>
+            )}
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <Label htmlFor="title">Campaign Title *</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  placeholder="Enter campaign title"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <Label htmlFor="description">Description *</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  placeholder="Enter campaign description"
+                  rows={4}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="currentAmount">Current Amount (Raised)</Label>
+                <Input
+                  id="currentAmount"
+                  type="text"
+                  value={formatCurrency(selectedCampaign?.currentAmount || 0)}
+                  disabled
+                  className="bg-muted"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="targetAmount">Target Amount *</Label>
+                <Input
+                  id="targetAmount"
+                  type="number"
+                  min="0"
+                  step="1000"
+                  value={formData.targetAmount}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      targetAmount: parseFloat(e.target.value) || 0,
+                    })
+                  }
+                  placeholder="0"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="status">Status *</Label>
+                <Select
+                  value={formData.statusId.toString()}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      statusId: parseInt(value) as FundStatus,
+                    })
+                  }
+                >
+                  <SelectTrigger id="status">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={FundStatus.ACTIVE.toString()}>
+                      Active
+                    </SelectItem>
+                    <SelectItem value={FundStatus.PAUSED.toString()}>
+                      Paused
+                    </SelectItem>
+                    <SelectItem value={FundStatus.COMPLETED.toString()}>
+                      Completed
+                    </SelectItem>
+                    <SelectItem value={FundStatus.CLOSED.toString()}>
+                      Closed
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="startDate">Start Date *</Label>
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startDate: e.target.value })
+                  }
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="endDate">End Date *</Label>
+                <Input
+                  id="endDate"
+                  type="date"
+                  value={formData.endDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, endDate: e.target.value })
+                  }
+                  min={formData.startDate}
+                />
+              </div>
             </div>
-            <div>
-              <Label>Description *</Label>
-              <Textarea
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                placeholder="Campaign description"
-                rows={4}
-              />
-            </div>
-            <div>
-              <Label>Status *</Label>
-              <Select
-                value={formData.status.toString()}
-                onValueChange={(value) =>
-                  setFormData({
-                    ...formData,
-                    status: parseInt(value) as FundStatus,
-                  })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={FundStatus.ACTIVE.toString()}>
-                    Active
-                  </SelectItem>
-                  <SelectItem value={FundStatus.PAUSED.toString()}>
-                    Paused
-                  </SelectItem>
-                  <SelectItem value={FundStatus.COMPLETED.toString()}>
-                    Completed
-                  </SelectItem>
-                  <SelectItem value={FundStatus.CLOSED.toString()}>
-                    Closed
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex justify-end gap-2">
+
+            <div className="flex justify-end gap-2 pt-4">
               <Button
                 variant="outline"
                 onClick={() => setEditDialogOpen(false)}

@@ -19,26 +19,18 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   Wallet as WalletIcon,
   Loader2,
   AlertCircle,
   CreditCard,
   TrendingUp,
-  Building2,
   Target,
 } from "lucide-react";
 import { Heading } from "@/components/ui/typography";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { getUserWallets, getWalletDetail } from "@/lib/services/wallet.service";
+import { getUserWallets } from "@/lib/services/wallet.service";
 import { isTokenExpired } from "@/lib/services/auth.service";
 import { Wallet } from "@/types/wallet";
 
@@ -48,10 +40,7 @@ export default function WalletPage() {
   const tCommon = useTranslations("common");
 
   const [wallets, setWallets] = useState<Wallet[]>([]);
-  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
 
   useEffect(() => {
     loadWallets();
@@ -98,21 +87,6 @@ export default function WalletPage() {
     }
   };
 
-  const handleViewDetails = async (wallet: Wallet) => {
-    try {
-      setIsLoadingDetail(true);
-      setIsDialogOpen(true);
-      const details = await getWalletDetail(wallet.walletId);
-      setSelectedWallet(details);
-    } catch (error) {
-      console.error("Error loading wallet details:", error);
-      toast.error(t("errorLoadingDetails"));
-      setIsDialogOpen(false);
-    } finally {
-      setIsLoadingDetail(false);
-    }
-  };
-
   const formatCurrency = (amount: string) => {
     const numAmount = parseFloat(amount);
     return new Intl.NumberFormat("vi-VN", {
@@ -143,8 +117,6 @@ export default function WalletPage() {
     (sum, wallet) => sum + parseFloat(wallet.receiveAmount),
     0
   );
-
-  console.log(wallets)
 
   return (
     <div className="container py-8 max-w-7xl">
@@ -277,13 +249,11 @@ export default function WalletPage() {
                         )}
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleViewDetails(wallet)}
-                        >
-                          {t("viewDetails")}
-                        </Button>
+                        <Link href={`/wallet/${wallet.walletId}`}>
+                          <Button variant="outline" size="sm">
+                            {t("viewDetails")}
+                          </Button>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -293,140 +263,6 @@ export default function WalletPage() {
           )}
         </CardContent>
       </Card>
-
-      {/* Wallet Detail Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>{t("walletDetails")}</DialogTitle>
-            <DialogDescription>{t("viewWalletInfo")}</DialogDescription>
-          </DialogHeader>
-
-          {isLoadingDetail ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            </div>
-          ) : selectedWallet ? (
-            <div className="space-y-6">
-              {/* Wallet Info */}
-              <div>
-                <h3 className="font-semibold mb-3">{t("walletInformation")}</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">
-                      {t("walletId")}:
-                    </span>{" "}
-                    #{selectedWallet.walletId}
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">{t("type")}:</span>{" "}
-                    {selectedWallet.type.walletTypeName}
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">
-                      {t("balance")}:
-                    </span>{" "}
-                    <span className="font-semibold">
-                      {formatCurrency(selectedWallet.balance)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">
-                      {t("received")}:
-                    </span>{" "}
-                    {formatCurrency(selectedWallet.receiveAmount)}
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">
-                      {t("status")}:
-                    </span>{" "}
-                    <Badge
-                      variant={getStatusBadgeVariant(
-                        selectedWallet.status.statusName
-                      )}
-                    >
-                      {selectedWallet.status.statusName}
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-
-              {/* Owner Info */}
-              <div>
-                <h3 className="font-semibold mb-3">{t("ownerInformation")}</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">{t("name")}:</span>{" "}
-                    {selectedWallet.owner.firstName}{" "}
-                    {selectedWallet.owner.lastName}
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">{t("email")}:</span>{" "}
-                    {selectedWallet.owner.email}
-                  </div>
-                </div>
-              </div>
-
-              {/* Campaign Info */}
-              {selectedWallet.campaign && (
-                <div>
-                  <h3 className="font-semibold mb-3">
-                    {t("campaignInformation")}
-                  </h3>
-                  <div className="p-4 bg-muted rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Target className="h-5 w-5 text-primary" />
-                      <span className="font-medium">
-                        {selectedWallet.campaign.title}
-                      </span>
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {t("campaignId")}: #{selectedWallet.campaign.campaignId}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Bank Info */}
-              {selectedWallet.bankInfo && (
-                <div>
-                  <h3 className="font-semibold mb-3">{t("bankInformation")}</h3>
-                  <div className="p-4 bg-muted rounded-lg space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Building2 className="h-5 w-5 text-primary" />
-                      <span className="font-medium">
-                        {selectedWallet.bankInfo.bankName}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-muted-foreground">
-                          {t("accountNumber")}:
-                        </span>{" "}
-                        {selectedWallet.bankInfo.accountNumber}
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">
-                          {t("accountHolder")}:
-                        </span>{" "}
-                        {selectedWallet.bankInfo.accountHolder}
-                      </div>
-                      {selectedWallet.bankInfo.branch && (
-                        <div>
-                          <span className="text-muted-foreground">
-                            {t("branch")}:
-                          </span>{" "}
-                          {selectedWallet.bankInfo.branch}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : null}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

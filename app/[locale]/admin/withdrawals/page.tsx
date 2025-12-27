@@ -29,10 +29,11 @@ import {
 } from "@/components/ui/dialog";
 import { Wallet, Loader2, AlertCircle, ChevronLeft, ChevronRight, CheckCircle, XCircle } from "lucide-react";
 import { toast } from "sonner";
-import { getWithdrawals, approveWithdrawal, rejectWithdrawal } from "@/lib/services/withdrawal.service";
+import { getWithdrawals, approveWithdrawal } from "@/lib/services/withdrawal.service";
 import { Withdrawal } from "@/types/withdrawal";
 import { useTranslations } from "next-intl";
 import { format } from "date-fns";
+import { RejectWithdrawalDialog } from "@/components/admin/reject-withdrawal-dialog";
 
 export default function WithdrawalsManagementPage() {
   const t = useTranslations("admin.withdrawals");
@@ -42,6 +43,7 @@ export default function WithdrawalsManagementPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedWithdrawal, setSelectedWithdrawal] = useState<Withdrawal | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Filters
@@ -108,24 +110,14 @@ export default function WithdrawalsManagementPage() {
     }
   };
 
-  const handleReject = async () => {
-    if (!selectedWithdrawal) return;
+  const handleReject = () => {
+    setIsDialogOpen(false);
+    setIsRejectDialogOpen(true);
+  };
 
-    try {
-      setIsUpdating(true);
-      await rejectWithdrawal(selectedWithdrawal.withdrawalId);
-
-      toast.success(t("rejectSuccess"));
-      setIsDialogOpen(false);
-      setSelectedWithdrawal(null);
-      // Reload withdrawals to get updated data
-      loadWithdrawals();
-    } catch (error) {
-      console.error("Error rejecting withdrawal:", error);
-      toast.error(t("rejectError"));
-    } finally {
-      setIsUpdating(false);
-    }
+  const handleRejectSuccess = () => {
+    setSelectedWithdrawal(null);
+    loadWithdrawals();
   };
 
   const getStatusBadgeVariant = (statusName: string) => {
@@ -485,6 +477,14 @@ export default function WithdrawalsManagementPage() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Reject Withdrawal Dialog */}
+      <RejectWithdrawalDialog
+        withdrawal={selectedWithdrawal}
+        open={isRejectDialogOpen}
+        onOpenChange={setIsRejectDialogOpen}
+        onSuccess={handleRejectSuccess}
+      />
     </div>
   );
 }
