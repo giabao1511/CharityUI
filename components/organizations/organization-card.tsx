@@ -20,11 +20,11 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
   const getStatusTranslationKey = (statusId: number): string => {
     switch (statusId) {
       case 1:
-        return "status.pending";
-      case 2:
         return "status.active";
+      case 2:
+        return "status.rejected";
       case 3:
-        return "status.inactive";
+        return "status.pending";
       case 4:
         return "status.suspended";
       default:
@@ -33,7 +33,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
   };
 
   const statusName = t(getStatusTranslationKey(organization.statusId));
-  const isActive = organization.statusId === 2; // Active status
+  const isActive = organization.statusId === 1; // Active status
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">

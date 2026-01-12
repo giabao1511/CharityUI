@@ -20,6 +20,7 @@ export enum FundStatus {
   PAUSED = 2,
   COMPLETED = 3,
   CLOSED = 4,
+  PENDING = 5,
 }
 
 export const FundStatusNames = {
@@ -27,6 +28,7 @@ export const FundStatusNames = {
   [FundStatus.PAUSED]: "Paused",
   [FundStatus.COMPLETED]: "Completed",
   [FundStatus.CLOSED]: "Closed",
+  [FundStatus.PENDING]: "Pending",
 } as const;
 
 // Media Types
@@ -171,6 +173,9 @@ export interface Organization {
   orgId: number;
   orgName: string;
   avatar: string;
+  email?: string;
+  phoneNumber?: string;
+  statusId?: number;
 }
 
 export interface CampaignStatus {

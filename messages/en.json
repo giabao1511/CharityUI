@@ -139,6 +139,7 @@
       "browseFunds": "Browse Funds"
     },
     "settings": {
+      "title": "Profile Settings",
       "profileInfo": "Profile Information",
       "updateInfo": "Update your personal information",
       "editProfile": "Edit Profile",
@@ -163,6 +164,12 @@
       "sessionExpiredDesc": "Please sign in again to continue.",
       "notAuthenticated": "Not authenticated",
       "notAuthenticatedDesc": "Please sign in to view your profile."
+    },
+    "account": {
+      "title": "Account Details",
+      "userId": "User ID",
+      "status": "Account Status",
+      "joined": "Joined"
     }
   },
   "contact": {
@@ -732,7 +739,18 @@
       "enterPhone": "0123456789",
       "enterAddress": "Enter full address",
       "enterDescription": "Enter organization description",
-      "enterWebsite": "https://example.org"
+      "enterWebsite": "https://example.org",
+      "review": "Review",
+      "reviewOrganization": "Review Organization",
+      "approve": "Approve",
+      "approveOrganization": "Approve Organization",
+      "reject": "Reject",
+      "rejectOrganization": "Reject Organization",
+      "rejectionReason": "Rejection Reason",
+      "approved": "Organization approved successfully",
+      "rejected": "Organization rejected successfully",
+      "approveFailed": "Failed to approve organization",
+      "rejectFailed": "Failed to reject organization"
     },
     "campaigns": {
       "title": "Campaigns",
@@ -1044,5 +1062,95 @@
     "partner3": "GoodCause",
     "confirm": "Confirm",
     "decline": "Decline"
+  },
+  "chat": {
+    "messages": "Messages",
+    "newMessage": "New Message",
+    "newConversation": "New Conversation",
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "sendFile": "Send File",
+    "sendImage": "Send Image",
+    "attachFile": "Attach File",
+    "attachImage": "Attach Image",
+    "search": "Search conversations",
+    "searchPeople": "Search people or organizations",
+    "noConversations": "No conversations yet",
+    "noConversationsDesc": "Start a conversation to connect with others",
+    "noMessages": "No messages yet",
+    "noMessagesDesc": "Send a message to start the conversation",
+    "startConversation": "Start a conversation",
+    "online": "Online",
+    "offline": "Offline",
+    "active": "Active",
+    "lastSeen": "Last seen {time}",
+    "justNow": "Just now",
+    "typing": "{name} is typing...",
+    "multipleTyping": "Several people are typing...",
+    "sendingMessage": "Sending...",
+    "messageSent": "Sent",
+    "messageDelivered": "Delivered",
+    "messageRead": "Read",
+    "messageFailed": "Failed to send",
+    "retry": "Retry",
+    "delete": "Delete",
+    "reply": "Reply",
+    "forward": "Forward",
+    "copy": "Copy",
+    "unreadMessages": "{count} unread messages",
+    "conversationWith": "Conversation with {name}",
+    "groupChat": "Group Chat",
+    "participants": "Participants",
+    "addParticipants": "Add Participants",
+    "removeParticipant": "Remove Participant",
+    "leaveGroup": "Leave Group",
+    "deleteConversation": "Delete Conversation",
+    "muteConversation": "Mute",
+    "unmuteConversation": "Unmute",
+    "pinConversation": "Pin",
+    "unpinConversation": "Unpin",
+    "conversationSettings": "Conversation Settings",
+    "viewProfile": "View Profile",
+    "sharedMedia": "Shared Media",
+    "sharedFiles": "Shared Files",
+    "loadMore": "Load more messages",
+    "loadingMessages": "Loading messages...",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "selectFile": "Select file to upload",
+    "selectImage": "Select image to upload",
+    "fileTooLarge": "File too large (max 10MB)",
+    "invalidFileType": "Invalid file type",
+    "uploadFailed": "Upload failed",
+    "uploading": "Uploading...",
+    "download": "Download",
+    "contactOrganization": "Contact Organization",
+    "contactUser": "Send Message",
+    "supportTeam": "Support Team",
+    "adminChat": "Admin Chat",
+    "filters": {
+      "all": "All",
+      "unread": "Unread",
+      "groups": "Groups",
+      "direct": "Direct",
+      "organizations": "Organizations"
+    },
+    "tabs": {
+      "conversations": "Conversations",
+      "info": "Info"
+    },
+    "emptyState": {
+      "title": "No conversations yet",
+      "description": "Start chatting with other users or organizations",
+      "action": "Start New Conversation"
+    },
+    "errors": {
+      "loadConversations": "Failed to load conversations",
+      "loadMessages": "Failed to load messages",
+      "sendMessage": "Failed to send message",
+      "uploadFile": "Failed to upload file",
+      "startConversation": "Failed to start conversation",
+      "generic": "Something went wrong"
+    }
   }
 }

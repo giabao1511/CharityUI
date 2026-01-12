@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -52,21 +52,27 @@ import {
   Search,
   Target,
   Trash2,
-  TrendingUp,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { CampaignApprovalDialog } from "@/components/admin/campaign-approval-dialog";
+import { RejectCampaignDialog } from "@/components/admin/reject-campaign-dialog";
 
 const STATUS_FILTERS = [
   { value: "all", label: "All Statuses" },
-  { value: FundStatus.PAUSED.toString(), label: "Paused" },
+  { value: FundStatus.PENDING.toString(), label: "Pending Approval" },
   { value: FundStatus.ACTIVE.toString(), label: "Active" },
+  { value: FundStatus.PAUSED.toString(), label: "Paused" },
   { value: FundStatus.COMPLETED.toString(), label: "Completed" },
   { value: FundStatus.CLOSED.toString(), label: "Closed" },
 ];
 
 const STATUS_CONFIG = {
+  [FundStatus.PENDING]: {
+    variant: "secondary" as const,
+    color: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+  },
   [FundStatus.PAUSED]: {
     variant: "secondary" as const,
     color: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
@@ -96,6 +102,8 @@ export default function CampaignsPage() {
   const [processingId, setProcessingId] = useState<number | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [approvalDialogOpen, setApprovalDialogOpen] = useState(false);
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<CampaignItem | null>(
     null
   );
@@ -104,6 +112,7 @@ export default function CampaignsPage() {
   const [stats, setStats] = useState({
     totalCampaigns: 0,
     activeCampaigns: 0,
+    pendingCampaigns: 0,
     totalRaised: 0,
     averageProgress: 0,
   });
@@ -140,6 +149,9 @@ export default function CampaignsPage() {
       const activeCampaigns = data.campaigns.filter(
         (c) => c.status.campaignStatusId === FundStatus.ACTIVE
       ).length;
+      const pendingCampaigns = data.campaigns.filter(
+        (c) => c.status.campaignStatusId === FundStatus.PENDING
+      ).length;
       const totalRaised = data.campaigns.reduce(
         (sum, c) => sum + c.currentAmount,
         0
@@ -158,6 +170,7 @@ export default function CampaignsPage() {
       setStats({
         totalCampaigns: data.total,
         activeCampaigns,
+        pendingCampaigns,
         totalRaised,
         averageProgress: Math.round(avgProgress),
       });
@@ -259,26 +272,9 @@ export default function CampaignsPage() {
     }
   };
 
-  const handleStatusChange = async (
-    campaign: CampaignItem,
-    newStatus: FundStatus
-  ) => {
-    try {
-      setProcessingId(campaign.campaignId);
-      await updateCampaign(campaign.campaignId, {
-        statusId: newStatus,
-      });
-      toast.success(
-        `Campaign ${newStatus === FundStatus.ACTIVE ? "approved" : "suspended"}`
-      );
-      loadCampaigns();
-    } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "Failed to update status"
-      );
-    } finally {
-      setProcessingId(null);
-    }
+  const handleApprovalClick = (campaign: CampaignItem) => {
+    setSelectedCampaign(campaign);
+    setApprovalDialogOpen(true);
   };
 
   const totalPages = Math.ceil(total / limit);
@@ -314,6 +310,20 @@ export default function CampaignsPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-yellow-100 dark:bg-yellow-900/20">
+                <CheckCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Pending Approval</p>
+                <p className="text-2xl font-bold">{stats.pendingCampaigns}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/20">
                 <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
@@ -334,20 +344,6 @@ export default function CampaignsPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Total Raised</p>
                 <p className="text-2xl font-bold">{formatCurrency(stats.totalRaised)}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/20">
-                <TrendingUp className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Avg Progress</p>
-                <p className="text-2xl font-bold">{stats.averageProgress}%</p>
               </div>
             </div>
           </CardContent>
@@ -492,44 +488,54 @@ export default function CampaignsPage() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2 pt-2">
-                      <Link
-                        href={`/campaigns/${campaign.campaignId}`}
-                        className="flex-1"
-                      >
-                        <Button size="sm" variant="outline" className="w-full">
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
-                        </Button>
-                      </Link>
-                      {statusId === FundStatus.PAUSED && (
-                        <Button
-                          size="sm"
-                          variant="default"
-                          onClick={() =>
-                            handleStatusChange(campaign, FundStatus.ACTIVE)
-                          }
-                          disabled={processingId === campaign.campaignId}
-                          className="flex-1 bg-green-600 hover:bg-green-700"
-                        >
-                          <CheckCircle className="h-4 w-4 mr-1" />
-                          Approve
-                        </Button>
+                      {statusId === FundStatus.PENDING ? (
+                        <>
+                          <Button
+                            size="sm"
+                            variant="default"
+                            onClick={() => handleApprovalClick(campaign)}
+                            disabled={processingId === campaign.campaignId}
+                            className="flex-1 bg-green-600 hover:bg-green-700"
+                          >
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            Review
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleEdit(campaign)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Link
+                            href={`/campaigns/${campaign.campaignId}`}
+                            className="flex-1"
+                          >
+                            <Button size="sm" variant="outline" className="w-full">
+                              <Eye className="h-4 w-4 mr-1" />
+                              View
+                            </Button>
+                          </Link>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleEdit(campaign)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleDeleteClick(campaign)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </>
                       )}
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleEdit(campaign)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleDeleteClick(campaign)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -651,6 +657,9 @@ export default function CampaignsPage() {
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value={FundStatus.PENDING.toString()}>
+                      Pending
+                    </SelectItem>
                     <SelectItem value={FundStatus.ACTIVE.toString()}>
                       Active
                     </SelectItem>
@@ -740,6 +749,26 @@ export default function CampaignsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Campaign Approval Dialog */}
+      <CampaignApprovalDialog
+        campaign={selectedCampaign}
+        open={approvalDialogOpen}
+        onOpenChange={setApprovalDialogOpen}
+        onApprove={loadCampaigns}
+        onReject={() => {
+          setApprovalDialogOpen(false);
+          setRejectDialogOpen(true);
+        }}
+      />
+
+      {/* Campaign Rejection Dialog */}
+      <RejectCampaignDialog
+        campaign={selectedCampaign}
+        open={rejectDialogOpen}
+        onOpenChange={setRejectDialogOpen}
+        onSuccess={loadCampaigns}
+      />
     </div>
   );
 }

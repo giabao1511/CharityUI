@@ -30,7 +30,9 @@ import {
   type AdminOrganization,
   type CreateOrganizationData,
 } from "@/lib/services/admin.service";
-import { Building2, Edit, Loader2, Plus, Search } from "lucide-react";
+import { Building2, Edit, Loader2, Plus, Search, CheckCircle } from "lucide-react";
+import { OrganizationApprovalDialog } from "@/components/admin/organization-approval-dialog";
+import { RejectOrganizationDialog } from "@/components/admin/reject-organization-dialog";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -49,6 +51,8 @@ export default function OrganizationsPage() {
   const [search, setSearch] = useState("");
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [approvalDialogOpen, setApprovalDialogOpen] = useState(false);
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [creating, setCreating] = useState(false);
   const [selectedOrg, setSelectedOrg] = useState<AdminOrganization | null>(null);
 
@@ -104,6 +108,11 @@ export default function OrganizationsPage() {
       avatar: org.avatar || "",
     });
     setEditDialogOpen(true);
+  };
+
+  const handleApprovalClick = (org: AdminOrganization) => {
+    setSelectedOrg(org);
+    setApprovalDialogOpen(true);
   };
 
   const handleCreate = async () => {
@@ -421,14 +430,28 @@ export default function OrganizationsPage() {
                             {new Date(org.createdAt).toLocaleDateString()}
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleEdit(org)}
-                            >
-                              <Edit className="h-4 w-4 mr-1" />
-                              Edit
-                            </Button>
+                            <div className="flex justify-end gap-2">
+                              {org.statusId === 1 ? (
+                                <Button
+                                  size="sm"
+                                  variant="default"
+                                  onClick={() => handleApprovalClick(org)}
+                                  className="bg-green-600 hover:bg-green-700"
+                                >
+                                  <CheckCircle className="h-4 w-4 mr-1" />
+                                  Review
+                                </Button>
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleEdit(org)}
+                                >
+                                  <Edit className="h-4 w-4 mr-1" />
+                                  Edit
+                                </Button>
+                              )}
+                            </div>
                           </TableCell>
                         </TableRow>
                       );
@@ -479,6 +502,32 @@ export default function OrganizationsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Organization Approval Dialog */}
+      <OrganizationApprovalDialog
+        organization={selectedOrg}
+        open={approvalDialogOpen}
+        onOpenChange={setApprovalDialogOpen}
+        onApprove={() => {
+          setApprovalDialogOpen(false);
+          loadOrganizations();
+        }}
+        onReject={() => {
+          setApprovalDialogOpen(false);
+          setRejectDialogOpen(true);
+        }}
+      />
+
+      {/* Reject Organization Dialog */}
+      <RejectOrganizationDialog
+        organization={selectedOrg}
+        open={rejectDialogOpen}
+        onOpenChange={setRejectDialogOpen}
+        onSuccess={() => {
+          setRejectDialogOpen(false);
+          loadOrganizations();
+        }}
+      />
     </div>
   );
 }

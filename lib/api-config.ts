@@ -53,6 +53,11 @@ export const API_ENDPOINTS = {
       `${API_BASE_URL}/v1/campaigns/detail/${campaignId}`,
     UPLOAD_BANNER: `${API_BASE_URL}/v1/fund-charity/upload-banner`,
     UPLOAD_MEDIA: `${API_BASE_URL}/v1/campaigns/upload-media`,
+    // Admin approval/rejection
+    APPROVE: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/campaigns/${campaignId}/approved`,
+    REJECT: (campaignId: string | number) =>
+      `${API_BASE_URL}/v1/campaigns/${campaignId}/rejected`,
   },
   // Legacy alias for backward compatibility (funds = campaigns)
   FUNDS: {
@@ -165,6 +170,10 @@ export const API_ENDPOINTS = {
       CREATE: `${API_BASE_URL}/v1/organizations`,
       UPDATE: (orgId: string | number) =>
         `${API_BASE_URL}/v1/organizations/${orgId}`,
+      APPROVE: (orgId: string | number) =>
+        `${API_BASE_URL}/v1/organizations/${orgId}/approved`,
+      REJECT: (orgId: string | number) =>
+        `${API_BASE_URL}/v1/organizations/${orgId}/rejected`,
     },
     // Users - using main user endpoints
     USERS: {

@@ -122,6 +122,7 @@
       "settings": "Cài Đặt"
     },
     "contributions": {
+      "description": "Xem lịch sử đóng góp của bạn và theo dõi phần thưởng của bạn",
       "title": "Lịch Sử Đóng Góp",
       "subtitle": "Xem tất cả quỹ bạn đã ủng hộ và theo dõi phần thưởng của bạn",
       "campaign": "Quỹ",
@@ -139,6 +140,8 @@
       "browseCampaigns": "Duyệt Quỹ"
     },
     "settings": {
+      "description": "Quản lý thông tin hồ sơ và cài đặt tài khoản của bạn",
+      "title": "Cài Đặt Hồ Sơ",
       "profileInfo": "Thông Tin Hồ Sơ",
       "updateInfo": "Cập nhật thông tin cá nhân của bạn",
       "editProfile": "Chỉnh Sửa Hồ Sơ",
@@ -163,6 +166,14 @@
       "sessionExpiredDesc": "Vui lòng đăng nhập lại để tiếp tục.",
       "notAuthenticated": "Chưa xác thực",
       "notAuthenticatedDesc": "Vui lòng đăng nhập để xem hồ sơ của bạn."
+    },
+    "account": {
+      "description": "Xem chi tiết tài khoản của bạn",
+      "title": "Chi Tiết Tài Khoản",
+      "joined": "Tham Gia",
+      "status": "Trạng Thái",
+      "userId": "ID Người Dùng",
+      "active": "Hoạt Động"
     }
   },
   "contact": {
@@ -733,7 +744,18 @@
       "enterPhone": "0123456789",
       "enterAddress": "Nhập địa chỉ đầy đủ",
       "enterDescription": "Nhập mô tả tổ chức",
-      "enterWebsite": "https://example.org"
+      "enterWebsite": "https://example.org",
+      "review": "Xem xét",
+      "reviewOrganization": "Xem xét tổ chức",
+      "approve": "Phê duyệt",
+      "approveOrganization": "Phê duyệt tổ chức",
+      "reject": "Từ chối",
+      "rejectOrganization": "Từ chối tổ chức",
+      "rejectionReason": "Lý do từ chối",
+      "approved": "Phê duyệt tổ chức thành công",
+      "rejected": "Từ chối tổ chức thành công",
+      "approveFailed": "Không thể phê duyệt tổ chức",
+      "rejectFailed": "Không thể từ chối tổ chức"
     },
     "campaigns": {
       "title": "Chiến dịch",
@@ -1056,5 +1078,95 @@
     "messages": "Tin nhắn",
     "noFriends": "Bạn chưa mời ai cả. Hãy bắt đầu chia sẻ ngay bây giờ!",
     "inviteMessage": "Tham gia cùng tôi trên [Tên Nền Tảng]! Cùng nhau, chúng ta có thể tạo nên sự khác biệt thông qua các chiến dịch"
+  },
+  "chat": {
+    "messages": "Tin nhắn",
+    "newMessage": "Tin nhắn mới",
+    "newConversation": "Cuộc trò chuyện mới",
+    "typeMessage": "Nhập tin nhắn...",
+    "send": "Gửi",
+    "sendFile": "Gửi tệp",
+    "sendImage": "Gửi hình ảnh",
+    "attachFile": "Đính kèm tệp",
+    "attachImage": "Đính kèm hình ảnh",
+    "search": "Tìm kiếm cuộc trò chuyện",
+    "searchPeople": "Tìm kiếm người hoặc tổ chức",
+    "noConversations": "Chưa có cuộc trò chuyện nào",
+    "noConversationsDesc": "Bắt đầu cuộc trò chuyện để kết nối với người khác",
+    "noMessages": "Chưa có tin nhắn nào",
+    "noMessagesDesc": "Gửi tin nhắn để bắt đầu cuộc trò chuyện",
+    "startConversation": "Bắt đầu cuộc trò chuyện",
+    "online": "Trực tuyến",
+    "offline": "Ngoại tuyến",
+    "active": "Đang hoạt động",
+    "lastSeen": "Hoạt động {time}",
+    "justNow": "Vừa xong",
+    "typing": "{name} đang nhập...",
+    "multipleTyping": "Nhiều người đang nhập...",
+    "sendingMessage": "Đang gửi...",
+    "messageSent": "Đã gửi",
+    "messageDelivered": "Đã nhận",
+    "messageRead": "Đã đọc",
+    "messageFailed": "Gửi thất bại",
+    "retry": "Thử lại",
+    "delete": "Xóa",
+    "reply": "Trả lời",
+    "forward": "Chuyển tiếp",
+    "copy": "Sao chép",
+    "unreadMessages": "{count} tin nhắn chưa đọc",
+    "conversationWith": "Cuộc trò chuyện với {name}",
+    "groupChat": "Nhóm trò chuyện",
+    "participants": "Thành viên",
+    "addParticipants": "Thêm thành viên",
+    "removeParticipant": "Xóa thành viên",
+    "leaveGroup": "Rời nhóm",
+    "deleteConversation": "Xóa cuộc trò chuyện",
+    "muteConversation": "Tắt thông báo",
+    "unmuteConversation": "Bật thông báo",
+    "pinConversation": "Ghim",
+    "unpinConversation": "Bỏ ghim",
+    "conversationSettings": "Cài đặt cuộc trò chuyện",
+    "viewProfile": "Xem hồ sơ",
+    "sharedMedia": "Ảnh đã chia sẻ",
+    "sharedFiles": "Tệp đã chia sẻ",
+    "loadMore": "Tải thêm tin nhắn",
+    "loadingMessages": "Đang tải tin nhắn...",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "selectFile": "Chọn tệp để tải lên",
+    "selectImage": "Chọn hình ảnh để tải lên",
+    "fileTooLarge": "Tệp quá lớn (tối đa 10MB)",
+    "invalidFileType": "Loại tệp không hợp lệ",
+    "uploadFailed": "Tải lên thất bại",
+    "uploading": "Đang tải lên...",
+    "download": "Tải xuống",
+    "contactOrganization": "Liên hệ tổ chức",
+    "contactUser": "Gửi tin nhắn",
+    "supportTeam": "Đội ngũ hỗ trợ",
+    "adminChat": "Chat quản trị",
+    "filters": {
+      "all": "Tất cả",
+      "unread": "Chưa đọc",
+      "groups": "Nhóm",
+      "direct": "Trực tiếp",
+      "organizations": "Tổ chức"
+    },
+    "tabs": {
+      "conversations": "Cuộc trò chuyện",
+      "info": "Thông tin"
+    },
+    "emptyState": {
+      "title": "Chưa có cuộc trò chuyện nào",
+      "description": "Bắt đầu trò chuyện với người dùng hoặc tổ chức khác",
+      "action": "Bắt đầu cuộc trò chuyện mới"
+    },
+    "errors": {
+      "loadConversations": "Không thể tải cuộc trò chuyện",
+      "loadMessages": "Không thể tải tin nhắn",
+      "sendMessage": "Không thể gửi tin nhắn",
+      "uploadFile": "Không thể tải lên tệp",
+      "startConversation": "Không thể bắt đầu cuộc trò chuyện",
+      "generic": "Đã xảy ra lỗi"
+    }
   }
 }

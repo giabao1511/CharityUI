@@ -18,7 +18,6 @@ export default async function OrganizationDetailPage({
 
   try {
     organization = await getOrganizationById(id);
-    console.log("org", organization)
   } catch (err) {
     error = err instanceof Error ? err.message : "Failed to load organization";
     console.error("Error fetching organization:", err);
@@ -26,6 +25,12 @@ export default async function OrganizationDetailPage({
   }
 
   if (!organization) {
+    notFound();
+  }
+
+  // Only show active organizations (statusId === 1 or status.orgStatusId === 1) to regular users
+  const isActive = organization.statusId === 1 || organization.status?.orgStatusId === 1;
+  if (!isActive) {
     notFound();
   }
 

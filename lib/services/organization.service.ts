@@ -71,12 +71,10 @@ export async function getOrganizationById(
  */
 export async function createOrganization(data: CreateOrganizationRequest) {
   const result = await apiClient<{
-    data: {
-      organization: Organization;
-      role: any;
-      banks: any;
-      wallet: any;
-    };
+    organization: Organization;
+    role: any;
+    banks: any;
+    wallet: any;
   }>(API_ENDPOINTS.ORGANIZATIONS.CREATE, {
     method: "POST",
     body: JSON.stringify(data),
@@ -86,7 +84,7 @@ export async function createOrganization(data: CreateOrganizationRequest) {
     throw new Error(result.error.message);
   }
 
-  return result.data!.data;
+  return result.data;
 }
 
 /**

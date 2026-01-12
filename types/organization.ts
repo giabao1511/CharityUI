@@ -120,13 +120,16 @@ export interface Organization {
   description: string;
   website: string;
   avatar: string;
-  statusId: number;
+  statusId?: number; // Optional: may be nested in status object
   createdBy: number;
   createdAt: string;
   updatedAt: string;
 
   // Relations (populated in GET requests)
-  status?: OrgStatusInfo;
+  status?: {
+    orgStatusId: number;
+    orgStatusName: string;
+  };
   banks?: OrgBank[];
   campaigns?: OrganizationCampaign[];
   userRoles?: UserRole[];
@@ -146,11 +149,14 @@ export interface OrganizationListItem {
   description: string;
   website: string;
   avatar: string;
-  statusId: number;
+  statusId?: number; // Optional: may be nested in status object
   createdBy: number;
   createdAt: string;
   updatedAt: string;
-  status?: OrgStatusInfo;
+  status?: {
+    orgStatusId: number;
+    orgStatusName: string;
+  };
 }
 
 /**
@@ -164,7 +170,7 @@ export interface CreateOrganizationRequest {
   description?: string;
   website?: string;
   avatar?: string;
-  banks: Array<{
+  banks?: Array<{
     bankName: string;
     bankAccount: string;
     accountHolder: string;
@@ -205,6 +211,7 @@ export interface OrganizationQueryFilters {
   search?: string;
   sortBy?: "orgName" | "createdAt" | "updatedAt";
   sortOrder?: "ASC" | "DESC";
+  statusId?: number;
 }
 
 /**
@@ -213,7 +220,8 @@ export interface OrganizationQueryFilters {
 export function isOrganizationActive(
   org: Organization | OrganizationListItem
 ): boolean {
-  return org.statusId === OrgStatus.ACTIVE;
+  // Check both direct statusId and nested status.orgStatusId
+  return org.statusId === OrgStatus.ACTIVE || org.status?.orgStatusId === OrgStatus.ACTIVE;
 }
 
 /**

@@ -55,6 +55,9 @@ export default async function CampaignDetailPage({
     notFound();
   }
 
+  // Note: Organization status is not included in the campaign detail API response
+  // If you need to check organization status, fetch it separately using getOrganizationById
+
   const percentageFunded = Math.round(
     (campaign.currentAmount / campaign.targetAmount) * 100
   );
@@ -130,6 +133,7 @@ export default async function CampaignDetailPage({
           currentAmount={campaign.currentAmount}
           daysLeft={daysLeft}
           percentageFunded={percentageFunded}
+          campaignStatus={campaign.status.campaignStatusId}
         />
       </div>
     </div>

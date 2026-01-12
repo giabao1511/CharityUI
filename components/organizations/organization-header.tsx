@@ -13,7 +13,7 @@ interface OrganizationHeaderProps {
 export function OrganizationHeader({ organization }: OrganizationHeaderProps) {
   const t = useTranslations("organizations.detail");
   const statusName = organization.status?.orgStatusName;
-  const isActive = organization.statusId === 2;
+  const isActive = organization.statusId === 1;
 
   return (
     <div className="space-y-6">

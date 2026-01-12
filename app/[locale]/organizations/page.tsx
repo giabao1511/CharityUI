@@ -39,10 +39,17 @@ export default async function OrganizationsPage({
       search,
       sortBy: sortBy as "orgName" | "createdAt",
       sortOrder: sortOrder as "ASC" | "DESC",
+      statusId: 1, // Only show active organizations
     });
     if (result.data) {
-      organizations = result.data;
-      totalCount = result.pagination?.total || result.data.length;
+      // Client-side filtering to ensure only active organizations (status.orgStatusId === 1) are shown
+      // Backend returns status as nested object: { status: { orgStatusId: 1, orgStatusName: "Active" } }
+      organizations = result.data.filter(org => {
+        // Check both statusId (direct) and status.orgStatusId (nested)
+        return org.statusId === 1 || org.status?.orgStatusId === 1;
+      });
+
+      totalCount = organizations.length;
       totalPages = Math.ceil(totalCount / limit);
     }
   } catch (err) {

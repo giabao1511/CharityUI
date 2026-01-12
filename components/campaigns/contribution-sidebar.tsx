@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/lib/auth-context";
 import { formatCurrency } from "@/lib/currency";
 import { createPayment } from "@/lib/services/payment.service";
+import { FundStatus } from "@/types/fund";
 import { Calendar, Loader2, Target } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -27,6 +28,7 @@ interface ContributionSidebarProps {
   readonly currentAmount: number;
   readonly daysLeft: number;
   readonly percentageFunded: number;
+  readonly campaignStatus: number;
 }
 
 export function ContributionSidebar({
@@ -35,6 +37,7 @@ export function ContributionSidebar({
   currentAmount,
   daysLeft,
   percentageFunded,
+  campaignStatus,
 }: ContributionSidebarProps) {
   const { user } = useAuth();
   const t = useTranslations("campaigns.detail");
@@ -44,10 +47,35 @@ export function ContributionSidebar({
   const [showGuestDialog, setShowGuestDialog] = useState(false);
   const [showLoggedInDialog, setShowLoggedInDialog] = useState(false);
 
+  const isCampaignActive = campaignStatus === FundStatus.ACTIVE;
+  const canDonate = isCampaignActive && daysLeft > 0;
+
+  const getCampaignStatusText = () => {
+    if (!isCampaignActive) return "Campaign Not Active";
+    if (daysLeft > 0) return t("campaignActive");
+    return t("campaignEnded");
+  };
+
   const handleContribute = async (amount: number) => {
     if (!amount || amount <= 0) {
       toast.error(t("invalidAmount"), {
         description: t("invalidAmountDesc"),
+      });
+      return;
+    }
+
+    // Check if campaign is active
+    if (!isCampaignActive) {
+      toast.error("Campaign Not Active", {
+        description: "This campaign is not currently accepting donations.",
+      });
+      return;
+    }
+
+    // Check if campaign has ended
+    if (daysLeft <= 0) {
+      toast.error("Campaign Ended", {
+        description: "This campaign has already ended.",
       });
       return;
     }
@@ -187,8 +215,8 @@ export function ContributionSidebar({
                 className="h-4 w-4 text-muted-foreground"
                 aria-hidden="true"
               />
-              <span className="text-muted-foreground">
-                {daysLeft > 0 ? t("campaignActive") : t("campaignEnded")}
+              <span className={`${!canDonate ? "text-red-600 font-medium" : "text-muted-foreground"}`}>
+                {getCampaignStatusText()}
               </span>
             </div>
           </div>
@@ -204,6 +232,7 @@ export function ContributionSidebar({
               placeholder={t("enterAmount")}
               aria-required="true"
               aria-describedby="contribution-hint"
+              disabled={!canDonate}
             />
             <p id="contribution-hint" className="text-xs text-muted-foreground">
               {t("minimumContribution")}
@@ -212,7 +241,7 @@ export function ContributionSidebar({
               className="w-full"
               size="lg"
               onClick={() => handleContribute(contributionAmount)}
-              disabled={isProcessing || daysLeft <= 0}
+              disabled={isProcessing || !canDonate}
             >
               {isProcessing ? (
                 <>
@@ -230,6 +259,7 @@ export function ContributionSidebar({
               variant="outline"
               size="sm"
               onClick={() => setContributionAmount(10000)}
+              disabled={!canDonate}
             >
               {formatCurrency(10000)}
             </Button>
@@ -237,6 +267,7 @@ export function ContributionSidebar({
               variant="outline"
               size="sm"
               onClick={() => setContributionAmount(100000)}
+              disabled={!canDonate}
             >
               {formatCurrency(100000)}
             </Button>
@@ -244,6 +275,7 @@ export function ContributionSidebar({
               variant="outline"
               size="sm"
               onClick={() => setContributionAmount(1000000)}
+              disabled={!canDonate}
             >
               {formatCurrency(1000000)}
             </Button>

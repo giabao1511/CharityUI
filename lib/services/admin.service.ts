@@ -146,6 +146,58 @@ export async function updateOrganization(
 }
 
 /**
+ * Approve organization (admin)
+ */
+export async function approveOrganization(
+  orgId: number
+): Promise<AdminOrganization> {
+  try {
+    const result = await apiClient<AdminOrganization>(
+      API_ENDPOINTS.ADMIN.ORGANIZATIONS.APPROVE(orgId),
+      {
+        method: "PUT",
+      }
+    );
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
+    return result.data!;
+  } catch (error) {
+    console.error("Error approving organization:", error);
+    throw error;
+  }
+}
+
+/**
+ * Reject organization (admin)
+ */
+export async function rejectOrganization(
+  orgId: number,
+  reasonRejected?: string
+): Promise<AdminOrganization> {
+  try {
+    const result = await apiClient<AdminOrganization>(
+      API_ENDPOINTS.ADMIN.ORGANIZATIONS.REJECT(orgId),
+      {
+        method: "PUT",
+        body: JSON.stringify({ reasonRejected }),
+      }
+    );
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
+    return result.data!;
+  } catch (error) {
+    console.error("Error rejecting organization:", error);
+    throw error;
+  }
+}
+
+/**
  * Get all users (admin view)
  */
 export async function getAdminUsers(params?: {
@@ -337,6 +389,56 @@ export async function deleteCampaign(campaignId: number): Promise<boolean> {
     return true;
   } catch (error) {
     console.error("Error deleting campaign:", error);
+    throw error;
+  }
+}
+
+/**
+ * Approve campaign (admin)
+ */
+export async function approveCampaign(campaignId: number): Promise<Campaign> {
+  try {
+    const result = await apiClient<Campaign>(
+      API_ENDPOINTS.CAMPAIGNS.APPROVE(campaignId),
+      {
+        method: "PUT",
+      }
+    );
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
+    return result.data!;
+  } catch (error) {
+    console.error("Error approving campaign:", error);
+    throw error;
+  }
+}
+
+/**
+ * Reject campaign (admin)
+ */
+export async function rejectCampaign(
+  campaignId: number,
+  reasonRejected?: string
+): Promise<Campaign> {
+  try {
+    const result = await apiClient<Campaign>(
+      API_ENDPOINTS.CAMPAIGNS.REJECT(campaignId),
+      {
+        method: "PUT",
+        body: JSON.stringify({ reasonRejected }),
+      }
+    );
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
+    return result.data!;
+  } catch (error) {
+    console.error("Error rejecting campaign:", error);
     throw error;
   }
 }
