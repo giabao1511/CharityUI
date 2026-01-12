@@ -1034,5 +1034,15 @@
       "press": "Press",
       "career": "Career"
     }
+  },
+  "friends": {
+    "friendRequests": "Friend Requests",
+    "noFriendRequests": "No new friend requests",
+    "title": "Our Friends",
+    "partner1": "CharityConnect",
+    "partner2": "HelpHands",
+    "partner3": "GoodCause",
+    "confirm": "Confirm",
+    "decline": "Decline"
   }
 }

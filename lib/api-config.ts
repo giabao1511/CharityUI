@@ -95,6 +95,19 @@ export const API_ENDPOINTS = {
     // Mark all notifications as read
     MARK_ALL_READ: `${API_BASE_URL}/v1/notifications/read-all`,
   },
+
+  FRIENDS: {
+    LIST: `${API_BASE_URL}/v1/friends`,
+    SEND: `${API_BASE_URL}/v1/friends/send`,
+    ACCEPT: (friendId: string | number) =>
+      `${API_BASE_URL}/v1/friends/${friendId}/accept`,
+    DECLINE: (friendId: string | number) =>
+      `${API_BASE_URL}/v1/friends/${friendId}/decline`,
+    CANCEL: (friendId: string | number) =>
+      `${API_BASE_URL}/v1/friends/${friendId}/cancel`,
+    LIST_REQUEST: `${API_BASE_URL}/v1/friends/requests`,
+    COUNT_REQUEST: `${API_BASE_URL}/v1/friends/count-requests`,
+  },
   // Comment endpoints
   COMMENTS: {
     // Get comments for a campaign
@@ -156,10 +169,8 @@ export const API_ENDPOINTS = {
     // Users - using main user endpoints
     USERS: {
       LIST: `${API_BASE_URL}/v1/users`,
-      UPDATE: (userId: string | number) =>
-        `${API_BASE_URL}/v1/users/${userId}`,
-      DELETE: (userId: string | number) =>
-        `${API_BASE_URL}/v1/users/${userId}`,
+      UPDATE: (userId: string | number) => `${API_BASE_URL}/v1/users/${userId}`,
+      DELETE: (userId: string | number) => `${API_BASE_URL}/v1/users/${userId}`,
     },
   },
 } as const;

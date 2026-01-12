@@ -11,6 +11,7 @@ import { NotificationDropdown } from "@/components/layout/notification-dropdown"
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { FriendRequestDropdown } from "./friend-request-dropdown";
 
 export function Header() {
   const t = useTranslations("common");
@@ -30,15 +31,16 @@ export function Header() {
     User: 1,
     Admin: 2,
     Organization: 3,
-    MemberOfOrganization: 4
+    MemberOfOrganization: 4,
   };
 
   // Check if user has Organization or MemberOfOrganization role
-  const hasCreatorRole = user?.roles?.some(
-    (userRole) =>
-      userRole.role.roleId === roleType.Organization ||
-      userRole.role.roleId === roleType.MemberOfOrganization
-  ) ?? false;
+  const hasCreatorRole =
+    user?.roles?.some(
+      (userRole) =>
+        userRole.role.roleId === roleType.Organization ||
+        userRole.role.roleId === roleType.MemberOfOrganization
+    ) ?? false;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -107,6 +109,7 @@ export function Header() {
         <div className="hidden md:flex items-center gap-3">
           <LanguageSwitcher />
           <ThemeToggle />
+          {user && <FriendRequestDropdown />}
           {user && <NotificationDropdown />}
           {user ? (
             <UserMenu />

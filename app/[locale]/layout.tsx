@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { getMessages, setRequestLocale } from 'next-intl/server';
-import { notFound } from 'next/navigation';
-import { routing } from '@/i18n/routing';
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { getMessages, setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -11,12 +11,14 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/lib/auth-context";
 import { NotificationProvider } from "@/contexts/notification-context";
 import { Toaster } from "@/components/ui/sonner";
+import { FriendProvider } from "@/contexts/friend-request-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "CharityHub - Modern Crowdfunding Platform",
-  description: "Support and track fundraising campaigns making a real difference in the world.",
+  description:
+    "Support and track fundraising campaigns making a real difference in the world.",
 };
 
 export function generateStaticParams() {
@@ -31,7 +33,7 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  
+
   // Ensure that the incoming `locale` is valid
   if (!hasLocale(routing.locales, locale)) {
     notFound();
@@ -50,25 +52,29 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
             <NotificationProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="light"
-                enableSystem
-                disableTransitionOnChange
-              >
-                <a
-                  href="#main-content"
-                  className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+              <FriendProvider>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="light"
+                  enableSystem
+                  disableTransitionOnChange
                 >
-                  Skip to main content
-                </a>
-                <div className="flex min-h-screen flex-col">
-                  <Header />
-                  <main id="main-content" className="flex-1 pt-0">{children}</main>
-                  <Footer />
-                </div>
-                <Toaster />
-              </ThemeProvider>
+                  <a
+                    href="#main-content"
+                    className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+                  >
+                    Skip to main content
+                  </a>
+                  <div className="flex min-h-screen flex-col">
+                    <Header />
+                    <main id="main-content" className="flex-1 pt-0">
+                      {children}
+                    </main>
+                    <Footer />
+                  </div>
+                  <Toaster />
+                </ThemeProvider>
+              </FriendProvider>
             </NotificationProvider>
           </AuthProvider>
         </NextIntlClientProvider>

@@ -1035,5 +1035,26 @@
       "press": "Truyền thông",
       "career": "Nghề nghiệp"
     }
+  },
+  "friends": {
+    "friendRequests": "Lời mời kết bạn",
+    "noFriendRequests": "Bạn không có lời mời kết bạn nào",
+    "title": "Bạn bè",
+    "confirm": "Xác nhận",
+    "decline": "Từ chối",
+    "subtitle": "Mời bạn bè tham gia và cùng nhau tạo nên sự khác biệt",
+    "inviteFriends": "Mời bạn bè",
+    "shareLink": "Chia sẻ liên kết mời",
+    "copyLink": "Sao chép liên kết",
+    "linkCopied": "Liên kết đã được sao chép!",
+    "shareOn": "Chia sẻ trên",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "linkedin": "LinkedIn",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "messages": "Tin nhắn",
+    "noFriends": "Bạn chưa mời ai cả. Hãy bắt đầu chia sẻ ngay bây giờ!",
+    "inviteMessage": "Tham gia cùng tôi trên [Tên Nền Tảng]! Cùng nhau, chúng ta có thể tạo nên sự khác biệt thông qua các chiến dịch"
   }
 }
