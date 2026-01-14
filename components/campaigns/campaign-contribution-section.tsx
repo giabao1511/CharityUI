@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { RewardTiersList } from "./reward-tiers-list";
+import { useRef } from "react";
 import { ContributionSidebar } from "./contribution-sidebar";
 import { CampaignItem } from "@/types/fund";
 
@@ -11,24 +10,12 @@ interface FundContributionSectionProps {
   daysLeft: number;
 }
 
-export function FundContributionSection({ 
-  fund, 
-  percentageFunded, 
-  daysLeft 
+export function FundContributionSection({
+  fund,
+  percentageFunded,
+  daysLeft
 }: FundContributionSectionProps) {
-  const [selectedTierId, setSelectedTierId] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
-
-  const handleSelectTier = (tierId: string) => {
-    setSelectedTierId(tierId);
-    
-    // Scroll to sidebar on mobile/tablet
-    if (window.innerWidth < 1024 && sidebarRef.current) {
-      setTimeout(() => {
-        sidebarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    }
-  };
 
   return (
     <>
@@ -48,7 +35,7 @@ export function FundContributionSection({
           currentAmount={fund.currentAmount}
           daysLeft={daysLeft}
           percentageFunded={percentageFunded}
-          selectedTierId={selectedTierId}
+          campaignStatus={fund.status.campaignStatusId}
         />
       </div>
     </>

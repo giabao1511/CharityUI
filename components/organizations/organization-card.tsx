@@ -32,7 +32,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
     }
   };
 
-  const statusName = t(getStatusTranslationKey(organization.statusId));
+  const statusName = t(getStatusTranslationKey(organization.statusId ?? 3));
   const isActive = organization.statusId === 1; // Active status
 
   return (

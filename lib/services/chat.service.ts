@@ -6,13 +6,15 @@
  * making it easy to swap this mock service with real API calls later.
  */
 
+import {
+  ConversationType,
+  MessageType,
+  MessageStatus,
+} from "@/types/chat";
 import type {
   ChatConversation,
   ChatMessage,
   ChatParticipant,
-  ConversationType,
-  MessageType,
-  MessageStatus,
   CreateMessageDTO,
   CreateConversationDTO,
   UserSearchResult,
@@ -624,5 +626,285 @@ export async function toggleMute(conversationId: string): Promise<void> {
   const conversation = mockConversationsData.find((c) => c.conversationId === conversationId);
   if (conversation) {
     conversation.isMuted = !conversation.isMuted;
+  }
+}
+
+// ============================================================================
+// REAL API FUNCTIONS
+// ============================================================================
+
+import { API_ENDPOINTS, apiClient } from "@/lib/api-config";
+
+// API Types
+export interface ApiMediaType {
+  mediaTypeId: number;
+  mediaName: string;
+}
+
+export interface ApiMessageMedia {
+  messageMediaId: number;
+  messageId: number;
+  mediaUrl: string;
+  mediaTypeId: number;
+  createdAt: string;
+  updatedAt: string;
+  mediaType: ApiMediaType;
+}
+
+export interface ApiMessageMediaInput {
+  mediaTypeId: number;
+  url: string;
+}
+
+export interface ApiMessageSender {
+  userId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  avatar: string | null;
+}
+
+export interface ApiMessageConversation {
+  conversationId: number;
+  type: string;
+  name: string | null;
+}
+
+export interface ApiMessage {
+  messageId: number;
+  conversationId: number;
+  senderId: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  sender?: ApiMessageSender;
+  conversation?: ApiMessageConversation;
+  media?: ApiMessageMedia[];
+}
+
+export interface ApiMessagesResponse {
+  data: ApiMessage[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+  };
+}
+
+export interface GetApiMessagesParams {
+  conversationId: number;
+  page?: number;
+  limit?: number;
+}
+
+export interface SendApiMessageParams {
+  conversationId: number;
+  content: string;
+  media?: ApiMessageMediaInput[];
+}
+
+export interface ApiUploadResponse {
+  data: {
+    url: string;
+    mediaTypeId: number;
+  }[];
+}
+
+/**
+ * Get messages for a conversation from API
+ */
+export async function getApiMessages(
+  params: GetApiMessagesParams
+): Promise<ApiMessagesResponse> {
+  try {
+    const { conversationId, page = 1, limit = 20 } = params;
+
+    const query = new URLSearchParams({
+      conversationId: String(conversationId),
+      page: String(page),
+      limit: String(limit),
+    }).toString();
+
+    const result = await apiClient<ApiMessagesResponse>(
+      `${API_ENDPOINTS.CHAT.MESSAGES}?${query}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (result.error || !result.data) {
+      console.error("Error fetching messages:", result.error);
+      return {
+        data: [],
+        pagination: {
+          total: 0,
+          page,
+          limit,
+        },
+      };
+    }
+
+    return result as any;
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    return {
+      data: [],
+      pagination: {
+        total: 0,
+        page: 1,
+        limit: 20,
+      },
+    };
+  }
+}
+
+/**
+ * Send a message via API
+ */
+export async function sendApiMessage(
+  params: SendApiMessageParams
+): Promise<ApiMessage | null> {
+  try {
+    console.log("sendApiMessage params:", params);
+    console.log("sendApiMessage endpoint:", API_ENDPOINTS.CHAT.SEND_MESSAGE);
+
+    const result = await apiClient<ApiMessage>(API_ENDPOINTS.CHAT.SEND_MESSAGE, {
+      method: "POST",
+      body: JSON.stringify(params),
+    });
+
+    console.log("sendApiMessage result:", result);
+
+    if (result.error) {
+      console.error("Error sending message:", result.error);
+      return null;
+    }
+
+    // Handle both { data: message } and direct message response
+    return result.data || (result as any) || null;
+  } catch (error) {
+    console.error("Error sending message:", error);
+    return null;
+  }
+}
+
+/**
+ * Upload files for messages via API
+ */
+export async function uploadApiMessageFiles(
+  files: File[]
+): Promise<ApiUploadResponse["data"] | null> {
+  try {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    // Get access token
+    const accessToken =
+      typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+
+    const response = await fetch(API_ENDPOINTS.CHAT.UPLOAD, {
+      method: "POST",
+      headers: {
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error("Error uploading files:", result);
+      return null;
+    }
+
+    return result.data || null;
+  } catch (error) {
+    console.error("Error uploading files:", error);
+    return null;
+  }
+}
+
+// Conversation Types
+export interface ApiConversationUser {
+  userId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  avatar: string | null;
+}
+
+export interface ApiConversationMember {
+  conversationMemberId: number;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  user: ApiConversationUser;
+}
+
+export interface ApiConversation {
+  conversationId: number;
+  type: string;
+  name: string | null;
+  members: ApiConversationMember[];
+  lastMessage?: ApiMessage;
+  unreadCount?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApiConversationsResponse {
+  data: ApiConversation[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+  };
+}
+
+/**
+ * Get all conversations for the current user from API
+ */
+export async function getApiConversations(
+  page = 1,
+  limit = 20
+): Promise<ApiConversationsResponse> {
+  try {
+    const query = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    }).toString();
+
+    const result = await apiClient<ApiConversationsResponse>(
+      `${API_ENDPOINTS.CHAT.CONVERSATIONS}?${query}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (result.error || !result.data) {
+      console.error("Error fetching conversations:", result.error);
+      return {
+        data: [],
+        pagination: {
+          total: 0,
+          page,
+          limit,
+        },
+      };
+    }
+
+    return result as any;
+  } catch (error) {
+    console.error("Error fetching conversations:", error);
+    return {
+      data: [],
+      pagination: {
+        total: 0,
+        page: 1,
+        limit: 20,
+      },
+    };
   }
 }

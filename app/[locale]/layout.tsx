@@ -12,6 +12,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { NotificationProvider } from "@/contexts/notification-context";
 import { Toaster } from "@/components/ui/sonner";
 import { FriendProvider } from "@/contexts/friend-request-context";
+import { ChatWidget } from "@/components/chat/chat-widget";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -73,6 +74,7 @@ export default async function LocaleLayout({
                     <Footer />
                   </div>
                   <Toaster />
+                  <ChatWidget />
                 </ThemeProvider>
               </FriendProvider>
             </NotificationProvider>

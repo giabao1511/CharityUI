@@ -113,6 +113,17 @@ export const API_ENDPOINTS = {
     LIST_REQUEST: `${API_BASE_URL}/v1/friends/requests`,
     COUNT_REQUEST: `${API_BASE_URL}/v1/friends/count-requests`,
   },
+  // Chat/Messages endpoints
+  CHAT: {
+    // Get all conversations
+    CONVERSATIONS: `${API_BASE_URL}/v1/conversations`,
+    // Get messages for a conversation
+    MESSAGES: `${API_BASE_URL}/v1/messages`,
+    // Send a new message
+    SEND_MESSAGE: `${API_BASE_URL}/v1/messages`,
+    // Upload files/images for messages
+    UPLOAD: `${API_BASE_URL}/v1/messages/uploads`,
+  },
   // Comment endpoints
   COMMENTS: {
     // Get comments for a campaign

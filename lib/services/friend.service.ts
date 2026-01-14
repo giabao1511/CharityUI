@@ -33,6 +33,30 @@ export interface FriendRequestResponse {
   };
 }
 
+export interface ListFriend {
+  id: number;
+  userId: number;
+  friendId: number;
+  createdAt: string; // Hoặc Date nếu bạn parse sau khi nhận
+  updatedAt: string;
+  User: {
+    userId: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    avatar: string | null;
+  };
+}
+
+export interface ListFriendResponse {
+  data: ListFriend[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+  };
+}
+
 export interface GetFriendRequestParams {
   page?: number;
   limit?: number;
@@ -131,6 +155,61 @@ export async function getFriendRequests(
     return result as any;
   } catch (error) {
     console.error("Error fetching friend requests:", error);
+    return {
+      data: [],
+      pagination: {
+        total: 0,
+        page: 1,
+        limit: 10,
+      },
+    };
+  }
+}
+export interface GetListFriendsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export async function getListFriends(
+  params: GetListFriendsParams = {}
+): Promise<ListFriendResponse> {
+  try {
+    const { page = 1, limit = 10, search = "" } = params;
+
+    const queryParams: Record<string, string> = {
+      page: String(page),
+      limit: String(limit),
+    };
+
+    if (search) {
+      queryParams.search = search;
+    }
+
+    const query = new URLSearchParams(queryParams).toString();
+
+    const result = await apiClient<ListFriendResponse>(
+      `${API_ENDPOINTS.FRIENDS.LIST}?${query}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (result.error || !result.data) {
+      console.error("Error fetching friends list:", result.error);
+      return {
+        data: [],
+        pagination: {
+          total: 0,
+          page,
+          limit,
+        },
+      };
+    }
+
+    return result as any;
+  } catch (error) {
+    console.error("Error fetching friends list:", error);
     return {
       data: [],
       pagination: {

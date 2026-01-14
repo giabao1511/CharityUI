@@ -25,6 +25,7 @@ import React, {
 } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { getSocket } from "@/lib/socket";
+import { MessageStatus } from "@/types/chat";
 import type {
   ChatContextType,
   ChatConversation,
@@ -32,7 +33,6 @@ import type {
   TypingIndicator,
   CreateMessageDTO,
   ConversationType,
-  MessageStatus,
   NewMessageSocketPayload,
   TypingSocketPayload,
   MessageStatusSocketPayload,

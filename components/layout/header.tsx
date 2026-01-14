@@ -11,7 +11,8 @@ import { NotificationDropdown } from "@/components/layout/notification-dropdown"
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { FriendRequestDropdown } from "./friend-request-dropdown";
+import { FriendRequestDropdown } from "./friend-request-dropdown copy";
+import { ListFriendDropdown } from "./list-friend-dropdown";
 
 export function Header() {
   const t = useTranslations("common");
@@ -110,6 +111,7 @@ export function Header() {
           <LanguageSwitcher />
           <ThemeToggle />
           {user && <FriendRequestDropdown />}
+          {user && <ListFriendDropdown />}
           {user && <NotificationDropdown />}
           {user ? (
             <UserMenu />
