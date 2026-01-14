@@ -105,9 +105,9 @@ export const API_ENDPOINTS = {
     LIST: `${API_BASE_URL}/v1/friends`,
     SEND: `${API_BASE_URL}/v1/friends/send`,
     ACCEPT: (friendId: string | number) =>
-      `${API_BASE_URL}/v1/friends/${friendId}/accept`,
+      `${API_BASE_URL}/v1/friends/requests/${friendId}/accept`,
     DECLINE: (friendId: string | number) =>
-      `${API_BASE_URL}/v1/friends/${friendId}/decline`,
+      `${API_BASE_URL}/v1/friends//requests/${friendId}/decline`,
     CANCEL: (friendId: string | number) =>
       `${API_BASE_URL}/v1/friends/${friendId}/cancel`,
     LIST_REQUEST: `${API_BASE_URL}/v1/friends/requests`,

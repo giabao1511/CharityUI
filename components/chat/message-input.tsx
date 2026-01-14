@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Paperclip, Send, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { emitTyping } from "@/lib/socket";
 import {
   sendApiMessage,
   uploadApiMessageFiles,
@@ -22,7 +23,9 @@ export function MessageInput({ conversationId, onMessageSent }: MessageInputProp
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [sending, setSending] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
@@ -36,6 +39,42 @@ export function MessageInput({ conversationId, onMessageSent }: MessageInputProp
   const removeFile = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
+
+  // Handle typing events
+  const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newContent = e.target.value;
+    setContent(newContent);
+
+    // Emit typing start
+    if (newContent.length > 0 && !isTyping) {
+      setIsTyping(true);
+      emitTyping(conversationId, true);
+    }
+
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    // Set timeout to stop typing after 2 seconds of inactivity
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+      emitTyping(conversationId, false);
+    }, 2000);
+  };
+
+  // Cleanup typing timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      // Stop typing when component unmounts
+      if (isTyping) {
+        emitTyping(conversationId, false);
+      }
+    };
+  }, [conversationId, isTyping]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +117,12 @@ export function MessageInput({ conversationId, onMessageSent }: MessageInputProp
         onMessageSent(message);
         setContent("");
         setFiles([]);
+
+        // Stop typing indicator
+        if (isTyping) {
+          setIsTyping(false);
+          emitTyping(conversationId, false);
+        }
       } else {
         toast.error("Failed to send message");
       }
@@ -137,7 +182,7 @@ export function MessageInput({ conversationId, onMessageSent }: MessageInputProp
 
         <Input
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={handleContentChange}
           placeholder="Type a message..."
           disabled={sending}
           className="flex-1"

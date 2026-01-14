@@ -1,18 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { Link, usePathname } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
-import { Heart, User, Menu, X, LayoutDashboard, Wallet } from "lucide-react";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { UserMenu } from "@/components/user-menu";
 import { NotificationDropdown } from "@/components/layout/notification-dropdown";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { UserMenu } from "@/components/user-menu";
+import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
+import { Heart, LayoutDashboard, Menu, User, Wallet, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { FriendRequestDropdown } from "./friend-request-dropdown copy";
-import { ListFriendDropdown } from "./list-friend-dropdown";
 
 export function Header() {
   const t = useTranslations("common");
@@ -111,7 +110,6 @@ export function Header() {
           <LanguageSwitcher />
           <ThemeToggle />
           {user && <FriendRequestDropdown />}
-          {user && <ListFriendDropdown />}
           {user && <NotificationDropdown />}
           {user ? (
             <UserMenu />

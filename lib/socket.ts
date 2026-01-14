@@ -64,3 +64,66 @@ export function getSocket() {
   }
   return socket;
 }
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+/**
+ * Join a conversation room
+ */
+export function joinConversation(conversationId: number) {
+  const socket = getSocket();
+  console.log("🔌 Joining conversation:", conversationId);
+  socket.emit("join-conversation", conversationId);
+}
+
+/**
+ * Leave a conversation room
+ */
+export function leaveConversation(conversationId: number) {
+  const socket = getSocket();
+  console.log("🔌 Leaving conversation:", conversationId);
+  socket.emit("leave-conversation", conversationId);
+}
+
+/**
+ * Emit typing status
+ */
+export function emitTyping(conversationId: number, isTyping: boolean) {
+  const socket = getSocket();
+  socket.emit("typing", {
+    conversationId,
+    isTyping,
+  });
+}
+
+/**
+ * Mark message as read
+ */
+export function emitMessageRead(conversationId: number, messageId: number) {
+  const socket = getSocket();
+  socket.emit("message-read", {
+    conversationId,
+    messageId,
+  });
+}
+
+/**
+ * Get current connection status
+ */
+export function getConnectionStatus(): boolean {
+  return socket?.connected || false;
+}
+
+/**
+ * Disconnect socket
+ */
+export function disconnectSocket() {
+  if (socket) {
+    console.log("🔌 Disconnecting socket...");
+    socket.disconnect();
+    socket = null;
+  }
+}
+

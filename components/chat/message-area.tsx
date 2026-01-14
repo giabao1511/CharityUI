@@ -8,7 +8,7 @@ import { BodyText } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { useAuth } from "@/lib/auth-context";
-import { getSocket } from "@/lib/socket";
+import { getSocket, joinConversation, leaveConversation } from "@/lib/socket";
 import {
   getApiMessages,
   ApiMessage,
@@ -38,15 +38,17 @@ export function MessageArea({ conversationId, onBack }: MessageAreaProps) {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [typingUsers, setTypingUsers] = useState<{ userId: number; userName: string }[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<Map<number, NodeJS.Timeout>>(new Map());
 
   // Handle incoming real-time message
   const handleNewMessage = useCallback((newMessage: ApiMessage) => {
     console.log("📨 Received new message:", newMessage);
 
     // Only add if it's for this conversation
-    if (newMessage.conversationId === conversationId) {
+    if (String(newMessage.conversationId) === String(conversationId)) {
       setMessages((prev) => {
         // Check for duplicates (in case we sent the message ourselves)
         const exists = prev.some((m) => m.messageId === newMessage.messageId);
@@ -58,24 +60,70 @@ export function MessageArea({ conversationId, onBack }: MessageAreaProps) {
     }
   }, [conversationId]);
 
+  // Handle typing indicator
+  const handleTyping = useCallback((data: { conversationId: number; userId: number; userName: string; isTyping: boolean }) => {
+    console.log("⌨️  Typing event:", data);
+
+    // Ignore own typing events and events from other conversations
+    if (data.userId === user?.userId || data.conversationId !== conversationId) return;
+
+    if (data.isTyping) {
+      // Add typing user
+      setTypingUsers((prev) => {
+        const filtered = prev.filter((u) => u.userId !== data.userId);
+        return [...filtered, { userId: data.userId, userName: data.userName }];
+      });
+
+      // Clear existing timeout
+      const existingTimeout = typingTimeoutRef.current.get(data.userId);
+      if (existingTimeout) {
+        clearTimeout(existingTimeout);
+      }
+
+      // Auto-remove after 3 seconds
+      const timeout = setTimeout(() => {
+        setTypingUsers((prev) => prev.filter((u) => u.userId !== data.userId));
+        typingTimeoutRef.current.delete(data.userId);
+      }, 3000);
+
+      typingTimeoutRef.current.set(data.userId, timeout);
+    } else {
+      // Remove typing user
+      setTypingUsers((prev) => prev.filter((u) => u.userId !== data.userId));
+      const existingTimeout = typingTimeoutRef.current.get(data.userId);
+      if (existingTimeout) {
+        clearTimeout(existingTimeout);
+        typingTimeoutRef.current.delete(data.userId);
+      }
+    }
+  }, [conversationId, user?.userId]);
+
   // Socket.IO: Join room and listen for messages
   useEffect(() => {
     const socket = getSocket();
 
     // Join the conversation room
     console.log("🔌 Joining conversation room:", conversationId);
-    socket.emit("join-conversation", conversationId);
+    joinConversation(conversationId);
 
     // Listen for new messages
     socket.on("newMessage", handleNewMessage);
 
-    // Cleanup: leave room and remove listener
+    // Listen for typing events
+    socket.on("typing", handleTyping);
+
+    // Cleanup: leave room and remove listeners
     return () => {
       console.log("🔌 Leaving conversation room:", conversationId);
-      socket.emit("leave-conversation", conversationId);
+      leaveConversation(conversationId);
       socket.off("newMessage", handleNewMessage);
+      socket.off("typing", handleTyping);
+
+      // Clear all typing timeouts
+      typingTimeoutRef.current.forEach((timeout) => clearTimeout(timeout));
+      typingTimeoutRef.current.clear();
     };
-  }, [conversationId, handleNewMessage]);
+  }, [conversationId, handleNewMessage, handleTyping]);
 
   // Load messages
   useEffect(() => {
@@ -249,6 +297,23 @@ export function MessageArea({ conversationId, onBack }: MessageAreaProps) {
               </div>
             );
           })}
+
+          {/* Typing Indicator */}
+          {typingUsers.length > 0 && (
+            <div className="flex gap-2 items-center px-3 py-2">
+              <div className="flex gap-1">
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
+              <BodyText size="sm" muted>
+                {typingUsers.length === 1
+                  ? `${typingUsers[0].userName} is typing...`
+                  : `${typingUsers.length} people are typing...`}
+              </BodyText>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
       </ScrollArea>

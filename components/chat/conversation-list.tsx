@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -8,7 +8,8 @@ import { BodyText } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { useAuth } from "@/lib/auth-context";
-import { getApiConversations, ApiConversation } from "@/lib/services/chat.service";
+import { getSocket } from "@/lib/socket";
+import { getApiConversations, ApiConversation, ApiMessage } from "@/lib/services/chat.service";
 
 interface ConversationListProps {
   onSelectConversation: (conversationId: number) => void;
@@ -46,6 +47,49 @@ export function ConversationList({ onSelectConversation }: ConversationListProps
 
     loadConversations();
   }, []);
+
+  // Handle new message socket event
+  const handleNewMessage = useCallback((message: ApiMessage) => {
+    console.log("📨 [ConversationList] New message:", message);
+
+    setConversations((prev) => {
+      const updated = prev.map((conv) => {
+        if (conv.conversationId === message.conversationId) {
+          return {
+            ...conv,
+            lastMessage: message,
+            updatedAt: message.createdAt,
+            // Increment unread if message is not from current user
+            unreadCount: message.senderId === user?.userId
+              ? conv.unreadCount
+              : (conv.unreadCount || 0) + 1,
+          };
+        }
+        return conv;
+      });
+
+      // Sort by most recent
+      return updated.sort((a, b) =>
+        new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime()
+      );
+    });
+  }, [user?.userId]);
+
+  // Socket.IO: Listen for real-time updates
+  useEffect(() => {
+    if (!user) return;
+
+    const socket = getSocket();
+
+    // Listen for new messages
+    socket.on("newMessage", handleNewMessage);
+
+    // Cleanup
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [user, handleNewMessage]);
+
 
   if (loading) {
     return (
