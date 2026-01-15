@@ -103,7 +103,7 @@ export const API_ENDPOINTS = {
 
   FRIENDS: {
     LIST: `${API_BASE_URL}/v1/friends`,
-    SEND: `${API_BASE_URL}/v1/friends/send`,
+    SEND: `${API_BASE_URL}/v1/friends/requests/`,
     ACCEPT: (friendId: string | number) =>
       `${API_BASE_URL}/v1/friends/requests/${friendId}/accept`,
     DECLINE: (friendId: string | number) =>

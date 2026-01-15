@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { User, Loader2, ImageIcon, X } from "lucide-react";
+import { User, Loader2, ImageIcon, X, UserPlus } from "lucide-react";
 import { Comment, CommentMedia } from "@/types";
 import { Heading, BodyText } from "@/components/ui/typography";
 import { toast } from "sonner";
@@ -16,11 +16,13 @@ import {
   getCommentAuthorName,
   formatCommentDate,
 } from "@/lib/services/comment.service";
+import { sendFriendRequest } from "@/lib/services/friend.service";
 import { isAuthenticated } from "@/lib/services/auth.service";
 import { Pagination } from "@/components/ui/pagination";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/lib/auth-context";
 
 interface CommentsSectionProps {
   campaignId: number;
@@ -40,9 +42,11 @@ export function CommentsSection({ campaignId }: CommentsSectionProps) {
   const [totalComments, setTotalComments] = useState(0);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isUploadingMedia, setIsUploadingMedia] = useState(false);
+  const [sendingFriendRequest, setSendingFriendRequest] = useState<Record<number, boolean>>({});
 
   // Check if user is authenticated
   const userIsAuthenticated = isAuthenticated();
+  const { user } = useAuth();
 
   // Fetch comments
   useEffect(() => {
@@ -144,65 +148,111 @@ export function CommentsSection({ campaignId }: CommentsSectionProps) {
     }
   };
 
-  const renderComment = (comment: Comment) => (
-    <div key={comment.commentId}>
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            {/* Avatar */}
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-              {comment.user?.avatar ? (
-                <Image
-                  src={comment.user.avatar}
-                  alt={getCommentAuthorName(comment)}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              ) : (
-                <User className="h-5 w-5 text-primary" aria-hidden="true" />
-              )}
-            </div>
+  const handleSendFriendRequest = async (userId: number) => {
+    if (!userIsAuthenticated) {
+      toast.error(t("signInToComment"));
+      router.push("/auth?tab=signin");
+      return;
+    }
 
-            {/* Comment content */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-2">
-                <BodyText weight="semibold">
-                  {getCommentAuthorName(comment)}
-                </BodyText>
-                <BodyText size="sm" muted>
-                  {formatCommentDate(comment.createdAt)}
-                </BodyText>
+    try {
+      setSendingFriendRequest(prev => ({ ...prev, [userId]: true }));
+      const success = await sendFriendRequest(userId);
+
+      if (success) {
+        toast.success("Friend request sent successfully!");
+      } else {
+        toast.error("Failed to send friend request. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending friend request:", error);
+      toast.error("Failed to send friend request. Please try again.");
+    } finally {
+      setSendingFriendRequest(prev => ({ ...prev, [userId]: false }));
+    }
+  };
+
+  const renderComment = (comment: Comment) => {
+    return (
+      <div key={comment.commentId}>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-start gap-3">
+              {/* Avatar */}
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                {comment.user?.avatar ? (
+                  <Image
+                    src={comment.user.avatar}
+                    alt={getCommentAuthorName(comment)}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <User className="h-5 w-5 text-primary" aria-hidden="true" />
+                )}
               </div>
 
-              <BodyText className="mb-3 whitespace-pre-wrap">
-                {comment.content}
-              </BodyText>
+              {/* Comment content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <BodyText weight="semibold">
+                      {getCommentAuthorName(comment)}
+                    </BodyText>
+                    <BodyText size="sm" muted>
+                      {formatCommentDate(comment.createdAt)}
+                    </BodyText>
+                  </div>
 
-              {/* Media attachments */}
-              {comment.media && comment.media.length > 0 && (
-                <div className="grid grid-cols-3 gap-2 mt-3">
-                  {comment.media.map((media, index) => (
-                    <div
-                      key={index}
-                      className="relative aspect-square rounded-md overflow-hidden"
+                  {/* Add Friend button - only show if not the current user */}
+                  {userIsAuthenticated && user && comment.user && comment.user.userId !== user.userId && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSendFriendRequest(comment.user.userId)}
+                      disabled={sendingFriendRequest[comment.user.userId]}
+                      className="h-8"
                     >
-                      <Image
-                        src={media.url}
-                        alt={`Comment image ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
+                      {sendingFriendRequest[comment.user.userId] ? (
+                        <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                      ) : (
+                        <UserPlus className="h-4 w-4 mr-1" />
+                      )}
+                      Add Friend
+                    </Button>
+                  )}
                 </div>
-              )}
+
+                <BodyText className="mb-3 whitespace-pre-wrap">
+                  {comment.content}
+                </BodyText>
+
+                {/* Media attachments */}
+                {comment.media && comment.media.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2 mt-3">
+                    {comment.media.map((media, index) => (
+                      <div
+                        key={index}
+                        className="relative aspect-square rounded-md overflow-hidden"
+                      >
+                        <Image
+                          src={media.url}
+                          alt={`Comment image ${index + 1}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-6">

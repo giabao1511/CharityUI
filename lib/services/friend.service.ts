@@ -220,3 +220,31 @@ export async function getListFriends(
     };
   }
 }
+
+/**
+ * Send a friend request to another user
+ * @param receiverId - The user ID to send the friend request to
+ * @returns Promise<boolean> - True if successful, false otherwise
+ */
+export async function sendFriendRequest(receiverId: number): Promise<boolean> {
+  try {
+    const result = await apiClient(
+      API_ENDPOINTS.FRIENDS.SEND,
+      {
+        method: "POST",
+        body: JSON.stringify({ receiverId }),
+      }
+    );
+
+    if (result.error) {
+      console.error("Error sending friend request:", result.error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error sending friend request:", error);
+    return false;
+  }
+}
+
